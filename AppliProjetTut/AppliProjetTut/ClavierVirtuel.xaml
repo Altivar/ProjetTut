@@ -120,7 +120,7 @@
         <s:SurfaceButton Name="multiplier" Content="*"  Grid.Row="0" Grid.Column="19" ></s:SurfaceButton>
         <s:SurfaceButton Name="diviser" Content="/"  Grid.Row="0" Grid.Column="18" ></s:SurfaceButton>
         <s:SurfaceButton Name="égal" Content="="  Grid.Row="0" Grid.Column="17" ></s:SurfaceButton>
-        <s:SurfaceButton Name="ZERO" Content="0"  Grid.Row="4" Grid.Column="17" Grid.ColumnSpan="2" ></s:SurfaceButton>
+        <s:SurfaceButton Name="zero" Content="0"  Grid.Row="4" Grid.Column="17" Grid.ColumnSpan="2" ></s:SurfaceButton>
         <s:SurfaceButton Name="Entrer" Content="Enter"  Grid.Row="3" Grid.Column="20" Grid.RowSpan="2" ></s:SurfaceButton>
         <s:SurfaceButton Name="Point" Content="."  Grid.Row="4" Grid.Column="19" ></s:SurfaceButton>
 

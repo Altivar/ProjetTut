@@ -57,6 +57,16 @@ namespace AppliProjetTut
             this.V.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.B.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.N.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.zero.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.un.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.deux.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.trois.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.quatre.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.cinq.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.six.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.sept.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.huit.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.neuf.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
         }   
 
         void Cadenas_PreviewTouchDown(object sender, TouchEventArgs e)
