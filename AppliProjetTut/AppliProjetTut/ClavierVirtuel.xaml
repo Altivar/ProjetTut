@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AppliProjetTut.ClavierVirtuel"
+﻿<s:ScatterViewItem x:Class="AppliProjetTut.ClavierVirtuel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,4 +13,4 @@
         <s:SurfaceButton Name="Z" Content="Z" Width="20" Height="20" Margin="82,55,80,57"></s:SurfaceButton>
         <s:SurfaceButton Name="E" Content="E" Width="20" Height="20" Margin="126,55,36,57"></s:SurfaceButton>
     </Grid>
-</UserControl>
+</s:ScatterViewItem>

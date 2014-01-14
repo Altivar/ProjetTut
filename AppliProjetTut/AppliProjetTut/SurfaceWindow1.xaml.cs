@@ -116,23 +116,16 @@ namespace AppliProjetTut
         // gestion des clavier
         private void AddClavier()
         {
-            ScatterViewItem item = new ScatterViewItem();
+            /*ScatterViewItem item = new ScatterViewItem();
             listScatterViewItem.Add(item);
             item.PreviewTouchDown += new EventHandler<TouchEventArgs>(Clavier_OnPreviewTouchDown);
             item.Content = new ClavierVirtuel();
             item.Width = InteractiveSurface.PrimarySurfaceDevice.Bounds.Width / 2.2;
             item.Height = InteractiveSurface.PrimarySurfaceDevice.Bounds.Height / 2.2;
-            this.MainScatterView.Items.Add(item);
+            this.MainScatterView.Items.Add(item);*/
+            this.MainScatterView.Items.Add(new ClavierVirtuel());
         }
 
-        void Clavier_OnPreviewTouchDown(object sender, TouchEventArgs e)
-        {
-            for (int i = 0; i < listScatterViewItem.Count(); i++)
-            {
-                listScatterViewItem.ElementAt(i);
-            }
-        }
-
-
+        
     }
 }

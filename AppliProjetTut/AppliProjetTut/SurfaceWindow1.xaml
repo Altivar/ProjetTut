@@ -4,7 +4,10 @@
     xmlns:s="http://schemas.microsoft.com/surface/2008"
     Title="AppliProjetTut"
     >
-  <Grid>
+    <s:SurfaceWindow.Background>
+        <ImageBrush ImageSource="./Resources/icon.png" />
+    </s:SurfaceWindow.Background>
+    <Grid>
         <s:ScatterView Name="MainScatterView" Grid.Row="1" Grid.Column="0"/>
     </Grid>
 </s:SurfaceWindow>

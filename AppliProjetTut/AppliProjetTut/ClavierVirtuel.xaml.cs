@@ -11,18 +11,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Surface.Presentation.Controls;
 
 namespace AppliProjetTut
 {
     /// <summary>
     /// Logique d'interaction pour ClavierVirtuel.xaml
     /// </summary>
-    public partial class ClavierVirtuel : UserControl
+    public partial class ClavierVirtuel : ScatterViewItem
     {
+
+        private bool isMovementEnabled = true;
+
         public ClavierVirtuel()
         {
             InitializeComponent();
-
+            
             this.Text.IsEnabled = false;
 
             this.Cadenas.PreviewTouchDown += new EventHandler<TouchEventArgs>(Cadenas_PreviewTouchDown);
@@ -34,7 +38,10 @@ namespace AppliProjetTut
 
         void Cadenas_PreviewTouchDown(object sender, TouchEventArgs e)
         {
-
+            isMovementEnabled = !isMovementEnabled;
+            this.CanMove = isMovementEnabled;
+            this.CanRotate = isMovementEnabled;
+            this.CanScale = isMovementEnabled;
         }
 
         void E_PreviewTouchDown(object sender, TouchEventArgs e)
@@ -51,5 +58,10 @@ namespace AppliProjetTut
         {
             this.Text.AppendText("A");
         }
+
+
+
+        
+
     }
 }
