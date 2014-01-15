@@ -7,7 +7,7 @@
     <s:SurfaceWindow.Background>
         <ImageBrush ImageSource="./Resources/icon.png" />
     </s:SurfaceWindow.Background>
-    <Grid>
+    <Grid Name="MainGrid">
         <s:ScatterView Name="MainScatterView" Grid.Row="1" Grid.Column="0"/>
     </Grid>
 </s:SurfaceWindow>

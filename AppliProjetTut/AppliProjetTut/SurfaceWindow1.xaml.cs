@@ -24,11 +24,11 @@ namespace AppliProjetTut
     public partial class SurfaceWindow1 : SurfaceWindow
     {
 
-        // liste de claviers
-        //List<ScatterViewItem> listScatterViewItem = new List<ScatterViewItem>();
-
         // liste de node
         List<NodeText> listNode = new List<NodeText>();
+
+        // liste de ligne inter-node
+        List<Line> listLine = new List<Line>();
 
         //Départ du hold
         int start;
@@ -52,13 +52,22 @@ namespace AppliProjetTut
             // AddClavier();
 
             // ajout de Nodes
-            AddNode(null, initP);
+            //AddNode(null, initP);
 
             PreviewTouchMove += new EventHandler<TouchEventArgs>(OnPreviewTouchMove);
             PreviewTouchDown += new EventHandler<TouchEventArgs>(OnPreviewTouchDown);
             PreviewTouchUp += new EventHandler<TouchEventArgs>(OnPreviewTouchUp);
 
+            ManipulationInertiaStarting += new EventHandler<ManipulationInertiaStartingEventArgs>(SurfaceWindow1_ManipulationInertiaStarting);
+
         }
+
+        void SurfaceWindow1_ManipulationInertiaStarting(object sender, ManipulationInertiaStartingEventArgs e)
+        {
+            
+        }
+
+        
 
         
 
@@ -128,12 +137,11 @@ namespace AppliProjetTut
             //TODO: disable audio, animations here
         }
 
-
-
         public void AddNode(NodeText parent, Point pt)
         {
             NodeText text = new NodeText(this, parent);
             text.Center = pt;
+            
             this.MainScatterView.Items.Add(text);
             listNode.Add(text);
         }
@@ -143,10 +151,40 @@ namespace AppliProjetTut
             start = e.Timestamp;
         }
         
-        
         void OnPreviewTouchMove(object sender, TouchEventArgs e)
         {
             start = e.Timestamp;
+            for (int i = 0; i < listLine.Count; i++)
+            {
+                this.MainGrid.Children.Remove(listLine.ElementAt(i));
+            }
+            listLine.Clear();
+            for (int i = 1; i < listNode.Count; i++)
+            {
+                Line tempLine = listNode.ElementAt(i).getLineToParent();
+                listLine.Add(tempLine);
+                Line line1 = new Line();
+                line1.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
+                line1.StrokeThickness = 2;
+                line1.X1 = tempLine.X2 + 30;
+                line1.Y1 = tempLine.Y2 + 30;
+                line1.X2 = tempLine.X2 - 30;
+                line1.Y2 = tempLine.Y2 - 30;
+                listLine.Add(line1);
+                Line line2 = new Line();
+                line2.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
+                line2.StrokeThickness = 2;
+                line2.X1 = tempLine.X2 - 30;
+                line2.Y1 = tempLine.Y2 + 30;
+                line2.X2 = tempLine.X2 + 30;
+                line2.Y2 = tempLine.Y2 - 30;
+                listLine.Add(line2);
+
+                this.MainGrid.Children.Add(line1);
+                this.MainGrid.Children.Add(line2);
+                this.MainGrid.Children.Add(tempLine);
+
+            }
         }
 
 

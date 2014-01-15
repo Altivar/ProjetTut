@@ -143,6 +143,30 @@ namespace AppliProjetTut
             }
         }
 
+        public Line getLineToParent()
+        {
+            Line line = new Line();
+
+            if (parent != null)
+            {
+                Point pt1 = this.PointToScreen(new Point(150, 100));
+                Point pt2 = parent.PointToScreen(new Point(150, 100));
+
+                line.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
+
+
+                
+
+                line.X1 = pt1.X;
+                line.Y1 = pt1.Y;
+                line.X2 = pt2.X;
+                line.Y2 = pt2.Y;
+                line.StrokeThickness = 2;
+            }
+
+            return line;
+        }
+
         
     }
 }
