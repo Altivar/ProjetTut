@@ -34,7 +34,7 @@ namespace AppliProjetTut
         int start;
 
         //Position du Node initial
-        Point initP = new Point(100, 100);
+        Point initP = new Point(800, 400);
         
 
         /// <summary>
@@ -60,13 +60,7 @@ namespace AppliProjetTut
 
         }
 
-        void OnPreviewTouchMove(object sender, TouchEventArgs e)
-        {
-            for (int i = 0; i < listNode.Count; i++)
-            {
-                listNode.ElementAt(i);
-            }
-        }
+        
 
         /// <summary>
         /// Occurs when the window is about to close. 
@@ -148,11 +142,18 @@ namespace AppliProjetTut
         {
             start = e.Timestamp;
         }
+        
+        
+        void OnPreviewTouchMove(object sender, TouchEventArgs e)
+        {
+            start = e.Timestamp;
+        }
+
 
         private void OnPreviewTouchUp(object sender, TouchEventArgs e)
         {
             //créé un nouveau node après 2 secondes
-            if (e.Timestamp - start > 1000)
+            if (e.Timestamp - start > 2000)
             {
                 Point pt = e.TouchDevice.GetPosition(this);
                 AddNode(null, pt);

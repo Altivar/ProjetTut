@@ -56,7 +56,6 @@ namespace AppliProjetTut
             // initialisation du texte et de la couleur de fond
             this.TextBoxNode.IsEnabled = false;
             this.Background = new SolidColorBrush(Colors.LightBlue);
-            this.TextBoxNode.AppendText("|");
             CanScale = false;
         }
 
@@ -67,6 +66,9 @@ namespace AppliProjetTut
             if (!isEditing)
             {
                 this.MainScatter.Items.Add(clavier);
+
+                // on fait apparaitre le "curseur"
+                this.TextBoxNode.AppendText("|");
                 clavier.CanMove = false;
                 clavier.CanScale = false;
                 clavier.CanRotate = false;
@@ -94,6 +96,13 @@ namespace AppliProjetTut
             if (str.Equals("close"))
             {
                 this.MainScatter.Items.Remove(clavier);
+                
+                // on enlève le "curseur"
+                string test = this.TextBoxNode.Text;
+                test = test.Remove(test.Length - 1);
+                this.TextBoxNode.Clear();
+                this.TextBoxNode.AppendText(test);
+
                 isMoveEnable(true);
                 isEditing = false;
             }
@@ -107,7 +116,6 @@ namespace AppliProjetTut
                     this.TextBoxNode.AppendText(test);
                     this.TextBoxNode.AppendText("|");
                 }
-                
             }
             else
             {
