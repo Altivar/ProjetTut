@@ -27,6 +27,9 @@ namespace AppliProjetTut
         // liste de claviers
         List<ScatterViewItem> listScatterViewItem = new List<ScatterViewItem>();
 
+        // liste de node
+        List<NodeText> listNode = new List<NodeText>();
+
 
         /// <summary>
         /// Default constructor.
@@ -39,9 +42,11 @@ namespace AppliProjetTut
             AddWindowAvailabilityHandlers();
 
 
-            // ajout de claviers
-            AddClavier();
-            AddClavier();
+            // ajout de Claviers
+            // AddClavier();
+
+            // ajout de Nodes
+            AddNode();
 
         }
 
@@ -116,7 +121,15 @@ namespace AppliProjetTut
         // gestion des clavier
         private void AddClavier()
         {
-            this.MainScatterView.Items.Add(new ClavierVirtuel());
+            //this.MainScatterView.Items.Add(new ClavierVirtuel(this));
+        }
+
+        private void AddNode()
+        {
+            NodeText text = new NodeText();
+            this.MainScatterView.Items.Add(new NodeText());
+            
+            listNode.Add(text);
         }
 
         

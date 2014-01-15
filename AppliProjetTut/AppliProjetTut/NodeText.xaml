@@ -1,0 +1,23 @@
+﻿<s:ScatterViewItem x:Class="AppliProjetTut.NodeText"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:s="http://schemas.microsoft.com/surface/2008"
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        
+        <s:SurfaceTextBox Name="Text" Margin="0,0,0,0" />
+        
+        <s:ElementMenu 
+        Name="MainMenu"
+        ActivationMode="AlwaysActive"
+        ActivationHost="{Binding ElementName=MenuGrid}"
+        HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <s:ElementMenuItem Header="Menu 1" Click="OnEditSelection" />
+            <s:ElementMenuItem Header="Menu 2" Click="OnAddNodeSelection" />
+            <s:ElementMenuItem Header="Menu 3" Click="OnRemoveSelection" />
+        </s:ElementMenu>
+        <s:ScatterView Name="MainScatter" Margin="150,240,150,60"/>
+    </Grid>
+</s:ScatterViewItem>

@@ -21,14 +21,24 @@ namespace AppliProjetTut
     public partial class ClavierVirtuel : ScatterViewItem
     {
 
+        // mouvement
         private bool isMovementEnabled = true;
 
-        public ClavierVirtuel()
+        // Node
+        private NodeText NodeParent;
+
+
+        public ClavierVirtuel(NodeText parent)
         {
             InitializeComponent();
-            
-            this.Text.IsEnabled = false;
 
+            // initialize nodeparent
+            NodeParent = parent;
+
+            this.CanScale = false;
+
+            this.Text.IsEnabled = false;
+            
             this.Cadenas.PreviewTouchDown += new EventHandler<TouchEventArgs>(Cadenas_PreviewTouchDown);
 
             this.A.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
@@ -67,19 +77,19 @@ namespace AppliProjetTut
             this.sept.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.huit.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.neuf.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+
+            this.close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
         }   
 
         void Cadenas_PreviewTouchDown(object sender, TouchEventArgs e)
         {
             isMovementEnabled = !isMovementEnabled;
-            this.CanMove = isMovementEnabled;
-            this.CanRotate = isMovementEnabled;
-            this.CanScale = isMovementEnabled;
+            NodeParent.isMoveEnable(isMovementEnabled);
         }
 
         void OnLetterPreviewTouchDown(object sender, TouchEventArgs e)
         {
-            this.Text.AppendText(((SurfaceButton)sender).Content.ToString());
+            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
         }
 
         
