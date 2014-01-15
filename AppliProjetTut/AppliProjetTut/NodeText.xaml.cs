@@ -76,7 +76,8 @@ namespace AppliProjetTut
 
         private void OnAddNodeSelection(object sender, RoutedEventArgs e)
         {
-            Surface.AddNode(this);
+            Point pt = new Point(150, 150);
+            Surface.AddNode(this, pt);
         }
 
         private void OnRemoveSelection(object sender, RoutedEventArgs e)

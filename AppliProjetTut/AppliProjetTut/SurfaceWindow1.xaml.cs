@@ -30,6 +30,12 @@ namespace AppliProjetTut
         // liste de node
         List<NodeText> listNode = new List<NodeText>();
 
+        //Départ du hold
+        int start;
+
+        //Position du Node initial
+        Point initP = new Point(100, 100);
+        
 
         /// <summary>
         /// Default constructor.
@@ -46,9 +52,11 @@ namespace AppliProjetTut
             // AddClavier();
 
             // ajout de Nodes
-            AddNode(null);
+            AddNode(null, initP);
 
             PreviewTouchMove += new EventHandler<TouchEventArgs>(OnPreviewTouchMove);
+            PreviewTouchDown += new EventHandler<TouchEventArgs>(OnPreviewTouchDown);
+            PreviewTouchUp += new EventHandler<TouchEventArgs>(OnPreviewTouchUp);
 
         }
 
@@ -128,13 +136,29 @@ namespace AppliProjetTut
 
 
 
-        public void AddNode(NodeText parent)
+        public void AddNode(NodeText parent, Point pt)
         {
             NodeText text = new NodeText(this, parent);
+            text.Center = pt;
             this.MainScatterView.Items.Add(text);
             listNode.Add(text);
         }
 
+        private void OnPreviewTouchDown(object sender, TouchEventArgs e)
+        {
+            start = e.Timestamp;
+        }
+
+        private void OnPreviewTouchUp(object sender, TouchEventArgs e)
+        {
+            //créé un nouveau node après 2 secondes
+            if (e.Timestamp - start > 1000)
+            {
+                Point pt = e.TouchDevice.GetPosition(this);
+                AddNode(null, pt);
+                start = 0;
+            }
+        }
         
     }
 }
