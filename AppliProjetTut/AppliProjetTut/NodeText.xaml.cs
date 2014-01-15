@@ -56,7 +56,7 @@ namespace AppliProjetTut
             // initialisation du texte et de la couleur de fond
             this.TextBoxNode.IsEnabled = false;
             this.Background = new SolidColorBrush(Colors.LightBlue);
-            this.TextBoxNode.AppendText("// TODO \\\\");
+            this.TextBoxNode.AppendText("|");
             CanScale = false;
         }
 
@@ -98,15 +98,24 @@ namespace AppliProjetTut
             }
             else if (str.Equals("Backspace"))
             {
-                string test = this.TextBoxNode.Text;
-                test = test.Remove(test.Length - 1);
-                this.TextBoxNode.Clear();
-                this.TextBoxNode.AppendText(test);
+                if (this.TextBoxNode.Text.Length > 1)
+                {
+                    string test = this.TextBoxNode.Text;
+                    test = test.Remove(test.Length - 2);
+                    this.TextBoxNode.Clear();
+                    this.TextBoxNode.AppendText(test);
+                    this.TextBoxNode.AppendText("|");
+                }
                 
             }
             else
             {
-                this.TextBoxNode.AppendText(str); 
+                string test = this.TextBoxNode.Text;
+                test = test.Remove(test.Length - 1);
+                this.TextBoxNode.Clear();
+                this.TextBoxNode.AppendText(test);
+                this.TextBoxNode.AppendText(str);
+                this.TextBoxNode.AppendText("|");
             }
             
         }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:s="http://schemas.microsoft.com/surface/2008"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Width="646" Height="186">
+             d:DesignHeight="300" d:DesignWidth="300" Width="646" Height="151">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -40,25 +40,25 @@
             <ColumnDefinition Width="44"/>
         </Grid.ColumnDefinitions>
 
-        <s:SurfaceTextBox Name="Text" Height="50" Width="100" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" Grid.RowSpan="2" ></s:SurfaceTextBox>
+
         <s:SurfaceButton Name="Carré" Content="²" Grid.Row="0" Grid.Column="0"/>
         <s:SurfaceButton Name="et" Content=" &amp; "   Grid.Row="0" Grid.Column="1"></s:SurfaceButton>
         <s:SurfaceButton Name="é" Content="é"  Grid.Row="0" Grid.Column="2"></s:SurfaceButton>
         <s:SurfaceButton Name="dbl_quotes" Content=' &quot; '  Grid.Row="0" Grid.Column="3" ></s:SurfaceButton>
         <s:SurfaceButton Name="quote" Content="'"  Grid.Row="0" Grid.Column="4" ></s:SurfaceButton>
         <s:SurfaceButton Name="par" Content="("  Grid.Row="0" Grid.Column="5" ></s:SurfaceButton>
-        <s:SurfaceButton Name="par1" Content="miii"  Grid.Row="0" Grid.Column="6" ></s:SurfaceButton>
+        <s:SurfaceButton Name="par1" Content="&lt;"  Grid.Row="0" Grid.Column="6" ></s:SurfaceButton>
         <s:SurfaceButton Name="è" Content="è"  Grid.Row="0" Grid.Column="7" ></s:SurfaceButton>
         <s:SurfaceButton Name="under" Content="_"  Grid.Row="0" Grid.Column="8" ></s:SurfaceButton>
         <s:SurfaceButton Name="ç" Content="ç"  Grid.Row="0" Grid.Column="9" ></s:SurfaceButton>
         <s:SurfaceButton Name="à" Content="à"  Grid.Row="0" Grid.Column="10" ></s:SurfaceButton>
         <s:SurfaceButton Name="parbis" Content=")"  Grid.Row="0" Grid.Column="11" ></s:SurfaceButton>
-        <s:SurfaceButton Name="par1bis" Content="miii"  Grid.Row="0" Grid.Column="12" ></s:SurfaceButton>
+        <s:SurfaceButton Name="par1bis" Content="&gt;"  Grid.Row="0" Grid.Column="12" ></s:SurfaceButton>
         <s:SurfaceButton Name="arobase" Content="@"  Grid.Row="0" Grid.Column="13" ></s:SurfaceButton>
-        <s:SurfaceButton Name="backspace" Content="Backspace"  Grid.Row="0" Grid.Column="14" Grid.ColumnSpan="2" ></s:SurfaceButton>
+        <s:SurfaceButton Name="Backspace" Content="Backspace"  Grid.Row="0" Grid.Column="14" Grid.ColumnSpan="2" ></s:SurfaceButton>
 
         <s:SurfaceButton Name="Tab" Content="Tab" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"></s:SurfaceButton>
-        <s:SurfaceButton Name="A" Content="A"   Grid.Row="1" Grid.Column="2"></s:SurfaceButton>
+        <s:SurfaceButton Name="A" Content="A"   Grid.Row="1" Grid.Column="2" ></s:SurfaceButton>
         <s:SurfaceButton Name="Z" Content="Z"  Grid.Row="1" Grid.Column="3"></s:SurfaceButton>
         <s:SurfaceButton Name="E" Content="E"  Grid.Row="1" Grid.Column="4" ></s:SurfaceButton>
         <s:SurfaceButton Name="R" Content="R"  Grid.Row="1" Grid.Column="5" ></s:SurfaceButton>
@@ -71,10 +71,7 @@
         <s:SurfaceButton Name="Circonflexe" Content="^"  Grid.Row="1" Grid.Column="12" ></s:SurfaceButton>
         <s:SurfaceButton Name="Dollars" Content="$"  Grid.Row="1" Grid.Column="13" ></s:SurfaceButton>
 
-        <s:SurfaceButton Name="Caps_Lock"   Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  >
-            <Image Source=".\Resources\cadenas.jpg" >
-            </Image>
-        </s:SurfaceButton>
+        <s:SurfaceButton Name="Caps_Lock" Content="Caps Lock"   Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  ></s:SurfaceButton>
         <s:SurfaceButton Name="Q" Content="Q" Grid.Row="2" Grid.Column="2"  ></s:SurfaceButton>
         <s:SurfaceButton Name="S" Content="S" Grid.Row="2" Grid.Column="3" ></s:SurfaceButton>
         <s:SurfaceButton Name="D" Content="D" Grid.Row="2" Grid.Column="4" ></s:SurfaceButton>
@@ -89,7 +86,7 @@
         <s:SurfaceButton Name="Stars" Content="*" Grid.Row="2" Grid.Column="13"   ></s:SurfaceButton>
         <s:SurfaceButton Name="Enter" Content="&#13;"  Grid.Row="1" Grid.Column="14" Grid.RowSpan="3" Grid.ColumnSpan="2" ></s:SurfaceButton>
 
-        <s:SurfaceButton Name="shift" Content="shift" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  ></s:SurfaceButton>
+        <s:SurfaceButton Name="shift" Content="Shift" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  ></s:SurfaceButton>
         <s:SurfaceButton Name="W" Content="W" Grid.Row="3" Grid.Column="2"  ></s:SurfaceButton>
         <s:SurfaceButton Name="X" Content="X" Grid.Row="3" Grid.Column="3" ></s:SurfaceButton>
         <s:SurfaceButton Name="C" Content="C" Grid.Row="3" Grid.Column="4" ></s:SurfaceButton>
@@ -102,8 +99,8 @@
         <s:SurfaceButton Name="pointvrgl" Content=";" Grid.Row="3" Grid.Column="11" ></s:SurfaceButton>
         <s:SurfaceButton Name="dble" Content=":" Grid.Row="3" Grid.Column="12" ></s:SurfaceButton>
         <s:SurfaceButton Name="exclamation" Content="!" Grid.Row="3" Grid.Column="13"   ></s:SurfaceButton>
-        <s:SurfaceButton Name="Cadenas" Content="Cadenas" Grid.Row="4" Grid.Column="14"></s:SurfaceButton>
-        <s:SurfaceButton Name="close" Content="close" Grid.Row="4" Grid.Column="15"   ></s:SurfaceButton>
+        <s:SurfaceButton Name="Cadenas" Content="Cadenas" Grid.Row="4" Grid.Column="13" Grid.ColumnSpan="3"></s:SurfaceButton>
+        <s:SurfaceButton Name="close" Content="close" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"  ></s:SurfaceButton>
 
 
         <s:SurfaceButton Name="un" Content="1"   Grid.Row="3" Grid.Column="17"></s:SurfaceButton>
@@ -121,14 +118,10 @@
         <s:SurfaceButton Name="diviser" Content="/"  Grid.Row="0" Grid.Column="18" ></s:SurfaceButton>
         <s:SurfaceButton Name="égal" Content="="  Grid.Row="0" Grid.Column="17" ></s:SurfaceButton>
         <s:SurfaceButton Name="zero" Content="0"  Grid.Row="4" Grid.Column="17" Grid.ColumnSpan="2" ></s:SurfaceButton>
-        <s:SurfaceButton Name="Entrer" Content="Enter"  Grid.Row="3" Grid.Column="20" Grid.RowSpan="2" ></s:SurfaceButton>
+        <s:SurfaceButton Name="Entrer" Content="&#13;"  Grid.Row="3" Grid.Column="20" Grid.RowSpan="2" ></s:SurfaceButton>
         <s:SurfaceButton Name="Point" Content="."  Grid.Row="4" Grid.Column="19" ></s:SurfaceButton>
 
-        <s:SurfaceButton Name="Controle" Content="Ctrl"  Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ></s:SurfaceButton>
-        <s:SurfaceButton Name="Wdws" Content="Wdws"  Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" ></s:SurfaceButton>
-
-        <s:SurfaceButton Name="Space" Content="Space"  Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="8" ></s:SurfaceButton>
-        <s:SurfaceButton Name="Alt" Content="Alt"  Grid.Row="4" Grid.Column="12" Grid.ColumnSpan="2" ></s:SurfaceButton>
+        <s:SurfaceButton Name="Space" Content=" "  Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="10" ></s:SurfaceButton>
 
     </Grid>
 </s:ScatterViewItem>

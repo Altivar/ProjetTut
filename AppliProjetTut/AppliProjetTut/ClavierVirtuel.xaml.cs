@@ -37,9 +37,42 @@ namespace AppliProjetTut
 
             this.CanScale = false;
 
-            this.Text.IsEnabled = false;
-            
+            //this.Text.IsEnabled = false;
+
             this.Cadenas.PreviewTouchDown += new EventHandler<TouchEventArgs>(Cadenas_PreviewTouchDown);
+
+            this.Carré.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.et.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.é.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.dbl_quotes.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.quote.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.par.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.par1.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.è.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.under.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.ç.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.à.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.parbis.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.par1bis.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.arobase.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Backspace.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Tab.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Circonflexe.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Dollars.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.ù.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Stars.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.virgule.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.interogation.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.point.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.pointvrgl.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.dble.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.exclamation.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.plus.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.moins.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.multiplier.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.diviser.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.égal.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Point.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
 
             this.A.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.Z.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
@@ -78,10 +111,16 @@ namespace AppliProjetTut
             this.huit.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.neuf.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
 
-            this.backspace.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Enter.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Entrer.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Space.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+
+            this.Caps_Lock.PreviewTouchDown += new EventHandler<TouchEventArgs>(Caps_PreviewTouchDown);
+            this.Tab.PreviewTouchDown += new EventHandler<TouchEventArgs>(Tab_PreviewTouchDown);
+
 
             this.close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
-        }   
+        }
 
         void Cadenas_PreviewTouchDown(object sender, TouchEventArgs e)
         {
@@ -94,11 +133,24 @@ namespace AppliProjetTut
             NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
         }
 
-        
+        void Enter_PreviewTouchDown(object sender, TouchEventArgs e)
+        {
+            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+        }
 
+        void Space_PreviewTouchDown(object sender, TouchEventArgs e)
+        {
+            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+        }
 
-
-        
+        void Caps_PreviewTouchDown(object sender, TouchEventArgs e)
+        {
+            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+        }
+        void Tab_PreviewTouchDown(object sender, TouchEventArgs e)
+        {
+            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+        }
 
     }
 }
