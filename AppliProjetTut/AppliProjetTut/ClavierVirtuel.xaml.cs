@@ -78,6 +78,8 @@ namespace AppliProjetTut
             this.huit.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.neuf.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
 
+            this.backspace.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+
             this.close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
         }   
 

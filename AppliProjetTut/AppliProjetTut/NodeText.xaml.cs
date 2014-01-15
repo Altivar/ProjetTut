@@ -26,26 +26,38 @@ namespace AppliProjetTut
         private bool isEditing = false;
 
         // liste de nodes enfant
-        private List<NodeText> listeNode = new List<NodeText>();
+        //private List<NodeText> listeNode = new List<NodeText>();
+
+        // parent
+        NodeText parent;
+        // surfacewindow
+        SurfaceWindow1 Surface;
 
         // clavier virtuel
         private ClavierVirtuel clavier;
 
-        public NodeText()
+        public NodeText(SurfaceWindow1 parentSurface, NodeText parentNode)
         {
             InitializeComponent();
 
+            parent = parentNode;
+            Surface = parentSurface;
             clavier = new ClavierVirtuel(this);
+        }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnNodeLoaded(object sender, RoutedEventArgs e)
+        {
             // initialisation du texte et de la couleur de fond
-            this.Text.IsEnabled = false;
+            this.TextBoxNode.IsEnabled = false;
             this.Background = new SolidColorBrush(Colors.LightBlue);
-
-            this.Text.AppendText("// TODO \\\\");
-
-            
-
+            this.TextBoxNode.AppendText("// TODO \\\\");
+            CanScale = false;
         }
 
 
@@ -64,7 +76,7 @@ namespace AppliProjetTut
 
         private void OnAddNodeSelection(object sender, RoutedEventArgs e)
         {
-            
+            Surface.AddNode(this);
         }
 
         private void OnRemoveSelection(object sender, RoutedEventArgs e)
@@ -78,20 +90,29 @@ namespace AppliProjetTut
         public void AjoutTexte(string str)
         {
 
-            if (str == "close")
+            if (str.Equals("close"))
             {
                 this.MainScatter.Items.Remove(clavier);
+                isMoveEnable(true);
                 isEditing = false;
+            }
+            else if (str.Equals("Backspace"))
+            {
+                string test = this.TextBoxNode.Text;
+                test = test.Remove(test.Length - 1);
+                this.TextBoxNode.Clear();
+                this.TextBoxNode.AppendText(test);
+                
             }
             else
             {
-                this.Text.AppendText(str);
+                this.TextBoxNode.AppendText(str); 
             }
             
         }
+
         public void isMoveEnable(bool enable)
         {
-            CanRotate = enable;
             CanMove = enable;
             CanRotate = enable;
             if (enable)

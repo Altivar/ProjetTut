@@ -4,20 +4,25 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:s="http://schemas.microsoft.com/surface/2008"
-             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
+             Height="200" Width="300"
+             Loaded="OnNodeLoaded">
     <Grid>
         
-        <s:SurfaceTextBox Name="Text" Margin="0,0,0,0" />
+        <s:SurfaceTextBox Name="TextBoxNode" Margin="0,0,0,0" />
         
         <s:ElementMenu 
         Name="MainMenu"
         ActivationMode="AlwaysActive"
         ActivationHost="{Binding ElementName=MenuGrid}"
         HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <s:ElementMenuItem Header="Menu 1" Click="OnEditSelection" />
-            <s:ElementMenuItem Header="Menu 2" Click="OnAddNodeSelection" />
-            <s:ElementMenuItem Header="Menu 3" Click="OnRemoveSelection" />
+            
+            <s:ElementMenuItem Header="Edit" Click="OnEditSelection" />
+            <s:ElementMenuItem Header="Add NodeText" Click="OnAddNodeSelection" />
+            <s:ElementMenuItem Header="Remove This" Click="OnRemoveSelection" />
+            
         </s:ElementMenu>
         <s:ScatterView Name="MainScatter" Margin="150,240,150,60"/>
+        
     </Grid>
 </s:ScatterViewItem>

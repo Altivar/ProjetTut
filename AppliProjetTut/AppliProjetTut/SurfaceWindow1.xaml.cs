@@ -25,7 +25,7 @@ namespace AppliProjetTut
     {
 
         // liste de claviers
-        List<ScatterViewItem> listScatterViewItem = new List<ScatterViewItem>();
+        //List<ScatterViewItem> listScatterViewItem = new List<ScatterViewItem>();
 
         // liste de node
         List<NodeText> listNode = new List<NodeText>();
@@ -46,8 +46,18 @@ namespace AppliProjetTut
             // AddClavier();
 
             // ajout de Nodes
-            AddNode();
+            AddNode(null);
 
+            PreviewTouchMove += new EventHandler<TouchEventArgs>(OnPreviewTouchMove);
+
+        }
+
+        void OnPreviewTouchMove(object sender, TouchEventArgs e)
+        {
+            for (int i = 0; i < listNode.Count; i++)
+            {
+                listNode.ElementAt(i);
+            }
         }
 
         /// <summary>
@@ -118,17 +128,10 @@ namespace AppliProjetTut
 
 
 
-        // gestion des clavier
-        private void AddClavier()
+        public void AddNode(NodeText parent)
         {
-            //this.MainScatterView.Items.Add(new ClavierVirtuel(this));
-        }
-
-        private void AddNode()
-        {
-            NodeText text = new NodeText();
-            this.MainScatterView.Items.Add(new NodeText());
-            
+            NodeText text = new NodeText(this, parent);
+            this.MainScatterView.Items.Add(text);
             listNode.Add(text);
         }
 
