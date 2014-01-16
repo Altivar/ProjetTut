@@ -9,7 +9,7 @@
              Loaded="OnNodeLoaded">
     <Grid>
         
-        <s:SurfaceTextBox Name="TextBoxNode" Margin="0,0,0,0" />
+        <s:SurfaceTextBox Name="TextBoxNode" Margin="0,0,0,0" TextWrapping="Wrap" />
         
         <s:ElementMenu 
         Name="MainMenu"
@@ -22,7 +22,7 @@
             <s:ElementMenuItem Header="Remove This" Click="OnRemoveSelection" />
             
         </s:ElementMenu>
-        <s:ScatterView Name="MainScatter" Margin="150,240,150,60"/>
+        <s:ScatterView Name="MainScatter" Margin="150,287,150,13"/>
         
     </Grid>
 </s:ScatterViewItem>

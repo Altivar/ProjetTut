@@ -53,7 +53,7 @@ namespace AppliProjetTut
             // AddClavier();
 
             // ajout de Nodes
-            //AddNode(null, initP);
+            AddNode(null, initP);
 
             PreviewTouchMove += new EventHandler<TouchEventArgs>(OnPreviewTouchMove);
             PreviewTouchDown += new EventHandler<TouchEventArgs>(OnPreviewTouchDown);
