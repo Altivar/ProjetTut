@@ -149,19 +149,26 @@ namespace AppliProjetTut
 
             if (parent != null)
             {
+
                 Point pt1 = this.PointToScreen(new Point(150, 100));
                 Point pt2 = parent.PointToScreen(new Point(150, 100));
 
                 line.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
-
-
-                
 
                 line.X1 = pt1.X;
                 line.Y1 = pt1.Y;
                 line.X2 = pt2.X;
                 line.Y2 = pt2.Y;
                 line.StrokeThickness = 2;
+            }
+            else
+            {
+                line.Stroke = System.Windows.Media.Brushes.Transparent;
+                line.X1 = 0;
+                line.Y1 = 0;
+                line.X2 = 0;
+                line.Y2 = 0;
+                line.StrokeThickness = 0;
             }
 
             return line;

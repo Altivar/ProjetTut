@@ -31,6 +31,7 @@ namespace AppliProjetTut
         List<Line> listLine = new List<Line>();
 
         //Départ du hold
+        Point ptStartHold;
         int start;
 
         //Position du Node initial
@@ -149,40 +150,52 @@ namespace AppliProjetTut
         private void OnPreviewTouchDown(object sender, TouchEventArgs e)
         {
             start = e.Timestamp;
+            ptStartHold = e.TouchDevice.GetPosition(this);
         }
         
         void OnPreviewTouchMove(object sender, TouchEventArgs e)
         {
-            start = e.Timestamp;
+            double diffX = ptStartHold.X - e.TouchDevice.GetPosition(this).X;
+            double diffY = ptStartHold.Y - e.TouchDevice.GetPosition(this).Y;
+
+            if (diffX * diffX + diffY * diffY > 900)
+            {
+                start = e.Timestamp;
+            }
+
+
             for (int i = 0; i < listLine.Count; i++)
             {
                 this.MainGrid.Children.Remove(listLine.ElementAt(i));
             }
             listLine.Clear();
-            for (int i = 1; i < listNode.Count; i++)
+            for (int i = 0; i < listNode.Count; i++)
             {
                 Line tempLine = listNode.ElementAt(i).getLineToParent();
-                listLine.Add(tempLine);
-                Line line1 = new Line();
-                line1.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
-                line1.StrokeThickness = 2;
-                line1.X1 = tempLine.X2 + 30;
-                line1.Y1 = tempLine.Y2 + 30;
-                line1.X2 = tempLine.X2 - 30;
-                line1.Y2 = tempLine.Y2 - 30;
-                listLine.Add(line1);
-                Line line2 = new Line();
-                line2.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
-                line2.StrokeThickness = 2;
-                line2.X1 = tempLine.X2 - 30;
-                line2.Y1 = tempLine.Y2 + 30;
-                line2.X2 = tempLine.X2 + 30;
-                line2.Y2 = tempLine.Y2 - 30;
-                listLine.Add(line2);
+                if ( !(tempLine.X1 == 0 && tempLine.Y1 == 0 && tempLine.X2 == 0 && tempLine.Y2 == 0) )
+                {
+                    listLine.Add(tempLine);
+                    Line line1 = new Line();
+                    line1.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
+                    line1.StrokeThickness = 2;
+                    line1.X1 = tempLine.X2 + 30;
+                    line1.Y1 = tempLine.Y2 + 30;
+                    line1.X2 = tempLine.X2 - 30;
+                    line1.Y2 = tempLine.Y2 - 30;
+                    listLine.Add(line1);
+                    Line line2 = new Line();
+                    line2.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
+                    line2.StrokeThickness = 2;
+                    line2.X1 = tempLine.X2 - 30;
+                    line2.Y1 = tempLine.Y2 + 30;
+                    line2.X2 = tempLine.X2 + 30;
+                    line2.Y2 = tempLine.Y2 - 30;
+                    listLine.Add(line2);
 
-                this.MainGrid.Children.Add(line1);
-                this.MainGrid.Children.Add(line2);
-                this.MainGrid.Children.Add(tempLine);
+                    this.MainGrid.Children.Add(line1);
+                    this.MainGrid.Children.Add(line2);
+                    this.MainGrid.Children.Add(tempLine);
+                }
 
             }
         }
