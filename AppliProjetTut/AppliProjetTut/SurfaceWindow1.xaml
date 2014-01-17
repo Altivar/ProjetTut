@@ -5,9 +5,12 @@
     Title="AppliProjetTut"
     >
     <s:SurfaceWindow.Background>
-        <ImageBrush ImageSource="./Resources/icon.png" />
+        
+       <ImageBrush ImageSource="./Resources/icon.png" />
+        
     </s:SurfaceWindow.Background>
     <Grid Name="MainGrid">
-        <s:ScatterView Name="MainScatterView" Grid.Row="1" Grid.Column="0"/>
+        <Grid Name="LineGrid" />
+        <s:ScatterView Name="MainScatterView" Grid.Row="1" Grid.Column="0" />
     </Grid>
 </s:SurfaceWindow>

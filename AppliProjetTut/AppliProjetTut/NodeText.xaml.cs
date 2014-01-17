@@ -153,13 +153,7 @@ namespace AppliProjetTut
                 Point pt1 = this.ActualCenter;
                 Point pt2 = parent.ActualCenter;
 
-                line.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
-
-
-
-                // 
-
-
+                line.Stroke = Brushes.PaleVioletRed;
 
                 line.X1 = pt1.X;
                 line.Y1 = pt1.Y;
@@ -170,7 +164,7 @@ namespace AppliProjetTut
             }
             else
             {
-                line.Stroke = System.Windows.Media.Brushes.Transparent;
+                line.Stroke = Brushes.Transparent;
                 line.X1 = 0;
                 line.Y1 = 0;
                 line.X2 = 0;

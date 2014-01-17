@@ -29,6 +29,7 @@ namespace AppliProjetTut
 
         // liste de ligne inter-node
         List<Line> listLine = new List<Line>();
+        List<Polygon> listPoly = new List<Polygon>();
 
         //Départ du hold
         Point ptStartHold;
@@ -166,35 +167,46 @@ namespace AppliProjetTut
 
             for (int i = 0; i < listLine.Count; i++)
             {
-                this.MainGrid.Children.Remove(listLine.ElementAt(i));
+                this.LineGrid.Children.Remove(listLine.ElementAt(i));
             }
             listLine.Clear();
+            for (int i = 0; i < listPoly.Count; i++)
+            {
+                this.LineGrid.Children.Remove(listPoly.ElementAt(i));
+            }
+            listPoly.Clear();
             for (int i = 0; i < listNode.Count; i++)
             {
                 Line tempLine = listNode.ElementAt(i).getLineToParent();
                 if ( !(tempLine.X1 == 0 && tempLine.Y1 == 0 && tempLine.X2 == 0 && tempLine.Y2 == 0) )
                 {
+                    
                     listLine.Add(tempLine);
-                    Line line1 = new Line();
-                    line1.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
-                    line1.StrokeThickness = 2;
-                    line1.X1 = tempLine.X2 + 30;
-                    line1.Y1 = tempLine.Y2 + 30;
-                    line1.X2 = tempLine.X2 - 30;
-                    line1.Y2 = tempLine.Y2 - 30;
-                    listLine.Add(line1);
-                    Line line2 = new Line();
-                    line2.Stroke = System.Windows.Media.Brushes.PaleVioletRed;
-                    line2.StrokeThickness = 2;
-                    line2.X1 = tempLine.X2 - 30;
-                    line2.Y1 = tempLine.Y2 + 30;
-                    line2.X2 = tempLine.X2 + 30;
-                    line2.Y2 = tempLine.Y2 - 30;
-                    listLine.Add(line2);
+                    this.LineGrid.Children.Add(tempLine);
+                    Polygon triangle = new Polygon();
+                    double pourcentage = Math.Sqrt( 100 / ((tempLine.X1 - tempLine.X2) * (tempLine.X1 - tempLine.X2) + (tempLine.Y1 - tempLine.Y2) * (tempLine.Y1 - tempLine.Y2)) );
+                    double Xplus = (tempLine.X1 + tempLine.X2) / 2 - pourcentage * (tempLine.X2 - tempLine.X1);
+                    double Yplus = (tempLine.Y1 + tempLine.Y2) / 2 - pourcentage * (tempLine.Y2 - tempLine.Y1);
+                    
+                    double XVect = Xplus - (tempLine.X1 + tempLine.X2) / 2;
+                    double YVect = Yplus - (tempLine.Y1 + tempLine.Y2) / 2;
 
-                    this.MainGrid.Children.Add(line1);
-                    this.MainGrid.Children.Add(line2);
-                    this.MainGrid.Children.Add(tempLine);
+                    Point ptMilieu = new Point((tempLine.X1 + tempLine.X2) / 2, (tempLine.Y1 + tempLine.Y2) / 2);
+                    Point ptFleche1 = new Point( Xplus + YVect, Yplus - XVect);
+                    Point ptFleche2 = new Point( Xplus - YVect, Yplus + XVect);
+
+                    PointCollection triangleCollection = new PointCollection();
+                    triangleCollection.Add(ptMilieu);
+                    triangleCollection.Add(ptFleche1);
+                    triangleCollection.Add(ptFleche2);
+                    triangleCollection.Add(ptMilieu);
+                    triangle.Points = triangleCollection;
+                    triangle.Stroke = Brushes.PaleVioletRed;
+                    triangle.Fill = Brushes.PaleVioletRed;
+                    listPoly.Add(triangle);
+
+                    this.LineGrid.Children.Add(triangle);
+                    
                 }
 
             }
