@@ -90,7 +90,7 @@ namespace AppliProjetTut
 
         private void OnRemoveSelection(object sender, RoutedEventArgs e)
         {
-            //
+            Surface.RemoveNode(this, true);
         }
 
 
@@ -179,6 +179,11 @@ namespace AppliProjetTut
             }
 
             return line;
+        }
+
+        public NodeText GetParent()
+        {
+            return parent;
         }
 
         

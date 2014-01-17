@@ -49,9 +49,6 @@ namespace AppliProjetTut
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
 
-            // ajout de Claviers
-            // AddClavier();
-
             // ajout de Nodes
             AddNode(null, initP);
 
@@ -145,6 +142,25 @@ namespace AppliProjetTut
             
             this.MainScatterView.Items.Add(text);
             listNode.Add(text);
+        }
+        public void RemoveNode(NodeText parent, bool confirmation)
+        {
+            for (int i = 0; i < listNode.Count; i++)
+            {
+                if (listNode.ElementAt(i).GetParent() == parent)
+                {
+                    if (confirmation)
+                    {
+                        // demande de confirmation
+                        confirmation = false;
+                    }
+                    RemoveNode(listNode.ElementAt(i), false);
+                    i--;
+                }
+            }
+            listNode.Remove(parent);
+            this.MainScatterView.Items.Remove(parent);
+
         }
 
         private void OnPreviewTouchDown(object sender, TouchEventArgs e)
