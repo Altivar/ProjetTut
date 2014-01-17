@@ -49,7 +49,6 @@ namespace AppliProjetTut
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
 
-
             // ajout de Claviers
             // AddClavier();
 

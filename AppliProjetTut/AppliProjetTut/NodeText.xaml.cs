@@ -25,9 +25,6 @@ namespace AppliProjetTut
         // en edition
         private bool isEditing = false;
 
-        // liste de nodes enfant
-        //private List<NodeText> listeNode = new List<NodeText>();
-
         // parent
         NodeText parent;
         // surfacewindow
@@ -78,7 +75,16 @@ namespace AppliProjetTut
 
         private void OnAddNodeSelection(object sender, RoutedEventArgs e)
         {
-            Point pt = new Point(150, 150);
+
+            Point pt = ActualCenter;
+            if (pt.Y < Surface.Height - 300)
+            {
+                pt.Y += 200;
+            }
+            else
+            {
+                pt.Y -= 200;
+            }
             Surface.AddNode(this, pt);
         }
 
