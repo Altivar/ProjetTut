@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Forms;
 using Microsoft.Surface;
 using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
@@ -145,14 +146,27 @@ namespace AppliProjetTut
         }
         public void RemoveNode(NodeText parent, bool confirmation)
         {
+            bool conf = confirmation;
             for (int i = 0; i < listNode.Count; i++)
             {
                 if (listNode.ElementAt(i).GetParent() == parent)
                 {
-                    if (confirmation)
+                    if (conf)
                     {
                         // demande de confirmation
-                        confirmation = false;
+                        string title = "Warning";
+                        string message = "Remove this Text will remove automatically its children. Remove?";
+                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                        DialogResult res;
+
+                        res = System.Windows.Forms.MessageBox.Show(message, title, buttons);
+
+                        if (res == System.Windows.Forms.DialogResult.No)
+                        {
+                            // On annule la suppression
+                            return;
+                        }
+                        conf = false;
                     }
                     RemoveNode(listNode.ElementAt(i), false);
                     i--;
@@ -160,6 +174,10 @@ namespace AppliProjetTut
             }
             listNode.Remove(parent);
             this.MainScatterView.Items.Remove(parent);
+            if (confirmation)
+            {
+                RefreshImage();
+            }
 
         }
 
@@ -179,7 +197,25 @@ namespace AppliProjetTut
                 start = e.Timestamp;
             }
 
+            RefreshImage();
+            
+        }
 
+
+        private void OnPreviewTouchUp(object sender, TouchEventArgs e)
+        {
+            //créé un nouveau node après 2 secondes
+            if (e.Timestamp - start > 2000)
+            {
+                Point pt = e.TouchDevice.GetPosition(this);
+                AddNode(null, pt);
+                start = 0;
+            }
+        }
+
+
+        private void RefreshImage()
+        {
             for (int i = 0; i < listLine.Count; i++)
             {
                 this.LineGrid.Children.Remove(listLine.ElementAt(i));
@@ -193,22 +229,21 @@ namespace AppliProjetTut
             for (int i = 0; i < listNode.Count; i++)
             {
                 Line tempLine = listNode.ElementAt(i).getLineToParent();
-                if ( !(tempLine.X1 == 0 && tempLine.Y1 == 0 && tempLine.X2 == 0 && tempLine.Y2 == 0) )
+                if (!(tempLine.X1 == 0 && tempLine.Y1 == 0 && tempLine.X2 == 0 && tempLine.Y2 == 0))
                 {
-                    
                     listLine.Add(tempLine);
                     this.LineGrid.Children.Add(tempLine);
                     Polygon triangle = new Polygon();
-                    double pourcentage = Math.Sqrt( 100 / ((tempLine.X1 - tempLine.X2) * (tempLine.X1 - tempLine.X2) + (tempLine.Y1 - tempLine.Y2) * (tempLine.Y1 - tempLine.Y2)) );
+                    double pourcentage = Math.Sqrt(100 / ((tempLine.X1 - tempLine.X2) * (tempLine.X1 - tempLine.X2) + (tempLine.Y1 - tempLine.Y2) * (tempLine.Y1 - tempLine.Y2)));
                     double Xplus = (tempLine.X1 + tempLine.X2) / 2 - pourcentage * (tempLine.X2 - tempLine.X1);
                     double Yplus = (tempLine.Y1 + tempLine.Y2) / 2 - pourcentage * (tempLine.Y2 - tempLine.Y1);
-                    
+
                     double XVect = Xplus - (tempLine.X1 + tempLine.X2) / 2;
                     double YVect = Yplus - (tempLine.Y1 + tempLine.Y2) / 2;
 
                     Point ptMilieu = new Point((tempLine.X1 + tempLine.X2) / 2, (tempLine.Y1 + tempLine.Y2) / 2);
-                    Point ptFleche1 = new Point( Xplus + YVect, Yplus - XVect);
-                    Point ptFleche2 = new Point( Xplus - YVect, Yplus + XVect);
+                    Point ptFleche1 = new Point(Xplus + YVect, Yplus - XVect);
+                    Point ptFleche2 = new Point(Xplus - YVect, Yplus + XVect);
 
                     PointCollection triangleCollection = new PointCollection();
                     triangleCollection.Add(ptMilieu);
@@ -221,21 +256,7 @@ namespace AppliProjetTut
                     listPoly.Add(triangle);
 
                     this.LineGrid.Children.Add(triangle);
-                    
                 }
-
-            }
-        }
-
-
-        private void OnPreviewTouchUp(object sender, TouchEventArgs e)
-        {
-            //créé un nouveau node après 2 secondes
-            if (e.Timestamp - start > 2000)
-            {
-                Point pt = e.TouchDevice.GetPosition(this);
-                AddNode(null, pt);
-                start = 0;
             }
         }
         
