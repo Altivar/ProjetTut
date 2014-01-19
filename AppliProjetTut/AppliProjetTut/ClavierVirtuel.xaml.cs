@@ -119,19 +119,35 @@ namespace AppliProjetTut
             this.Tab.PreviewTouchDown += new EventHandler<TouchEventArgs>(Tab_PreviewTouchDown);
 
 
-            this.close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnClosePreviewTouchDown);
         }
 
-        private void OnClavierLoaded(object sender, RoutedEventArgs e)
+        void OnClosePreviewTouchDown(object sender, TouchEventArgs e)
         {
-            
+            this.Cadenas.Foreground = new SolidColorBrush(Colors.Black);
+            this.Cadenas.Background = new SolidColorBrush(Colors.LightBlue);
+            isMovementEnabled = true;
+            NodeParent.isMoveEnable(isMovementEnabled);
+            NodeParent.AjoutTexte("Close");
         }
 
         void Cadenas_PreviewTouchDown(object sender, TouchEventArgs e)
         {
             isMovementEnabled = !isMovementEnabled;
             NodeParent.isMoveEnable(isMovementEnabled);
+            if (isMovementEnabled)
+            {
+                this.Cadenas.Foreground = new SolidColorBrush(Colors.Black);
+                this.Cadenas.Background = new SolidColorBrush(Colors.LightBlue);
+            }
+            else
+            {
+                this.Cadenas.Foreground = new SolidColorBrush(Colors.White);
+                this.Cadenas.Background = new SolidColorBrush(Colors.Teal);
+            }
         }
+
+        
 
         void OnLetterPreviewTouchDown(object sender, TouchEventArgs e)
         {

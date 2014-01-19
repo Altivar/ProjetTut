@@ -6,7 +6,7 @@
              xmlns:s="http://schemas.microsoft.com/surface/2008"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Width="646" Height="151"
-             Loaded="OnClavierLoaded">
+             >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -100,7 +100,7 @@
         <s:SurfaceButton Name="pointvrgl" Content=";" Grid.Row="3" Grid.Column="11" ></s:SurfaceButton>
         <s:SurfaceButton Name="dble" Content=":" Grid.Row="3" Grid.Column="12" ></s:SurfaceButton>
         <s:SurfaceButton Name="exclamation" Content="!" Grid.Row="3" Grid.Column="13"   ></s:SurfaceButton>
-        <s:SurfaceButton Name="Cadenas" Content="Cadenas" Grid.Row="4" Grid.Column="13" Grid.ColumnSpan="3" Background="LightBlue"></s:SurfaceButton>
+        <s:SurfaceButton Name="Cadenas" Content="Cadenas" Grid.Row="4" Grid.Column="13" Grid.ColumnSpan="3" Background="LightBlue" ></s:SurfaceButton>
         <s:SurfaceButton Name="close" Content="Close" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Background="LightCoral"></s:SurfaceButton>
 
 

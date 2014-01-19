@@ -32,6 +32,10 @@ namespace AppliProjetTut
 
         // clavier virtuel
         private ClavierVirtuel clavier;
+        // palette de couleur
+        private PaletteCouleurs palette;
+        // couleur actuelle
+        private Brush currentColor;
 
         public NodeText(SurfaceWindow1 parentSurface, NodeText parentNode)
         {
@@ -40,6 +44,7 @@ namespace AppliProjetTut
             parent = parentNode;
             Surface = parentSurface;
             clavier = new ClavierVirtuel(this);
+            palette = new PaletteCouleurs(this);
         }
 
 
@@ -52,7 +57,9 @@ namespace AppliProjetTut
         {
             // initialisation du texte et de la couleur de fond
             this.TextBoxNode.IsEnabled = false;
-            this.Background = new SolidColorBrush(Colors.LightBlue);
+            currentColor = new SolidColorBrush(Colors.LightBlue);
+            this.TextBoxNode.Background = currentColor;
+            this.TextBoxNode.BorderBrush = currentColor;
             CanScale = false;
         }
 
@@ -95,7 +102,16 @@ namespace AppliProjetTut
 
         private void OnColorSelection(object sender, RoutedEventArgs e)
         {
-            //
+            if (!isEditing)
+            {
+                this.MainScatter.Items.Add(palette);
+
+                palette.SetFirstColor(currentColor);
+                palette.CanMove = false;
+                palette.CanScale = false;
+                palette.CanRotate = false;
+                isEditing = true;
+            }
         }
 
         private void OnSeparateSelection(object sender, RoutedEventArgs e)
@@ -143,18 +159,23 @@ namespace AppliProjetTut
             
         }
 
+        // changement de couleur
+        public void SetBackGroundColor(Brush color)
+        {
+            currentColor = color;
+            this.TextBoxNode.Background = currentColor;
+            this.TextBoxNode.BorderBrush = currentColor;
+        }
+        public void ClosePalette()
+        {
+            this.MainScatter.Items.Remove(palette);
+            isEditing = false;
+        }
+
         public void isMoveEnable(bool enable)
         {
             CanMove = enable;
             CanRotate = enable;
-            if (enable)
-            {
-                this.Background = new SolidColorBrush(Colors.LightBlue);
-            }
-            else
-            {
-                this.Background = new SolidColorBrush(Colors.Teal);
-            }
         }
 
         public Line getLineToParent()
