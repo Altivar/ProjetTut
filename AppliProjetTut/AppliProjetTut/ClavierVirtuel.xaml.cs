@@ -122,6 +122,11 @@ namespace AppliProjetTut
             this.close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
         }
 
+        private void OnClavierLoaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         void Cadenas_PreviewTouchDown(object sender, TouchEventArgs e)
         {
             isMovementEnabled = !isMovementEnabled;

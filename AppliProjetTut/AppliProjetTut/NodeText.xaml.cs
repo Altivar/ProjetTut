@@ -99,7 +99,7 @@ namespace AppliProjetTut
         public void AjoutTexte(string str)
         {
 
-            if (str.Equals("close"))
+            if (str.Equals("Close"))
             {
                 this.MainScatter.Items.Remove(clavier);
                 

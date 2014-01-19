@@ -38,6 +38,9 @@ namespace AppliProjetTut
 
         //Position du Node initial
         Point initP = new Point(800, 400);
+
+        // timer
+        Timer timeRefresh = new Timer();
         
 
         /// <summary>
@@ -57,15 +60,18 @@ namespace AppliProjetTut
             PreviewTouchDown += new EventHandler<TouchEventArgs>(OnPreviewTouchDown);
             PreviewTouchUp += new EventHandler<TouchEventArgs>(OnPreviewTouchUp);
 
-            ManipulationInertiaStarting += new EventHandler<ManipulationInertiaStartingEventArgs>(SurfaceWindow1_ManipulationInertiaStarting);
+            timeRefresh.Interval = 30;
+            timeRefresh.Tick += new EventHandler(TimerRefresh);
+            timeRefresh.Start();
 
         }
 
-        void SurfaceWindow1_ManipulationInertiaStarting(object sender, ManipulationInertiaStartingEventArgs e)
+        void TimerRefresh(object sender, EventArgs e)
         {
-            
+            RefreshImage();
         }
 
+       
         
 
         
