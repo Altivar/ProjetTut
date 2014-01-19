@@ -16,10 +16,12 @@
         ActivationMode="AlwaysActive"
         ActivationHost="{Binding ElementName=MenuGrid}"
         HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            
+        
             <s:ElementMenuItem Header="Edit" Click="OnEditSelection" />
             <s:ElementMenuItem Header="Add NodeText" Click="OnAddNodeSelection" />
             <s:ElementMenuItem Header="Remove This" Click="OnRemoveSelection" />
+            <s:ElementMenuItem Header="Color Choice" Click="OnColorSelection" />
+            <s:ElementMenuItem Header="Separate from Parent" Click="OnSeparateSelection" />
             
         </s:ElementMenu>
         <s:ScatterView Name="MainScatter" Margin="150,287,150,13"/>

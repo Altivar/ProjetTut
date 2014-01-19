@@ -93,7 +93,15 @@ namespace AppliProjetTut
             Surface.RemoveNode(this, true);
         }
 
+        private void OnColorSelection(object sender, RoutedEventArgs e)
+        {
+            //
+        }
 
+        private void OnSeparateSelection(object sender, RoutedEventArgs e)
+        {
+            parent = null;
+        }
 
         // ajout de texte
         public void AjoutTexte(string str)

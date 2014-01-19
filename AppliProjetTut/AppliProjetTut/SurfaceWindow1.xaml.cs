@@ -153,6 +153,7 @@ namespace AppliProjetTut
             this.MainScatterView.Items.Add(text);
             listNode.Add(text);
         }
+
         public void RemoveNode(NodeText parent, bool confirmation)
         {
             bool conf = confirmation;
