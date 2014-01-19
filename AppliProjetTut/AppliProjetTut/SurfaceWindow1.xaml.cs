@@ -36,6 +36,9 @@ namespace AppliProjetTut
         Point ptStartHold;
         int start;
 
+        // gestion du multi-touch
+        List<KeyValuePair<int, KeyValuePair<int, Point>>> listTouch = new List<KeyValuePair<int, KeyValuePair<int, Point>>>();
+
         //Position du Node initial
         Point initP = new Point(800, 400);
 
@@ -189,34 +192,52 @@ namespace AppliProjetTut
 
         private void OnPreviewTouchDown(object sender, TouchEventArgs e)
         {
-            start = e.Timestamp;
-            ptStartHold = e.TouchDevice.GetPosition(this);
+            // on ajoute cette instance de point avec : 
+            // son ID
+            // sa position
+            // son heure d'apparition
+            KeyValuePair<int, Point> statTouch = new KeyValuePair<int,Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
+            KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int,KeyValuePair<int,Point>>(e.TouchDevice.Id, statTouch);
+            listTouch.Add(pairTouch);
         }
         
         void OnPreviewTouchMove(object sender, TouchEventArgs e)
         {
-            double diffX = ptStartHold.X - e.TouchDevice.GetPosition(this).X;
-            double diffY = ptStartHold.Y - e.TouchDevice.GetPosition(this).Y;
-
-            if (diffX * diffX + diffY * diffY > 900)
+            for (int i = 0; i < listTouch.Count; i++)
             {
-                start = e.Timestamp;
+                if (listTouch.ElementAt(i).Key == e.TouchDevice.Id)
+                {
+                    double diffX = listTouch.ElementAt(i).Value.Value.X - e.TouchDevice.GetPosition(this).X;
+                    double diffY = listTouch.ElementAt(i).Value.Value.Y - e.TouchDevice.GetPosition(this).Y;
+                    if (diffX * diffX + diffY * diffY > 900)    // si le déplacement depuis le point de départ est plus grand que 30pxl, on reinit le timer
+                    {
+                        listTouch.RemoveAt(i);
+                        KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
+                        KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);
+                        listTouch.Add(pairTouch);
+                        return;
+                    }
+                }
             }
-
-            RefreshImage();
-            
         }
 
 
         private void OnPreviewTouchUp(object sender, TouchEventArgs e)
         {
-            //créé un nouveau node après 2 secondes
-            if (e.Timestamp - start > 2000)
+            
+            for (int i = 0; i < listTouch.Count; i++)
             {
-                Point pt = e.TouchDevice.GetPosition(this);
-                AddNode(null, pt);
-                start = 0;
+                if (listTouch.ElementAt(i).Key == e.TouchDevice.Id)
+                {
+                    if (e.Timestamp - listTouch.ElementAt(i).Value.Key > 2000)  // si l'appui a duré +2s
+                    {
+                        Point pt = e.TouchDevice.GetPosition(this);             // on crée un NodeText
+                        AddNode(null, pt);
+                    }
+                    listTouch.RemoveAt(i);
+                }
             }
+
         }
 
 
@@ -240,7 +261,7 @@ namespace AppliProjetTut
                     listLine.Add(tempLine);
                     this.LineGrid.Children.Add(tempLine);
                     Polygon triangle = new Polygon();
-                    double pourcentage = Math.Sqrt(100 / ((tempLine.X1 - tempLine.X2) * (tempLine.X1 - tempLine.X2) + (tempLine.Y1 - tempLine.Y2) * (tempLine.Y1 - tempLine.Y2)));
+                    double pourcentage = Math.Sqrt(400 / ((tempLine.X1 - tempLine.X2) * (tempLine.X1 - tempLine.X2) + (tempLine.Y1 - tempLine.Y2) * (tempLine.Y1 - tempLine.Y2)));
                     double Xplus = (tempLine.X1 + tempLine.X2) / 2 - pourcentage * (tempLine.X2 - tempLine.X1);
                     double Yplus = (tempLine.Y1 + tempLine.Y2) / 2 - pourcentage * (tempLine.Y2 - tempLine.Y1);
 
