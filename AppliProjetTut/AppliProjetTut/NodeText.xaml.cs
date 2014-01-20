@@ -45,6 +45,7 @@ namespace AppliProjetTut
             Surface = parentSurface;
             clavier = new ClavierVirtuel(this);
             palette = new PaletteCouleurs(this);
+
         }
 
 
@@ -57,7 +58,14 @@ namespace AppliProjetTut
         {
             // initialisation du texte et de la couleur de fond
             this.TextBoxNode.IsEnabled = false;
-            currentColor = new SolidColorBrush(Colors.LightBlue);
+            if (parent != null)
+            {
+                currentColor = parent.GetColor();
+            }
+            else
+            {
+                currentColor = new SolidColorBrush(Colors.LightBlue);
+            }
             this.TextBoxNode.Background = currentColor;
             this.TextBoxNode.BorderBrush = currentColor;
             CanScale = false;
@@ -170,6 +178,10 @@ namespace AppliProjetTut
         {
             this.MainScatter.Items.Remove(palette);
             isEditing = false;
+        }
+        public Brush GetColor()
+        {
+            return currentColor;
         }
 
         public void isMoveEnable(bool enable)

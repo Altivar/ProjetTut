@@ -149,7 +149,7 @@ namespace AppliProjetTut
         {
             NodeText text = new NodeText(this, parent);
             text.Center = pt;
-            
+
             this.MainScatterView.Items.Add(text);
             listNode.Add(text);
         }
