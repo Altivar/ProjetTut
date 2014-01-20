@@ -45,6 +45,8 @@ namespace AppliProjetTut
         // timer
         Timer timeRefresh = new Timer();
         
+        //Liste des Cercle Chargeur
+        List<LoadCircle> listLoadCircle = new List<LoadCircle>();
 
         /// <summary>
         /// Default constructor.
@@ -193,6 +195,14 @@ namespace AppliProjetTut
 
         private void OnPreviewTouchDown(object sender, TouchEventArgs e)
         {
+            //Cercle de chargement
+            LoadCircle mLCircle = new LoadCircle();
+            mLCircle.Id = e.TouchDevice.Id;
+            mLCircle.Center = e.TouchDevice.GetPosition(this);
+            listLoadCircle.Add(mLCircle);
+            MainScatterView.Items.Add(mLCircle);
+
+
             // on ajoute cette instance de point avec : 
             // son ID
             // sa position
@@ -212,6 +222,7 @@ namespace AppliProjetTut
                     double diffY = listTouch.ElementAt(i).Value.Value.Y - e.TouchDevice.GetPosition(this).Y;
                     if (diffX * diffX + diffY * diffY > 900)    // si le déplacement depuis le point de départ est plus grand que 30pxl, on reinit le timer
                     {
+                        MainScatterView.Items.Remove(listLoadCircle.ElementAt(i));
                         listTouch.RemoveAt(i);
                         KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
                         KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);
@@ -225,6 +236,14 @@ namespace AppliProjetTut
 
         private void OnPreviewTouchUp(object sender, TouchEventArgs e)
         {
+            for (int i = 0; i < listLoadCircle.Count; i++)
+            {
+                if (listLoadCircle.ElementAt(i).Id == e.TouchDevice.Id)
+                {
+                    MainScatterView.Items.Remove(listLoadCircle.ElementAt(i));
+                    listLoadCircle.RemoveAt(i);
+                }
+            }
             
             for (int i = 0; i < listTouch.Count; i++)
             {
