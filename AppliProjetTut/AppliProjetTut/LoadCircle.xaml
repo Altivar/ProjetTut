@@ -8,7 +8,7 @@
         <DropShadowEffect ShadowDepth="10" Direction="200" Color="Black" Opacity="0.5" BlurRadius="4"/>
     </s:ScatterViewItem.Effect>
     <Grid>
-        <Path x:Name="mLoadCircle"  Fill="DodgerBlue" Stroke="DodgerBlue" Opacity="1" >
+        <Path x:Name="mLoadCircle"  Fill="DodgerBlue" Stroke="DodgerBlue" Opacity="0" >
             <Path.Data>
                 <CombinedGeometry GeometryCombineMode="Exclude">
                     <CombinedGeometry.Geometry1>
@@ -27,14 +27,14 @@
                             <DoubleAnimation
                             Storyboard.TargetName="mLoadCircle" 
                             Storyboard.TargetProperty="Opacity"
-                            From="0.0" To="0.7" Duration="0:0:2" />
+                            From="0.0" To="0.7" Duration="0:0:1.5" BeginTime="0:0:0.5"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
             </Path.Triggers>
         </Path>
 
-        <Path x:Name="mQuarterCircle"  Fill="Blue" Stroke="Blue" Opacity="0.5">
+        <Path x:Name="mQuarterCircle"  Fill="Blue" Stroke="Blue" Opacity="0">
             <Path.Data>
                 <CombinedGeometry GeometryCombineMode="Intersect">
                     <CombinedGeometry.Geometry1>
@@ -53,12 +53,14 @@
                     </CombinedGeometry.Geometry2>
                 </CombinedGeometry>
             </Path.Data>
+            
             <Path.RenderTransform>
                 <RotateTransform Angle="0"/>
             </Path.RenderTransform>
             <Path.RenderTransformOrigin >
                 <Point X="0.5" Y="0.5"/>
             </Path.RenderTransformOrigin>
+            
             <Path.Triggers>
                 <EventTrigger RoutedEvent="Path.Loaded">
                     <BeginStoryboard>
@@ -66,11 +68,22 @@
                             <DoubleAnimation
                                 Storyboard.TargetName="mQuarterCircle" 
                                 Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
-                                From="0.0" To="379.0" Duration="0:0:2" />
+                                From="0.0" To="379.0" Duration="0:0:1.5" BeginTime="0:0:0.5"/>
+                            <DoubleAnimation
+                                Storyboard.TargetName="mQuarterCircle" 
+                                Storyboard.TargetProperty="Opacity"
+                                From="0.0" To="1" Duration="0:0:0.5" BeginTime="0:0:0.5"/>
+                            <!--<ColorAnimation
+                                Storyboard.TargetName="mQuarterCircle" 
+                                Storyboard.TargetProperty="Stroke"
+                                From="Blue" To="DarkGreen" Duration="0:0:1.5" BeginTime="0:0:0.5"/>-->
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
             </Path.Triggers>
+            
+            
+            
         </Path>
     </Grid>
 </s:ScatterViewItem>

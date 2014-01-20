@@ -222,7 +222,25 @@ namespace AppliProjetTut
                     double diffY = listTouch.ElementAt(i).Value.Value.Y - e.TouchDevice.GetPosition(this).Y;
                     if (diffX * diffX + diffY * diffY > 900)    // si le déplacement depuis le point de départ est plus grand que 30pxl, on reinit le timer
                     {
-                        MainScatterView.Items.Remove(listLoadCircle.ElementAt(i));
+                        bool done = false;
+                        for (int j = 0; j < listLoadCircle.Count && !done; j++)
+                        {
+                            if (listLoadCircle.ElementAt(j).Id == e.TouchDevice.Id)
+                            {
+                                // on supprime l'ancien cercle
+                                MainScatterView.Items.Remove(listLoadCircle.ElementAt(j));
+                                listLoadCircle.RemoveAt(j);
+                                // on ajoute le nouveau
+                                LoadCircle mLCircle = new LoadCircle();
+                                
+                                mLCircle.Id = e.TouchDevice.Id;
+                                mLCircle.Center = e.TouchDevice.GetPosition(this);
+                                listLoadCircle.Add(mLCircle);
+                                MainScatterView.Items.Add(mLCircle);
+
+                                done = true;
+                            }
+                        }
                         listTouch.RemoveAt(i);
                         KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
                         KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);

@@ -39,5 +39,11 @@ namespace AppliProjetTut
             ssc = this.Template.FindName("shadow", this) as Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome;
             ssc.Visibility = Visibility.Hidden;
         }
+
+        //private void resetAnim()
+        //{
+        //    this.mLoadCircle.Opacity = 0;
+
+        //}
     }
 }
