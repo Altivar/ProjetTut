@@ -28,13 +28,13 @@ namespace AppliProjetTut
         // liste de node
         List<NodeText> listNode = new List<NodeText>();
 
-        // liste de ligne inter-node
+        // liste de ligne inter-node (trait rose avec triangle)
         List<Line> listLine = new List<Line>();
         List<Polygon> listPoly = new List<Polygon>();
 
-        //Départ du hold
-        Point ptStartHold;
-        int start;
+        // gestion de rattache à un parent
+        // gestion des poly de rattache à un parent
+        List<KeyValuePair<Polygon, NodeText>> listRattache = new List<KeyValuePair<Polygon, NodeText>>();
 
         // gestion du multi-touch
         List<KeyValuePair<int, KeyValuePair<int, Point>>> listTouch = new List<KeyValuePair<int, KeyValuePair<int, Point>>>();
@@ -281,11 +281,14 @@ namespace AppliProjetTut
 
         private void RefreshImage()
         {
-            for (int i = 0; i < listLine.Count; i++)
-            {
-                this.LineGrid.Children.Remove(listLine.ElementAt(i));
-            }
-            listLine.Clear();
+            // on efface toutes les lignes des liens internode
+            this.LineGrid.Children.RemoveRange(0, this.LineGrid.Children.Count);
+
+            // on efface tous les cercles de chargement verts
+            listPoly.Clear();
+            this.LinkParentGrid.Children.RemoveRange(0, this.LinkParentGrid.Children.Count);
+
+            
             for (int i = 0; i < listPoly.Count; i++)
             {
                 this.LineGrid.Children.Remove(listPoly.ElementAt(i));
@@ -296,8 +299,9 @@ namespace AppliProjetTut
                 Line tempLine = listNode.ElementAt(i).getLineToParent();
                 if (!(tempLine.X1 == 0 && tempLine.Y1 == 0 && tempLine.X2 == 0 && tempLine.Y2 == 0))
                 {
-                    listLine.Add(tempLine);
+                    // on dessine la ligne
                     this.LineGrid.Children.Add(tempLine);
+
                     Polygon triangle = new Polygon();
                     double pourcentage = Math.Sqrt(400 / ((tempLine.X1 - tempLine.X2) * (tempLine.X1 - tempLine.X2) + (tempLine.Y1 - tempLine.Y2) * (tempLine.Y1 - tempLine.Y2)));
                     double Xplus = (tempLine.X1 + tempLine.X2) / 2 - pourcentage * (tempLine.X2 - tempLine.X1);
@@ -310,6 +314,7 @@ namespace AppliProjetTut
                     Point ptFleche1 = new Point(Xplus + YVect, Yplus - XVect);
                     Point ptFleche2 = new Point(Xplus - YVect, Yplus + XVect);
 
+                    // on crée le triangle a partir des points calculés précedemment
                     PointCollection triangleCollection = new PointCollection();
                     triangleCollection.Add(ptMilieu);
                     triangleCollection.Add(ptFleche1);
@@ -322,8 +327,94 @@ namespace AppliProjetTut
 
                     this.LineGrid.Children.Add(triangle);
                 }
+                else
+                {
+
+                    Polygon poly = new Polygon();
+
+                    Point pt1 = listNode.ElementAt(i).PointFromScreen(listNode.ElementAt(i).ActualCenter);
+                    Point pt2 = pt1;
+                    Point pt3 = pt1;
+                    Point pt4 = pt1;
+                    Point pt5 = pt1;
+                    Point pt6 = pt1;
+                    // placement du premier point de la pseudo-ellipse
+                    pt1.X -= 60;
+                    pt1.Y -= 80;
+                    pt1 = listNode.ElementAt(i).PointToScreen(pt1);
+                    // placement du premier point de la pseudo-ellipse
+                    pt2.X -= 50;
+                    pt2.Y -= 120;
+                    pt2 = listNode.ElementAt(i).PointToScreen(pt2);
+                    // placement du premier point de la pseudo-ellipse
+                    pt3.X -= 20;
+                    pt3.Y -= 140;
+                    pt3 = listNode.ElementAt(i).PointToScreen(pt3);
+                    // placement du premier point de la pseudo-ellipse
+                    pt4.X += 20;
+                    pt4.Y -= 140;
+                    pt4 = listNode.ElementAt(i).PointToScreen(pt4);
+                    // placement du premier point de la pseudo-ellipse
+                    pt5.X += 50;
+                    pt5.Y -= 120;
+                    pt5 = listNode.ElementAt(i).PointToScreen(pt5);
+                    // placement du premier point de la pseudo-ellipse
+                    pt6.X += 60;
+                    pt6.Y -= 80;
+                    pt6 = listNode.ElementAt(i).PointToScreen(pt6);
+
+                    // création de la PointCollection qui génerera la forme
+                    PointCollection polyCollection = new PointCollection();
+                    polyCollection.Add(pt1);
+                    polyCollection.Add(pt2);
+                    polyCollection.Add(pt3);
+                    polyCollection.Add(pt4);
+                    polyCollection.Add(pt5);
+                    polyCollection.Add(pt6);
+                    polyCollection.Add(pt1);
+
+                    // on ajoute les points au poly
+                    poly.Points = polyCollection;
+
+                    poly.Fill = new SolidColorBrush(Colors.Green);
+                    poly.Stroke = new SolidColorBrush(Colors.DarkGreen);
+                    poly.StrokeThickness = 3;
+
+
+
+                    poly.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnGreenCirclePreviewTouchDown);
+
+                    // on dessine le poly
+                    KeyValuePair<Polygon, NodeText> myPair = new KeyValuePair<Polygon, NodeText>(poly, listNode.ElementAt(i));
+                    listRattache.Add(myPair);
+                    this.LinkParentGrid.Children.Add(poly);
+
+                }
             }
         }
-        
+
+
+
+
+        /// <summary>
+        /// Evenement Touch sur un Cercle Vert
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void OnGreenCirclePreviewTouchDown(object sender, TouchEventArgs e)
+        {
+            
+
+
+        }
+
+
+
+
+
+
+
+        ///////////////////
+            //FIN DES FONCTIONS !!!
     }
 }

@@ -10,6 +10,8 @@
         
     </s:SurfaceWindow.Background>
     <Grid Name="MainGrid">
+        <Grid Name="LinkParentLineGrid" />
+        <Grid Name="LinkParentGrid" />
         <Grid Name="LineGrid" />
         <s:ScatterView Name="MainScatterView" Grid.Row="1" Grid.Column="0" />
     </Grid>
