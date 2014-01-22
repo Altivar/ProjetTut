@@ -227,6 +227,14 @@ namespace AppliProjetTut
             return parent;
         }
 
+
+        public Point GetOrigin()
+        { 
+            Point pt = this.PointFromScreen(this.ActualCenter);
+            pt.Y -= 100;
+            return this.PointToScreen(pt);
+        }
+
         
     }
 }

@@ -33,6 +33,7 @@ namespace AppliProjetTut
         List<Polygon> listPoly = new List<Polygon>();
 
         // gestion de rattache à un parent
+        List<KeyValuePair<NodeText, KeyValuePair<int, Line>>> listLigneRattache = new List<KeyValuePair<NodeText,KeyValuePair<int,Line>>>();
         // gestion des poly de rattache à un parent
         List<KeyValuePair<Polygon, NodeText>> listRattache = new List<KeyValuePair<Polygon, NodeText>>();
 
@@ -214,6 +215,17 @@ namespace AppliProjetTut
         
         void OnPreviewTouchMove(object sender, TouchEventArgs e)
         {
+            bool isRattache = false;
+            for (int i = 0; i < listLigneRattache.Count && !isRattache; i++)
+            {
+                if (e.TouchDevice.Id == listLigneRattache.ElementAt(i).Value.Key)
+                {
+                    listLigneRattache.ElementAt(i).Value.Value.X2 = e.TouchDevice.GetPosition(this).X;
+                    listLigneRattache.ElementAt(i).Value.Value.Y2 = e.TouchDevice.GetPosition(this).Y;
+                    isRattache = true;
+                }
+            }
+            
             for (int i = 0; i < listTouch.Count; i++)
             {
                 if (listTouch.ElementAt(i).Key == e.TouchDevice.Id)
@@ -230,21 +242,28 @@ namespace AppliProjetTut
                                 // on supprime l'ancien cercle
                                 MainScatterView.Items.Remove(listLoadCircle.ElementAt(j));
                                 listLoadCircle.RemoveAt(j);
-                                // on ajoute le nouveau
-                                LoadCircle mLCircle = new LoadCircle();
-                                
-                                mLCircle.Id = e.TouchDevice.Id;
-                                mLCircle.Center = e.TouchDevice.GetPosition(this);
-                                listLoadCircle.Add(mLCircle);
-                                MainScatterView.Items.Add(mLCircle);
+
+                                if (!isRattache)
+                                {
+                                    // on ajoute le nouveau
+                                    LoadCircle mLCircle = new LoadCircle();
+
+                                    mLCircle.Id = e.TouchDevice.Id;
+                                    mLCircle.Center = e.TouchDevice.GetPosition(this);
+                                    listLoadCircle.Add(mLCircle);
+                                    MainScatterView.Items.Add(mLCircle);
+                                }
 
                                 done = true;
                             }
                         }
                         listTouch.RemoveAt(i);
-                        KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
-                        KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);
-                        listTouch.Add(pairTouch);
+                        if (!isRattache)
+                        {
+                            KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
+                            KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);
+                            listTouch.Add(pairTouch);
+                        }
                         return;
                     }
                 }
@@ -254,6 +273,16 @@ namespace AppliProjetTut
 
         private void OnPreviewTouchUp(object sender, TouchEventArgs e)
         {
+
+            for (int i = 0; i < listLigneRattache.Count; i++)
+            {
+                if (e.TouchDevice.Id == listLigneRattache.ElementAt(i).Value.Key)
+                {
+                    listLigneRattache.RemoveAt(i);
+                }
+            }
+
+
             for (int i = 0; i < listLoadCircle.Count; i++)
             {
                 if (listLoadCircle.ElementAt(i).Id == e.TouchDevice.Id)
@@ -294,6 +323,24 @@ namespace AppliProjetTut
                 this.LineGrid.Children.Remove(listPoly.ElementAt(i));
             }
             listPoly.Clear();
+
+
+            //
+            //  DESSIN DES LIGNES DE RATTACHE
+            //
+            this.LinkParentLineGrid.Children.RemoveRange(0, this.LinkParentLineGrid.Children.Count);
+            for (int i = 0; i < listLigneRattache.Count; i++)
+            {
+                listLigneRattache.ElementAt(i).Value.Value.X1 = listLigneRattache.ElementAt(i).Key.GetOrigin().X;
+                listLigneRattache.ElementAt(i).Value.Value.Y1 = listLigneRattache.ElementAt(i).Key.GetOrigin().Y;
+
+                this.LinkParentLineGrid.Children.Add(listLigneRattache.ElementAt(i).Value.Value);
+            }
+
+
+            //
+            //  DESSIN DES LIAISONS INTER-NODES
+            //
             for (int i = 0; i < listNode.Count; i++)
             {
                 Line tempLine = listNode.ElementAt(i).getLineToParent();
@@ -403,8 +450,49 @@ namespace AppliProjetTut
         /// <param name="e"></param>
         void OnGreenCirclePreviewTouchDown(object sender, TouchEventArgs e)
         {
-            
 
+            NodeText text = null;
+            for (int i = 0; i < listRattache.Count; i++)
+            {
+                if (listRattache.ElementAt(i).Key == (Polygon)sender)
+                {
+                    text = listRattache.ElementAt(i).Value;
+                }
+            }
+
+            if (text != null)
+            {
+                
+                bool isSet = false;
+                for (int i = 0; i < listLigneRattache.Count && !isSet; i++)
+                {
+                    if (listLigneRattache.ElementAt(i).Key == text)
+                    {
+                        isSet = true;
+                    }
+                }
+
+                if (!isSet)
+                {
+                    Line ligne = new Line();
+                    ligne.X1 = text.GetOrigin().X;
+                    ligne.Y1 = text.GetOrigin().Y;
+                    ligne.X2 = e.TouchDevice.GetPosition(this).X;
+                    ligne.Y2 = e.TouchDevice.GetPosition(this).Y;
+
+                    ligne.Stroke = new SolidColorBrush(Colors.DarkGreen);
+                    ligne.StrokeThickness = 3;
+
+                    KeyValuePair<int, Line> myFirstPair = new KeyValuePair<int, Line>(e.TouchDevice.Id, ligne);
+                    KeyValuePair<NodeText, KeyValuePair<int, Line>> myPair = new KeyValuePair<NodeText, KeyValuePair<int, Line>>(text, myFirstPair);
+
+                    listLigneRattache.Add(myPair);
+                }
+
+
+
+
+            }
 
         }
 
