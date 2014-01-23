@@ -226,8 +226,16 @@ namespace AppliProjetTut
             }
         }
         
+
+        /// <summary>
+        /// Evenement de mouvement de Touch sur la table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnPreviewTouchMove(object sender, TouchEventArgs e)
         {
+
+            // met a jour la ligne de rattache si l'id du touch correspond
             bool isRattache = false;
             for (int i = 0; i < listLigneRattache.Count && !isRattache; i++)
             {
@@ -238,6 +246,8 @@ namespace AppliProjetTut
                     isRattache = true;
                 }
             }
+            
+            
             
             for (int i = 0; i < listTouch.Count; i++)
             {
@@ -291,7 +301,35 @@ namespace AppliProjetTut
             {
                 if (e.TouchDevice.Id == listLigneRattache.ElementAt(i).Value.Key)
                 {
+                    
+
+                    double length = -1;
+                    NodeText nearestText = null;
+                    for (int j = 0; j < listNode.Count; j++) // on teste la distance de chaque node
+                    {
+                        if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j)) // on ne test pas la node a laquelle la ligne est rattachée
+                        {
+                            double diffXCarre = (listNode.ElementAt(j).ActualCenter.X - listLigneRattache.ElementAt(i).Value.Value.X2);
+                            diffXCarre *= diffXCarre;
+                            double diffYCarre = (listNode.ElementAt(j).ActualCenter.Y - listLigneRattache.ElementAt(i).Value.Value.Y2);
+                            diffYCarre *= diffYCarre;
+                            double testLenght = Math.Sqrt(diffXCarre + diffYCarre);
+                            if (length == -1 || length > testLenght) // si la node est plus proche que la précédente on la retient
+                            {
+                                length = testLenght;
+                                nearestText = listNode.ElementAt(j);
+                            }
+                        }
+                    }
+
+                    if (length != -1 && length < 200) // si la node la plus proche est assez près
+                    {
+                        listLigneRattache.ElementAt(i).Key.SetParent(nearestText);
+                    }
+
+                    // ensuite on supprime la ligne
                     listLigneRattache.RemoveAt(i);
+
                 }
             }
 
@@ -342,12 +380,54 @@ namespace AppliProjetTut
             //  DESSIN DES LIGNES DE RATTACHE
             //
             this.LinkParentLineGrid.Children.RemoveRange(0, this.LinkParentLineGrid.Children.Count);
+            this.NearParentEllipseCanvas.Children.RemoveRange(0, this.NearParentEllipseCanvas.Children.Count);
             for (int i = 0; i < listLigneRattache.Count; i++)
             {
                 listLigneRattache.ElementAt(i).Value.Value.X1 = listLigneRattache.ElementAt(i).Key.GetOrigin().X;
                 listLigneRattache.ElementAt(i).Value.Value.Y1 = listLigneRattache.ElementAt(i).Key.GetOrigin().Y;
 
                 this.LinkParentLineGrid.Children.Add(listLigneRattache.ElementAt(i).Value.Value);
+
+
+                double length = -1;
+                NodeText nearestText = null;
+                for (int j = 0; j < listNode.Count; j++) // on teste la distance de chaque node
+                {
+                    if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j)) // on ne test pas la node a laquelle la ligne est rattachée
+                    { 
+                        double diffXCarre = (listNode.ElementAt(j).ActualCenter.X - listLigneRattache.ElementAt(i).Value.Value.X2);
+                        diffXCarre *= diffXCarre;
+                        double diffYCarre = (listNode.ElementAt(j).ActualCenter.Y - listLigneRattache.ElementAt(i).Value.Value.Y2);
+                        diffYCarre *= diffYCarre;
+                        double testLenght = Math.Sqrt( diffXCarre + diffYCarre );
+                        if (length == -1 || length > testLenght) // si la node est plus proche que la précédente on la retient
+                        {
+                            length = testLenght;
+                            nearestText = listNode.ElementAt(j);
+                        }
+                    }
+                }
+
+                if (length != -1 && length < 200) // si la node la plus proche est assez près
+                { 
+                    Ellipse ell = new Ellipse();
+
+                    ell.Width = 400;
+                    ell.Height = 400;
+                    ell.Fill = new SolidColorBrush(Colors.Transparent);
+                    ell.Stroke = new SolidColorBrush(Colors.DarkGreen);
+                    ell.StrokeThickness = 9;
+
+                    DoubleCollection dColl = new DoubleCollection();
+                    dColl.Add(10);
+                    dColl.Add(5);
+                    ell.StrokeDashArray = dColl;
+
+                    this.NearParentEllipseCanvas.Children.Add(ell);
+                    Canvas.SetLeft(ell, nearestText.ActualCenter.X-200);
+                    Canvas.SetTop(ell, nearestText.ActualCenter.Y-200);
+                }
+
             }
 
 
@@ -494,7 +574,7 @@ namespace AppliProjetTut
                     ligne.Y2 = e.TouchDevice.GetPosition(this).Y;
 
                     ligne.Stroke = new SolidColorBrush(Colors.DarkGreen);
-                    ligne.StrokeThickness = 3;
+                    ligne.StrokeThickness = 6;
 
                     KeyValuePair<int, Line> myFirstPair = new KeyValuePair<int, Line>(e.TouchDevice.Id, ligne);
                     KeyValuePair<NodeText, KeyValuePair<int, Line>> myPair = new KeyValuePair<NodeText, KeyValuePair<int, Line>>(text, myFirstPair);

@@ -10,6 +10,7 @@
         
     </s:SurfaceWindow.Background>
     <Grid Name="MainGrid">
+        <Canvas Name="NearParentEllipseCanvas" />
         <Grid Name="LinkParentLineGrid" />
         <Grid Name="LinkParentGrid" />
         <Grid Name="LineGrid" />

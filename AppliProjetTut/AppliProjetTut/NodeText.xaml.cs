@@ -226,7 +226,13 @@ namespace AppliProjetTut
         {
             return parent;
         }
-
+        public void SetParent(NodeText newParent)
+        {
+            if (this.parent == null)
+            {
+                this.parent = newParent;
+            }
+        }
 
         public Point GetOrigin()
         { 
@@ -236,5 +242,6 @@ namespace AppliProjetTut
         }
 
         
+
     }
 }
