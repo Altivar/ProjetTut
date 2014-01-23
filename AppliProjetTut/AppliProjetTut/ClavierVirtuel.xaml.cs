@@ -27,6 +27,10 @@ namespace AppliProjetTut
         // Node
         private NodeText NodeParent;
 
+        //Gestion du LowerCase - UpperCase
+        private bool TempLockedCaps = true;
+        private bool LockedCaps = false;
+
 
         public ClavierVirtuel(NodeText parent)
         {
@@ -151,7 +155,21 @@ namespace AppliProjetTut
 
         void OnLetterPreviewTouchDown(object sender, TouchEventArgs e)
         {
-            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+            if (TempLockedCaps)
+            {
+                NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+                TempLockedCaps = false;
+                this.Caps_Lock.Foreground = new SolidColorBrush(Colors.Black);
+                this.Caps_Lock.Background = new SolidColorBrush(Colors.Lavender);
+            }
+            else if (LockedCaps)
+            {
+                NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+            }
+            else
+            {
+                NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString().ToLower());
+            }
         }
 
         void Enter_PreviewTouchDown(object sender, TouchEventArgs e)
@@ -166,7 +184,28 @@ namespace AppliProjetTut
 
         void Caps_PreviewTouchDown(object sender, TouchEventArgs e)
         {
-            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+            if (LockedCaps)
+            {
+                LockedCaps = false;
+                this.Caps_Lock.Foreground = new SolidColorBrush(Colors.Black);
+                this.Caps_Lock.Background = new SolidColorBrush(Colors.Lavender);
+                return;
+            }
+            if (TempLockedCaps)
+            {
+                LockedCaps = true;
+                TempLockedCaps = false;
+                this.Caps_Lock.Foreground = new SolidColorBrush(Colors.White);
+                this.Caps_Lock.Background = new SolidColorBrush(Colors.DarkGoldenrod);
+                return;
+            }
+
+            TempLockedCaps = true;
+            if (TempLockedCaps)
+            {
+                this.Caps_Lock.Foreground = new SolidColorBrush(Colors.White);
+                this.Caps_Lock.Background = new SolidColorBrush(Colors.BurlyWood);
+            }
         }
         void Tab_PreviewTouchDown(object sender, TouchEventArgs e)
         {

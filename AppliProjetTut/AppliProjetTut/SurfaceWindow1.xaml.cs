@@ -196,21 +196,34 @@ namespace AppliProjetTut
 
         private void OnPreviewTouchDown(object sender, TouchEventArgs e)
         {
-            //Cercle de chargement
-            LoadCircle mLCircle = new LoadCircle();
-            mLCircle.Id = e.TouchDevice.Id;
-            mLCircle.Center = e.TouchDevice.GetPosition(this);
-            listLoadCircle.Add(mLCircle);
-            MainScatterView.Items.Add(mLCircle);
+            bool LoadEnable = true;
+
+            for (int i = 0; i < listNode.Count; i++)
+            {
+                if (listNode.ElementAt(i).IsMouseOver)
+                {
+                    LoadEnable = false;
+                }
+            }
+
+            if (LoadEnable)
+            {
+                //Cercle de chargement
+                LoadCircle mLCircle = new LoadCircle();
+                mLCircle.Id = e.TouchDevice.Id;
+                mLCircle.Center = e.TouchDevice.GetPosition(this);
+                listLoadCircle.Add(mLCircle);
+                MainScatterView.Items.Add(mLCircle);
 
 
-            // on ajoute cette instance de point avec : 
-            // son ID
-            // sa position
-            // son heure d'apparition
-            KeyValuePair<int, Point> statTouch = new KeyValuePair<int,Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
-            KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int,KeyValuePair<int,Point>>(e.TouchDevice.Id, statTouch);
-            listTouch.Add(pairTouch);
+                // on ajoute cette instance de point avec : 
+                // son ID
+                // sa position
+                // son heure d'apparition
+                KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
+                KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);
+                listTouch.Add(pairTouch);
+            }
         }
         
         void OnPreviewTouchMove(object sender, TouchEventArgs e)
