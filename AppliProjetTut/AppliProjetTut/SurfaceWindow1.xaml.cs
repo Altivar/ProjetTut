@@ -17,6 +17,7 @@ using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
 
+
 namespace AppliProjetTut
 {
     /// <summary>
@@ -198,9 +199,10 @@ namespace AppliProjetTut
         {
             bool LoadEnable = true;
 
+            //Pour chaque node, verification de la position du touch
             for (int i = 0; i < listNode.Count; i++)
             {
-                if (listNode.ElementAt(i).IsMouseOver)
+                if (listNode.ElementAt(i).AreAnyTouchesOver)//Si il est dessus, le chargement est impossible
                 {
                     LoadEnable = false;
                 }
