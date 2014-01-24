@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Surface.Presentation.Controls;
+using Microsoft.Surface.Presentation.Input;
 
 namespace AppliProjetTut
 {
@@ -42,7 +43,7 @@ namespace AppliProjetTut
             this.CanScale = false;
 
             //this.Text.IsEnabled = false;
-
+            
             this.Cadenas.PreviewTouchDown += new EventHandler<TouchEventArgs>(Cadenas_PreviewTouchDown);
 
             this.Carré.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
@@ -128,26 +129,34 @@ namespace AppliProjetTut
 
         void OnClosePreviewTouchDown(object sender, TouchEventArgs e)
         {
-            this.Cadenas.Foreground = new SolidColorBrush(Colors.Black);
-            this.Cadenas.Background = new SolidColorBrush(Colors.LightBlue);
-            isMovementEnabled = true;
-            NodeParent.isMoveEnable(isMovementEnabled);
-            NodeParent.AjoutTexte("Close");
+            //ne ferme la fenêtre que si on utilise le doigt
+            if (e.TouchDevice.GetIsFingerRecognized())
+            {
+                this.Cadenas.Foreground = new SolidColorBrush(Colors.Black);
+                this.Cadenas.Background = new SolidColorBrush(Colors.LightBlue);
+                isMovementEnabled = true;
+                NodeParent.isMoveEnable(isMovementEnabled);
+                NodeParent.AjoutTexte("Close");
+            }
         }
 
         void Cadenas_PreviewTouchDown(object sender, TouchEventArgs e)
         {
-            isMovementEnabled = !isMovementEnabled;
-            NodeParent.isMoveEnable(isMovementEnabled);
-            if (isMovementEnabled)
+            //ne bloque la fenêtre que si on utilise le doigt
+            if (e.TouchDevice.GetIsFingerRecognized())
             {
-                this.Cadenas.Foreground = new SolidColorBrush(Colors.Black);
-                this.Cadenas.Background = new SolidColorBrush(Colors.LightBlue);
-            }
-            else
-            {
-                this.Cadenas.Foreground = new SolidColorBrush(Colors.White);
-                this.Cadenas.Background = new SolidColorBrush(Colors.Teal);
+                isMovementEnabled = !isMovementEnabled;
+                NodeParent.isMoveEnable(isMovementEnabled);
+                if (isMovementEnabled)
+                {
+                    this.Cadenas.Foreground = new SolidColorBrush(Colors.Black);
+                    this.Cadenas.Background = new SolidColorBrush(Colors.LightBlue);
+                }
+                else
+                {
+                    this.Cadenas.Foreground = new SolidColorBrush(Colors.White);
+                    this.Cadenas.Background = new SolidColorBrush(Colors.Teal);
+                }
             }
         }
 
@@ -155,61 +164,82 @@ namespace AppliProjetTut
 
         void OnLetterPreviewTouchDown(object sender, TouchEventArgs e)
         {
-            if (TempLockedCaps)
+            //ne tape une lettre que si on utilise le doigt
+            if (e.TouchDevice.GetIsFingerRecognized())
             {
-                NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
-                TempLockedCaps = false;
-                this.Caps_Lock.Foreground = new SolidColorBrush(Colors.Black);
-                this.Caps_Lock.Background = new SolidColorBrush(Colors.Lavender);
-            }
-            else if (LockedCaps)
-            {
-                NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
-            }
-            else
-            {
-                NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString().ToLower());
+                if (TempLockedCaps)
+                {
+                    NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+                    TempLockedCaps = false;
+                    this.Caps_Lock.Foreground = new SolidColorBrush(Colors.Black);
+                    this.Caps_Lock.Background = new SolidColorBrush(Colors.Lavender);
+                }
+                else if (LockedCaps)
+                {
+                    NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+                }
+                else
+                {
+                    NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString().ToLower());
+                }
             }
         }
 
         void Enter_PreviewTouchDown(object sender, TouchEventArgs e)
         {
-            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+            //ne passe à la ligne que si on utilise le doigt
+            if (e.TouchDevice.GetIsFingerRecognized())
+            {
+                NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+            }
         }
 
         void Space_PreviewTouchDown(object sender, TouchEventArgs e)
         {
-            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+            //ne fais un espace que si on utilise le doigt
+            if (e.TouchDevice.GetIsFingerRecognized())
+            {
+                NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+            }
         }
 
         void Caps_PreviewTouchDown(object sender, TouchEventArgs e)
         {
-            if (LockedCaps)
+            //n'utilise le caps qu'avec le doigt
+            if (e.TouchDevice.GetIsFingerRecognized())
             {
-                LockedCaps = false;
-                this.Caps_Lock.Foreground = new SolidColorBrush(Colors.Black);
-                this.Caps_Lock.Background = new SolidColorBrush(Colors.Lavender);
-                return;
-            }
-            if (TempLockedCaps)
-            {
-                LockedCaps = true;
-                TempLockedCaps = false;
-                this.Caps_Lock.Foreground = new SolidColorBrush(Colors.White);
-                this.Caps_Lock.Background = new SolidColorBrush(Colors.DarkGoldenrod);
-                return;
-            }
+                if (LockedCaps)
+                {
+                    LockedCaps = false;
+                    this.Caps_Lock.Foreground = new SolidColorBrush(Colors.Black);
+                    this.Caps_Lock.Background = new SolidColorBrush(Colors.Lavender);
+                    return;
+                }
+                if (TempLockedCaps)
+                {
+                    LockedCaps = true;
+                    TempLockedCaps = false;
+                    this.Caps_Lock.Foreground = new SolidColorBrush(Colors.White);
+                    this.Caps_Lock.Background = new SolidColorBrush(Colors.DarkGoldenrod);
+                    return;
+                }
 
-            TempLockedCaps = true;
-            if (TempLockedCaps)
-            {
-                this.Caps_Lock.Foreground = new SolidColorBrush(Colors.White);
-                this.Caps_Lock.Background = new SolidColorBrush(Colors.BurlyWood);
+                TempLockedCaps = true;
+                if (TempLockedCaps)
+                {
+                    this.Caps_Lock.Foreground = new SolidColorBrush(Colors.White);
+                    this.Caps_Lock.Background = new SolidColorBrush(Colors.BurlyWood);
+                }
             }
         }
+
         void Tab_PreviewTouchDown(object sender, TouchEventArgs e)
         {
-            NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+            //ne fait de tabulation que si on utilise le doigt
+            if (e.TouchDevice.GetIsFingerRecognized())
+            {
+                NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
+            }
         }
 
     }
