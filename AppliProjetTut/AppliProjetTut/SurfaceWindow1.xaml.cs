@@ -208,6 +208,16 @@ namespace AppliProjetTut
                 }
             }
 
+            //Pour chaque node, verification de la position du touch
+            for (int i = 0; i < listNode.Count; i++)
+            {
+                if (listNode.ElementAt(i).AreAnyTouchesOver)//Si il est dessus, le chargement est impossible
+                {
+                    LoadEnable = false;
+                }
+            }
+
+
             if (LoadEnable)
             {
                 //Cercle de chargement

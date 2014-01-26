@@ -144,7 +144,7 @@ namespace AppliProjetTut
                 isMoveEnable(true);
                 isEditing = false;
             }
-            else if (str.Equals("Backspace"))
+            else if (str.ToLower().Equals("backspace"))
             {
                 if (this.TextBoxNode.Text.Length > 1)
                 {
