@@ -209,9 +209,9 @@ namespace AppliProjetTut
             }
 
             //Pour chaque node, verification de la position du touch
-            for (int i = 0; i < listNode.Count; i++)
+            for (int i = 0; i < listRattache.Count; i++)
             {
-                if (listNode.ElementAt(i).AreAnyTouchesOver)//Si il est dessus, le chargement est impossible
+                if (listRattache.ElementAt(i).Key.AreAnyTouchesOver)//Si il est dessus, le chargement est impossible
                 {
                     LoadEnable = false;
                 }
@@ -321,15 +321,18 @@ namespace AppliProjetTut
                     {
                         if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j)) // on ne test pas la node a laquelle la ligne est rattachée
                         {
-                            double diffXCarre = (listNode.ElementAt(j).ActualCenter.X - listLigneRattache.ElementAt(i).Value.Value.X2);
-                            diffXCarre *= diffXCarre;
-                            double diffYCarre = (listNode.ElementAt(j).ActualCenter.Y - listLigneRattache.ElementAt(i).Value.Value.Y2);
-                            diffYCarre *= diffYCarre;
-                            double testLenght = Math.Sqrt(diffXCarre + diffYCarre);
-                            if (length == -1 || length > testLenght) // si la node est plus proche que la précédente on la retient
+                            if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j).GetParent()) // on test si la node n'a pas pour parent celle a laquelle la ligne est rattachée
                             {
-                                length = testLenght;
-                                nearestText = listNode.ElementAt(j);
+                                double diffXCarre = (listNode.ElementAt(j).ActualCenter.X - listLigneRattache.ElementAt(i).Value.Value.X2);
+                                diffXCarre *= diffXCarre;
+                                double diffYCarre = (listNode.ElementAt(j).ActualCenter.Y - listLigneRattache.ElementAt(i).Value.Value.Y2);
+                                diffYCarre *= diffYCarre;
+                                double testLenght = Math.Sqrt(diffXCarre + diffYCarre);
+                                if (length == -1 || length > testLenght) // si la node est plus proche que la précédente on la retient
+                                {
+                                    length = testLenght;
+                                    nearestText = listNode.ElementAt(j);
+                                }
                             }
                         }
                     }
@@ -405,17 +408,20 @@ namespace AppliProjetTut
                 NodeText nearestText = null;
                 for (int j = 0; j < listNode.Count; j++) // on teste la distance de chaque node
                 {
-                    if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j)) // on ne test pas la node a laquelle la ligne est rattachée
-                    { 
-                        double diffXCarre = (listNode.ElementAt(j).ActualCenter.X - listLigneRattache.ElementAt(i).Value.Value.X2);
-                        diffXCarre *= diffXCarre;
-                        double diffYCarre = (listNode.ElementAt(j).ActualCenter.Y - listLigneRattache.ElementAt(i).Value.Value.Y2);
-                        diffYCarre *= diffYCarre;
-                        double testLenght = Math.Sqrt( diffXCarre + diffYCarre );
-                        if (length == -1 || length > testLenght) // si la node est plus proche que la précédente on la retient
+                    if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j)) // on test si la node est differente de celle a laquelle la ligne est rattachée 
+                    {
+                        if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j).GetParent()) // on test si la node n'a pas pour parent celle a laquelle la ligne est rattachée
                         {
-                            length = testLenght;
-                            nearestText = listNode.ElementAt(j);
+                            double diffXCarre = (listNode.ElementAt(j).ActualCenter.X - listLigneRattache.ElementAt(i).Value.Value.X2);
+                            diffXCarre *= diffXCarre;
+                            double diffYCarre = (listNode.ElementAt(j).ActualCenter.Y - listLigneRattache.ElementAt(i).Value.Value.Y2);
+                            diffYCarre *= diffYCarre;
+                            double testLenght = Math.Sqrt(diffXCarre + diffYCarre);
+                            if (length == -1 || length > testLenght) // si la node est plus proche que la précédente on la retient
+                            {
+                                length = testLenght;
+                                nearestText = listNode.ElementAt(j);
+                            }
                         }
                     }
                 }
