@@ -65,11 +65,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="NodeText.xaml">
+    <Page Include="PaletteCouleurs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PaletteCouleurs.xaml">
+    <Page Include="ScatterCustom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -87,11 +87,12 @@
     <Compile Include="LoadCircle.xaml.cs">
       <DependentUpon>LoadCircle.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NodeText.xaml.cs">
-      <DependentUpon>NodeText.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="NodeText.cs" />
     <Compile Include="PaletteCouleurs.xaml.cs">
       <DependentUpon>PaletteCouleurs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScatterCustom.xaml.cs">
+      <DependentUpon>ScatterCustom.xaml</DependentUpon>
     </Compile>
     <Compile Include="SurfaceWindow1.xaml.cs">
       <DependentUpon>SurfaceWindow1.xaml</DependentUpon>

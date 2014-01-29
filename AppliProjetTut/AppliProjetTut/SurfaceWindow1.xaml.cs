@@ -27,16 +27,16 @@ namespace AppliProjetTut
     {
 
         // liste de node
-        List<NodeText> listNode = new List<NodeText>();
+        List<ScatterCustom> listNode = new List<ScatterCustom>();
 
         // liste de ligne inter-node (trait rose avec triangle)
         List<Line> listLine = new List<Line>();
         List<Polygon> listPoly = new List<Polygon>();
 
         // gestion de rattache à un parent
-        List<KeyValuePair<NodeText, KeyValuePair<int, Line>>> listLigneRattache = new List<KeyValuePair<NodeText,KeyValuePair<int,Line>>>();
+        List<KeyValuePair<ScatterCustom, KeyValuePair<int, Line>>> listLigneRattache = new List<KeyValuePair<ScatterCustom, KeyValuePair<int, Line>>>();
         // gestion des poly de rattache à un parent
-        List<KeyValuePair<Polygon, NodeText>> listRattache = new List<KeyValuePair<Polygon, NodeText>>();
+        List<KeyValuePair<Polygon, ScatterCustom>> listRattache = new List<KeyValuePair<Polygon, ScatterCustom>>();
 
         // gestion du multi-touch
         List<KeyValuePair<int, KeyValuePair<int, Point>>> listTouch = new List<KeyValuePair<int, KeyValuePair<int, Point>>>();
@@ -149,7 +149,7 @@ namespace AppliProjetTut
             //TODO: disable audio, animations here
         }
 
-        public void AddNode(NodeText parent, Point pt)
+        public void AddNode(ScatterCustom parent, Point pt)
         {
             NodeText text = new NodeText(this, parent);
             text.Center = pt;
@@ -158,7 +158,7 @@ namespace AppliProjetTut
             listNode.Add(text);
         }
 
-        public void RemoveNode(NodeText parent, bool confirmation)
+        public void RemoveNode(ScatterCustom parent, bool confirmation)
         {
             bool conf = confirmation;
             for (int i = 0; i < listNode.Count; i++)
@@ -316,7 +316,7 @@ namespace AppliProjetTut
                     
 
                     double length = -1;
-                    NodeText nearestText = null;
+                    ScatterCustom nearestText = null;
                     for (int j = 0; j < listNode.Count; j++) // on teste la distance de chaque node
                     {
                         if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j)) // on ne test pas la node a laquelle la ligne est rattachée
@@ -405,7 +405,7 @@ namespace AppliProjetTut
 
 
                 double length = -1;
-                NodeText nearestText = null;
+                ScatterCustom nearestText = null;
                 for (int j = 0; j < listNode.Count; j++) // on teste la distance de chaque node
                 {
                     if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j)) // on test si la node est differente de celle a laquelle la ligne est rattachée 
@@ -543,7 +543,7 @@ namespace AppliProjetTut
                     poly.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnGreenCirclePreviewTouchDown);
 
                     // on dessine le poly
-                    KeyValuePair<Polygon, NodeText> myPair = new KeyValuePair<Polygon, NodeText>(poly, listNode.ElementAt(i));
+                    KeyValuePair<Polygon, ScatterCustom> myPair = new KeyValuePair<Polygon, ScatterCustom>(poly, listNode.ElementAt(i));
                     listRattache.Add(myPair);
                     this.LinkParentGrid.Children.Add(poly);
 
@@ -562,7 +562,7 @@ namespace AppliProjetTut
         void OnGreenCirclePreviewTouchDown(object sender, TouchEventArgs e)
         {
 
-            NodeText text = null;
+            ScatterCustom text = null;
             for (int i = 0; i < listRattache.Count; i++)
             {
                 if (listRattache.ElementAt(i).Key == (Polygon)sender)
@@ -595,7 +595,7 @@ namespace AppliProjetTut
                     ligne.StrokeThickness = 6;
 
                     KeyValuePair<int, Line> myFirstPair = new KeyValuePair<int, Line>(e.TouchDevice.Id, ligne);
-                    KeyValuePair<NodeText, KeyValuePair<int, Line>> myPair = new KeyValuePair<NodeText, KeyValuePair<int, Line>>(text, myFirstPair);
+                    KeyValuePair<ScatterCustom, KeyValuePair<int, Line>> myPair = new KeyValuePair<ScatterCustom, KeyValuePair<int, Line>>(text, myFirstPair);
 
                     listLigneRattache.Add(myPair);
                 }
