@@ -65,6 +65,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MenuCreation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PaletteCouleurs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -86,6 +90,9 @@
     </Compile>
     <Compile Include="LoadCircle.xaml.cs">
       <DependentUpon>LoadCircle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MenuCreation.xaml.cs">
+      <DependentUpon>MenuCreation.xaml</DependentUpon>
     </Compile>
     <Compile Include="NodeText.cs" />
     <Compile Include="PaletteCouleurs.xaml.cs">

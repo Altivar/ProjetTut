@@ -29,6 +29,9 @@ namespace AppliProjetTut
         // liste de node
         List<ScatterCustom> listNode = new List<ScatterCustom>();
 
+        // liste de menu de création de node
+        List<KeyValuePair<MenuCreation, Timer>> listMenu = new List<KeyValuePair<MenuCreation, Timer>>();
+
         // liste de ligne inter-node (trait rose avec triangle)
         List<Line> listLine = new List<Line>();
         List<Polygon> listPoly = new List<Polygon>();
@@ -40,6 +43,7 @@ namespace AppliProjetTut
 
         // gestion du multi-touch
         List<KeyValuePair<int, KeyValuePair<int, Point>>> listTouch = new List<KeyValuePair<int, KeyValuePair<int, Point>>>();
+        int mLimiteNbrTouch = 4;
 
         //Position du Node initial
         Point initP = new Point(800, 400);
@@ -49,6 +53,19 @@ namespace AppliProjetTut
         
         //Liste des Cercle Chargeur
         List<LoadCircle> listLoadCircle = new List<LoadCircle>();
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         /// <summary>
         /// Default constructor.
@@ -61,7 +78,7 @@ namespace AppliProjetTut
             AddWindowAvailabilityHandlers();
 
             // ajout de Nodes
-            AddNode(null, initP);
+            AddNode(null, initP, "Text");
 
             PreviewTouchMove += new EventHandler<TouchEventArgs>(OnPreviewTouchMove);
             PreviewTouchDown += new EventHandler<TouchEventArgs>(OnPreviewTouchDown);
@@ -78,7 +95,25 @@ namespace AppliProjetTut
             RefreshImage();
         }
 
-       
+        void ChoiceMenuTimeExpired(object sender, EventArgs e)
+        {
+            //
+            // SUPPRIME LE MENU EXPIRE
+            //
+            Timer menuTimer = (Timer)sender;
+            if (menuTimer == null)
+                return;
+
+            for (int i = 0; i < listMenu.Count; i++)
+            {
+                if (listMenu.ElementAt(i).Value == menuTimer)
+                {
+                    this.MainScatterView.Items.Remove(listMenu.ElementAt(i).Key);
+                    listMenu.RemoveAt(i);
+                    return;
+                }
+            }
+        }
         
 
         
@@ -149,13 +184,21 @@ namespace AppliProjetTut
             //TODO: disable audio, animations here
         }
 
-        public void AddNode(ScatterCustom parent, Point pt)
+        public void AddNode(ScatterCustom parent, Point pt, String typeNode)
         {
-            NodeText text = new NodeText(this, parent);
-            text.Center = pt;
+            switch (typeNode)
+            {
+                case "Text":
+                    NodeText text = new NodeText(this, parent);
+                    text.Center = pt;
+                    this.MainScatterView.Items.Add(text);
+                    listNode.Add(text);
+                    break;
+                case "Image":
+                    break;
 
-            this.MainScatterView.Items.Add(text);
-            listNode.Add(text);
+            }
+            
         }
 
         public void RemoveNode(ScatterCustom parent, bool confirmation)
@@ -218,7 +261,7 @@ namespace AppliProjetTut
             }
 
 
-            if (LoadEnable)
+            if (LoadEnable && listTouch.Count < mLimiteNbrTouch)
             {
                 //Cercle de chargement
                 LoadCircle mLCircle = new LoadCircle();
@@ -364,14 +407,26 @@ namespace AppliProjetTut
                 {
                     if (e.Timestamp - listTouch.ElementAt(i).Value.Key > 2000)  // si l'appui a duré +2s
                     {
-                        Point pt = e.TouchDevice.GetPosition(this);             // on crée un NodeText
-                        AddNode(null, pt);
+                        MenuCreation ChoiceNode = new MenuCreation(this);
+                        ChoiceNode.Center = e.TouchDevice.GetCenterPosition(this);
+                        ChoiceNode.Orientation = e.TouchDevice.GetOrientation(this)+90.0;
+                        MainScatterView.Items.Add(ChoiceNode);
+
+                        Timer menuLifeTime = new Timer();
+                        menuLifeTime.Interval = 3000;
+                        menuLifeTime.Tick += new EventHandler(ChoiceMenuTimeExpired);
+                        menuLifeTime.Start();
+
+                        KeyValuePair<MenuCreation, Timer> myPair = new KeyValuePair<MenuCreation, Timer>(ChoiceNode, menuLifeTime);
+                        listMenu.Add(myPair);
                     }
                     listTouch.RemoveAt(i);
                 }
             }
 
         }
+
+        
 
 
         private void RefreshImage()
@@ -549,6 +604,8 @@ namespace AppliProjetTut
 
                 }
             }
+
+
         }
 
 
@@ -600,9 +657,6 @@ namespace AppliProjetTut
                     listLigneRattache.Add(myPair);
                 }
 
-
-
-
             }
 
         }
@@ -610,6 +664,17 @@ namespace AppliProjetTut
 
 
 
+
+        public void MenuIsClicked(MenuCreation menu, String choice)
+        {
+            AddNode(null, menu.ActualCenter, choice);
+
+            try
+            {
+                MainScatterView.Items.Remove(menu);
+            }
+            catch { }
+        }
 
 
 

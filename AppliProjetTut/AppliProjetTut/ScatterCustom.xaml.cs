@@ -103,7 +103,7 @@ namespace AppliProjetTut
             {
                 pt.Y -= 200;
             }
-            Surface.AddNode(this, pt);
+            Surface.AddNode(this, pt, "Text");
         }
 
         public void OnRemoveSelection(object sender, RoutedEventArgs e)

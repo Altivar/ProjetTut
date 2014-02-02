@@ -1,0 +1,17 @@
+﻿<s:ScatterViewItem x:Class="AppliProjetTut.MenuCreation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:s="http://schemas.microsoft.com/surface/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             Background="Transparent">
+    <Grid Name="ChoiceNodeMenu" Width="150" Height="150" >
+            
+        <s:SurfaceButton Content="X" FontSize="30" Margin="50,50,50,50" Background="Red" Foreground="White" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Click="CloseMenuClick"/>
+        <s:SurfaceButton Content="Text" Margin="0, 0, 100, 100" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Click="TextButtonClick"/>
+        
+        
+    </Grid>
+</s:ScatterViewItem>
