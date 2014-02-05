@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IO.Log" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,6 +59,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="ClavierVirtuel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListeImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -87,6 +92,9 @@
     </Compile>
     <Compile Include="ClavierVirtuel.xaml.cs">
       <DependentUpon>ClavierVirtuel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ListeImage.xaml.cs">
+      <DependentUpon>ListeImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoadCircle.xaml.cs">
       <DependentUpon>LoadCircle.xaml</DependentUpon>

@@ -80,6 +80,9 @@ namespace AppliProjetTut
             // ajout de Nodes
             AddNode(null, initP, "Text");
 
+            ListeImages maListe = new ListeImages();
+            MainScatterView.Items.Add(maListe);
+
             PreviewTouchMove += new EventHandler<TouchEventArgs>(OnPreviewTouchMove);
             PreviewTouchDown += new EventHandler<TouchEventArgs>(OnPreviewTouchDown);
             PreviewTouchUp += new EventHandler<TouchEventArgs>(OnPreviewTouchUp);
