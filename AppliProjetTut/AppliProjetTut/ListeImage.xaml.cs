@@ -23,9 +23,17 @@ namespace AppliProjetTut
     /// </summary>
     public partial class ListeImages : ScatterViewItem
     {
-        public ListeImages()
+
+
+        // NodeImage a laquelle il est rattaché
+        NodeImage nodeParent;
+
+
+        public ListeImages(NodeImage parent)
         {
             InitializeComponent();
+
+            nodeParent = parent;
 
             CanScale = false;
             CanMove = false;
@@ -38,11 +46,15 @@ namespace AppliProjetTut
         }
 
 
-
+        //
+        //   FONCTION D'INITIALISATION DE LA LISTE D'IMAGE
+        //
         public void InitListView()
         {
 
             listview.Items.Clear();
+
+            listview.Items.Add("NONE");
 
             DirectoryInfo dirInfo = new DirectoryInfo(".\\Resources\\Images");
             try
@@ -65,7 +77,10 @@ namespace AppliProjetTut
             
         }
 
-
+        //
+        //   VERIFIE SI LE FICHIER EST UNE IMAGE
+        //   true : extension d'image reconnue
+        //   false : extension autre que d'une image reconnue
         private bool isImage(string nom)
         {
 
@@ -86,6 +101,31 @@ namespace AppliProjetTut
             }
 
 
+        }
+
+        
+        
+        
+        
+        
+        //
+        //   INTERACTION AVEC LA LISTE D'IMAGES
+        //
+        private void Valider_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string nomImg = (string)listview.SelectedItem;
+                nodeParent.onValidateChoice(nomImg);
+            }
+            catch { }
+
+            nodeParent.onCloseImagesList();
+        }
+
+        private void Annuler_Click(object sender, RoutedEventArgs e)
+        {
+            nodeParent.onCloseImagesList();
         }
 
 

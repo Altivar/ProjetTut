@@ -79,9 +79,7 @@ namespace AppliProjetTut
 
             // ajout de Nodes
             AddNode(null, initP, "Text");
-
-            ListeImages maListe = new ListeImages();
-            MainScatterView.Items.Add(maListe);
+            AddNode(null, initP, "Image");
 
             PreviewTouchMove += new EventHandler<TouchEventArgs>(OnPreviewTouchMove);
             PreviewTouchDown += new EventHandler<TouchEventArgs>(OnPreviewTouchDown);
@@ -198,6 +196,10 @@ namespace AppliProjetTut
                     listNode.Add(text);
                     break;
                 case "Image":
+                    NodeImage image = new NodeImage(this, parent);
+                    image.Center = pt;
+                    this.MainScatterView.Items.Add(image);
+                    listNode.Add(image);
                     break;
 
             }

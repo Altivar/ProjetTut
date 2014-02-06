@@ -9,9 +9,13 @@
              Width="300" Height="200"
              Loaded="OnNodeLoaded">
     <Grid Name="MainGrid" Width="300"  >
-        
-        <Grid Name="TextScatter" />
 
+
+        <Image Source="icon.png"/>
+        <Grid Name="TypeScatter" />
+        
+        
+        
         <s:ElementMenu 
         Name="MainMenu"
         ActivationMode="AlwaysActive"

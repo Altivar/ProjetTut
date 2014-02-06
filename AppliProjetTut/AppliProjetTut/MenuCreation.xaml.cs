@@ -41,5 +41,10 @@ namespace AppliProjetTut
         {
             parentWindow.MenuIsClicked(this, "Text");
         }
+
+        private void ImageButtonClick(object sender, RoutedEventArgs e)
+        {
+            parentWindow.MenuIsClicked(this, "Image");
+        }
     }
 }

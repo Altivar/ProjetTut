@@ -58,7 +58,7 @@ namespace AppliProjetTut
             STextBox.IsEnabled = false;
             STextBox.TextWrapping = TextWrapping.Wrap;
             STextBox.MaxLines = 6;
-            base.TextScatter.Children.Add(STextBox);
+            base.TypeScatter.Children.Add(STextBox);
 
             ElementMenuItem MenuItem1 = new ElementMenuItem();
             MenuItem1.Header = "Color choice";
@@ -83,8 +83,9 @@ namespace AppliProjetTut
         }
 
 
-
-        // evenement de selection du menu
+        //
+        //   EVENT de selection du menu
+        //
         private void OnEditSelection(object sender, RoutedEventArgs e)
         {
             if (!isEditing)
@@ -114,7 +115,10 @@ namespace AppliProjetTut
             }
         }
 
-        // ajout de texte
+
+        //
+        //   INTERACTION AVEC LE CLAVIER
+        //
         public void AjoutTexte(string str)
         {
 
@@ -154,7 +158,9 @@ namespace AppliProjetTut
 
         }
 
-        // changement de couleur
+        //
+        //   INTERACTION AVEC LA PALETTE
+        //
         public void SetBackGroundColor(Brush color)
         {
             currentColor = color;
@@ -166,6 +172,12 @@ namespace AppliProjetTut
             this.AddonGrid.Items.Remove(palette);
             isEditing = false;
         }
+
+
+
+        //
+        // autres fonctions utiles
+        //
         public Brush GetColor()
         {
             return currentColor;

@@ -102,6 +102,7 @@
     <Compile Include="MenuCreation.xaml.cs">
       <DependentUpon>MenuCreation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NodeImage.cs" />
     <Compile Include="NodeText.cs" />
     <Compile Include="PaletteCouleurs.xaml.cs">
       <DependentUpon>PaletteCouleurs.xaml</DependentUpon>

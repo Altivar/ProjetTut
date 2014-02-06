@@ -6,13 +6,13 @@
              xmlns:s="http://schemas.microsoft.com/surface/2008"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Name="ImagesGrid" Width="200" Height="100" >
+    <Grid Name="ImagesGrid" Width="200" Height="130" >
 
 
-        <ListView Name="listview" Width="200" Height="100" />
+        <ListView Name="listview" Width="200" Height="100" Margin="0,0,0,30"/>
 
-
-
-
+        <s:SurfaceButton Name="Valider" Content="Valider" Width="100" Height="30" Click="Valider_Click" Margin="0,100,100,0" Background="DarkGreen"/>
+        <s:SurfaceButton Name="Annuler" Content="Annuler" Width="100" Height="30" Click="Annuler_Click" Margin="100,100,0,0" Background="DarkRed"/>
+        
     </Grid>
 </s:ScatterViewItem>
