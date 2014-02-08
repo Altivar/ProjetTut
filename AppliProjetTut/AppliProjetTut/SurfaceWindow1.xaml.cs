@@ -209,6 +209,7 @@ namespace AppliProjetTut
         public void RemoveNode(ScatterCustom parent, bool confirmation)
         {
             bool conf = confirmation;
+
             for (int i = 0; i < listNode.Count; i++)
             {
                 if (listNode.ElementAt(i).GetParent() == parent)
@@ -228,7 +229,14 @@ namespace AppliProjetTut
                             // On annule la suppression
                             return;
                         }
+
+                        // on separe de son parent avant d'effectuer la suppression des enfants
+                        // utile dans le cas d'une boucle
+                        parent.SetParent(null);
+
                         conf = false;
+
+                        
                     }
                     RemoveNode(listNode.ElementAt(i), false);
                     i--;

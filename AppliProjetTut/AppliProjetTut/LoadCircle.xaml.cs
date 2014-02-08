@@ -32,6 +32,9 @@ namespace AppliProjetTut
 
             this.ShowsActivationEffects = false;
             this.BorderBrush = System.Windows.Media.Brushes.Transparent;
+
+            CanScale = false;
+            CanMove = false;
         }
         private void ScatterViewItem_Loaded(object sender, RoutedEventArgs e)
         {

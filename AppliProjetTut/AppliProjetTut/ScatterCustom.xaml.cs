@@ -133,6 +133,10 @@ namespace AppliProjetTut
             {
                 this.parent = newParent;
             }
+            else if (newParent == null)
+            {
+                this.parent = null;
+            }
         }
 
         public Point GetOrigin()

@@ -18,16 +18,20 @@ using System.IO;
 
 namespace AppliProjetTut
 {
+    
     /// <summary>
     /// Logique d'interaction pour ListeImages.xaml
     /// </summary>
     public partial class ListeImages : ScatterViewItem
     {
 
+        int imgSize = 100;
 
         // NodeImage a laquelle il est rattaché
         NodeImage nodeParent;
 
+        // liste de bouton
+        List<SurfaceButton> listButton = new List<SurfaceButton>();
 
         public ListeImages(NodeImage parent)
         {
@@ -39,6 +43,7 @@ namespace AppliProjetTut
             CanMove = false;
             CanRotate = false;
 
+            ButtonListGrid.Height = 100;
 
             InitListView();
 
@@ -51,10 +56,7 @@ namespace AppliProjetTut
         //
         public void InitListView()
         {
-
-            listview.Items.Clear();
-
-            listview.Items.Add("NONE");
+            listButton.Clear();
 
             DirectoryInfo dirInfo = new DirectoryInfo(".\\Resources\\Images");
             try
@@ -68,13 +70,50 @@ namespace AppliProjetTut
 
                     if (isImage(nomPartition.Last()))
                     {
-                        listview.Items.Add(nomPartition.Last());
+                        SurfaceButton btnImg = new SurfaceButton();
+                        btnImg.Width = imgSize;
+                        btnImg.Height = imgSize;
+                        
+                        BitmapImage bi = new BitmapImage();
+                        bi.BeginInit();
+                        bi.UriSource = new Uri(".\\Resources\\Images\\" + nomPartition.Last(), UriKind.Relative);
+                        bi.EndInit();
+                        btnImg.Background = new ImageBrush(bi);
+
+                        listButton.Add(btnImg);
                     }
                 }
+                SurfaceButton btnNone = new SurfaceButton();
+                btnNone.Width = imgSize;
+                btnNone.Height = imgSize;
+
+                btnNone.Background = new SolidColorBrush(Colors.Gray);
+
+                listButton.Add(btnNone);
+
             }
             catch { };
 
+            ButtonListGrid.Width = listButton.Count * imgSize;
+            for (int i = 0 ; i < listButton.Count; i++)
+            { 
+                SurfaceButton btn = listButton.ElementAt(i);
+                btn.Margin = new Thickness(imgSize * i, 0, imgSize * (listButton.Count - 1 - i), 100 - imgSize);
+                btn.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnButtonPreviewTouchUp);
+                ButtonListGrid.Children.Add(btn);
+            }
             
+        }
+
+
+        void OnButtonPreviewTouchUp(object sender, TouchEventArgs e)
+        {
+            SurfaceButton button = (SurfaceButton)sender;
+            if (button != null)
+            {
+                Brush imgBrush = (Brush)button.Background;
+                nodeParent.onChoice(imgBrush);
+            }
         }
 
         //
@@ -113,13 +152,7 @@ namespace AppliProjetTut
         //
         private void Valider_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                string nomImg = (string)listview.SelectedItem;
-                nodeParent.onValidateChoice(nomImg);
-            }
-            catch { }
-
+            nodeParent.onValidateChoice();
             nodeParent.onCloseImagesList();
         }
 
