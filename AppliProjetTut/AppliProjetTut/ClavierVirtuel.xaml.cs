@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
+using System.Windows.Forms;
 
 namespace AppliProjetTut
 {
@@ -28,9 +29,15 @@ namespace AppliProjetTut
         // Node
         private NodeText NodeParent;
 
-        //Gestion du LowerCase - UpperCase
+        // Gestion du LowerCase - UpperCase
         private bool TempLockedCaps = true;
         private bool LockedCaps = false;
+
+
+        // Gestion d'un appui long sur le BackSpace
+        Timer backSpaceTimer;
+        bool isBackSpaceDown = false;
+        int compteurBackSpace = 0;
 
 
         public ClavierVirtuel(NodeText parent)
@@ -42,7 +49,14 @@ namespace AppliProjetTut
 
             this.CanScale = false;
 
-            //this.Text.IsEnabled = false;
+
+
+            backSpaceTimer = new Timer();
+            backSpaceTimer.Tick += new EventHandler(backSpaceTimer_Tick);
+            backSpaceTimer.Interval = 100;
+            backSpaceTimer.Start();
+
+
             
             this.Cadenas.PreviewTouchDown += new EventHandler<TouchEventArgs>(Cadenas_PreviewTouchDown);
 
@@ -60,7 +74,6 @@ namespace AppliProjetTut
             this.parbis.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.par1bis.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.arobase.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
-            this.Backspace.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.Tab.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.Circonflexe.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
             this.Dollars.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
@@ -123,10 +136,42 @@ namespace AppliProjetTut
             this.Caps_Lock.PreviewTouchDown += new EventHandler<TouchEventArgs>(Caps_PreviewTouchDown);
             this.Tab.PreviewTouchDown += new EventHandler<TouchEventArgs>(Tab_PreviewTouchDown);
 
-
             this.close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnClosePreviewTouchDown);
+
+            this.Backspace.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnLetterPreviewTouchDown);
+            this.Backspace.PreviewTouchUp += new EventHandler<TouchEventArgs>(Backspace_PreviewTouchUp);
         }
 
+
+
+        //
+        //  TIMER POUR LE BACKSPACE
+        //
+        void backSpaceTimer_Tick(object sender, EventArgs e)
+        {
+            if (isBackSpaceDown)
+            {
+                if (compteurBackSpace < 4)
+                {
+                    compteurBackSpace++;
+                }
+                else
+                {
+                    NodeParent.AjoutTexte("backspace");
+                }
+            }
+        }
+        void Backspace_PreviewTouchUp(object sender, TouchEventArgs e)
+        {
+            compteurBackSpace = 0;
+            isBackSpaceDown = false;
+        }
+
+
+
+        //
+        //  GESTION FERMETURE
+        //
         void OnClosePreviewTouchDown(object sender, TouchEventArgs e)
         {
             //ne ferme la fenêtre que si on utilise le doigt
@@ -167,6 +212,11 @@ namespace AppliProjetTut
             //ne tape une lettre que si on utilise le doigt
             if (e.TouchDevice.GetIsFingerRecognized())
             {
+                if (((SurfaceButton)sender).Content.ToString().ToLower() == "backspace")
+                {
+                    isBackSpaceDown = true;
+                }
+
                 if (TempLockedCaps)
                 {
                     NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
