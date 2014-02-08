@@ -35,7 +35,7 @@ namespace AppliProjetTut
         ListeImages imageChoice;
 
         // Image du ImageNode
-        Brush ImgNode;
+        Brush currentImage;
 
         public NodeImage(SurfaceWindow1 parentSurface, ScatterCustom parentNode)
             : base(parentSurface, parentNode)
@@ -48,8 +48,15 @@ namespace AppliProjetTut
 
             imageChoice = new ListeImages(this);
 
-            ImgNode = new SolidColorBrush(Colors.Gray);
-            base.MainGrid.Background = ImgNode;
+            try
+            {
+                currentImage = ((NodeImage)parent).GetImage();
+            }
+            catch
+            {
+                currentImage = new SolidColorBrush(Colors.Gray);
+            }
+            base.MainGrid.Background = currentImage;
 
             ElementMenuItem MenuItem1 = new ElementMenuItem();
             MenuItem1.Header = "Image choice";
@@ -77,12 +84,12 @@ namespace AppliProjetTut
 
 
         //
-        //
+        //  GESTION IMAGE AR LISTE D'IMAGE
         //
         public void onCloseImagesList()
         {
             base.AddonGrid.Items.Remove(imageChoice);
-            base.MainGrid.Background = ImgNode;
+            base.MainGrid.Background = currentImage;
             isEditing = false;
         }
         public void onChoice(Brush newPath)
@@ -91,7 +98,16 @@ namespace AppliProjetTut
         }
         public void onValidateChoice()
         {
-            ImgNode = base.MainGrid.Background;
+            currentImage = base.MainGrid.Background;
+        }
+
+
+        //
+        //
+        //
+        public Brush GetImage()
+        {
+            return currentImage;
         }
 
 

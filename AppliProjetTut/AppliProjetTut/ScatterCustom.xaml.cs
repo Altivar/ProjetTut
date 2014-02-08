@@ -91,9 +91,21 @@ namespace AppliProjetTut
 
 
         // SELECTION MENU
-        public void OnAddNodeSelection(object sender, RoutedEventArgs e)
+        public void OnAddNodeTextSelection(object sender, RoutedEventArgs e)
         {
-
+            Point pt = ActualCenter;
+            if (pt.Y < Surface.Height - 300)
+            {
+                pt.Y += 200;
+            }
+            else
+            {
+                pt.Y -= 200;
+            }    
+            Surface.AddNode(this, pt, "Text");
+        }
+        public void OnAddNodeImageSelection(object sender, RoutedEventArgs e)
+        {
             Point pt = ActualCenter;
             if (pt.Y < Surface.Height - 300)
             {
@@ -103,7 +115,7 @@ namespace AppliProjetTut
             {
                 pt.Y -= 200;
             }
-            Surface.AddNode(this, pt, "Text");
+            Surface.AddNode(this, pt, "Image");
         }
 
         public void OnRemoveSelection(object sender, RoutedEventArgs e)

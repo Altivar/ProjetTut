@@ -11,7 +11,6 @@
     <Grid Name="MainGrid" Width="300"  >
 
 
-        <Image Source="icon.png"/>
         <Grid Name="TypeScatter" />
         
         
@@ -21,7 +20,8 @@
         ActivationMode="AlwaysActive"
         ActivationHost="{Binding ElementName=MenuGrid}"
         HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <s:ElementMenuItem Header="Add NodeText" Click="OnAddNodeSelection" />
+            <s:ElementMenuItem Header="Add NodeText" Click="OnAddNodeTextSelection" />
+            <s:ElementMenuItem Header="Add NodeImage" Click="OnAddNodeImageSelection" />
             <s:ElementMenuItem Header="Remove This" Click="OnRemoveSelection" />
             <s:ElementMenuItem Header="Separate from Parent" Click="OnSeparateSelection" />
         </s:ElementMenu>
