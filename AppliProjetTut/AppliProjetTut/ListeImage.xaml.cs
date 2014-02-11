@@ -27,6 +27,8 @@ namespace AppliProjetTut
 
         int imgSize = 100;
 
+        int imgBorder = 5;
+
         // NodeImage a laquelle il est rattaché
         NodeImage nodeParent;
 
@@ -98,7 +100,15 @@ namespace AppliProjetTut
             for (int i = 0 ; i < listButton.Count; i++)
             { 
                 SurfaceButton btn = listButton.ElementAt(i);
-                btn.Margin = new Thickness(imgSize * i, 0, imgSize * (listButton.Count - 1 - i), 100 - imgSize);
+                if (i == listButton.Count - 1)
+                {
+                    btn.Margin = new Thickness(imgSize * i + imgBorder, imgBorder, imgSize * (listButton.Count - 1 - i) + imgBorder, 100 - imgSize + imgBorder);
+                }
+                else
+                {
+                    btn.Margin = new Thickness(imgSize * i + imgBorder, imgBorder, imgSize * (listButton.Count - 1 - i), 100 - imgSize + imgBorder);
+                }
+                
                 btn.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnButtonPreviewTouchUp);
                 ButtonListGrid.Children.Add(btn);
             }
@@ -133,10 +143,8 @@ namespace AppliProjetTut
                 case "bmp":
                 case "gif":
                     return true;
-                    break;
                 default:
                     return false;
-                    break;
             }
 
 
