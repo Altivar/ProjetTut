@@ -33,7 +33,8 @@ namespace AppliProjetTut
         NodeImage nodeParent;
 
         // liste de bouton
-        List<SurfaceButton> listButton = new List<SurfaceButton>();
+        List<KeyValuePair<SurfaceButton, Point>> listButton = new List<KeyValuePair<SurfaceButton, Point>>();
+        
 
         public ListeImages(NodeImage parent)
         {
@@ -82,7 +83,10 @@ namespace AppliProjetTut
                         bi.EndInit();
                         btnImg.Background = new ImageBrush(bi);
 
-                        listButton.Add(btnImg);
+                        Point dim = new Point(bi.Width, bi.Height);
+                        KeyValuePair<SurfaceButton, Point> myPair = new KeyValuePair<SurfaceButton, Point>(btnImg, dim);
+
+                        listButton.Add(myPair);
                     }
                 }
                 SurfaceButton btnNone = new SurfaceButton();
@@ -90,8 +94,11 @@ namespace AppliProjetTut
                 btnNone.Height = imgSize;
 
                 btnNone.Background = new SolidColorBrush(Colors.Gray);
+                
+                Point dimNone = new Point(0, 0);
+                KeyValuePair<SurfaceButton, Point> myPairNone = new KeyValuePair<SurfaceButton, Point>(btnNone, dimNone);
 
-                listButton.Add(btnNone);
+                listButton.Add(myPairNone);
 
             }
             catch { };
@@ -99,7 +106,7 @@ namespace AppliProjetTut
             ButtonListGrid.Width = listButton.Count * imgSize;
             for (int i = 0 ; i < listButton.Count; i++)
             { 
-                SurfaceButton btn = listButton.ElementAt(i);
+                SurfaceButton btn = listButton.ElementAt(i).Key;
                 if (i == listButton.Count - 1)
                 {
                     btn.Margin = new Thickness(imgSize * i + imgBorder, imgBorder, imgSize * (listButton.Count - 1 - i) + imgBorder, 100 - imgSize + imgBorder);
@@ -121,8 +128,15 @@ namespace AppliProjetTut
             SurfaceButton button = (SurfaceButton)sender;
             if (button != null)
             {
-                Brush imgBrush = (Brush)button.Background;
-                nodeParent.onChoice(imgBrush);
+                for (int i = 0; i < listButton.Count; i++)
+                {
+                    if (listButton.ElementAt(i).Key == button)
+                    { 
+                        Brush imgBrush = (Brush)button.Background;
+                        nodeParent.onChoice(imgBrush, listButton.ElementAt(i).Value);
+                    }
+                }
+                
             }
         }
 
