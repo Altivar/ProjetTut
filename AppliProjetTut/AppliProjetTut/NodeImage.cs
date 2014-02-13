@@ -37,7 +37,8 @@ namespace AppliProjetTut
         // Image du ImageNode
         Brush currentImage;
         Point currentSize;
-        Point tempSize = new Point(-1, -1);
+        Point tempSize = new Point(300, 200);
+        Point previousSize = new Point(300, 200);
 
         public NodeImage(SurfaceWindow1 parentSurface, ScatterCustom parentNode)
             : base(parentSurface, parentNode)
@@ -58,27 +59,21 @@ namespace AppliProjetTut
             catch
             {
                 currentImage = new SolidColorBrush(Colors.Gray);
-                currentSize = new Point(-1, -1);
+                currentSize = new Point(300, 200);
             }
+            mise_a_echelle();
             base.MainGrid.Background = currentImage;
+
+            base.CanScale = true;
+            base.SizeChanged += new SizeChangedEventHandler(OnNodeImageSizeChanged);
 
             ElementMenuItem MenuItem1 = new ElementMenuItem();
             MenuItem1.Header = "Image choice";
             MenuItem1.Click += new RoutedEventHandler(OnImageChoiceSelection);
             base.MainMenu.Items.Add(MenuItem1);
-
-            ElementMenuItem MenuItem2 = new ElementMenuItem();
-            MenuItem2.Header = "Aggrandir";
-            MenuItem2.Click += new RoutedEventHandler(OnBiggerSelection);
-            base.MainMenu.Items.Add(MenuItem2);
-
-            ElementMenuItem MenuItem3 = new ElementMenuItem();
-            MenuItem3.Header = "Réduire";
-            MenuItem3.Click += new RoutedEventHandler(OnSmallerSelection);
-            base.MainMenu.Items.Add(MenuItem3);
-
-
         }
+
+        
 
 
 
@@ -89,6 +84,10 @@ namespace AppliProjetTut
         {
             if (!isEditing)
             {
+                base.Height = 200;
+                base.Width = 300;
+                base.MainGrid.Width = 300;
+                base.MainGrid.Height = 200;
                 base.AddonGrid.Items.Add(imageChoice);
                 imageChoice.InitListView();
 
@@ -96,77 +95,153 @@ namespace AppliProjetTut
             }
         }
 
-        private void OnBiggerSelection(object sender, RoutedEventArgs e)
+
+        //
+        //  EVENT de changement de taille
+        //
+        void OnNodeImageSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (currentSize.X != -1 && currentSize.Y != -1)
+
+            double ecartX = currentSize.X - 300;
+            double ecartY = currentSize.Y - 200;
+            double ecartXparY = ecartX / ecartY;
+
+            if (currentSize.X <= 300 && currentSize.Y <= 200)
             {
-                //base.CanScale = true;
+                base.Width = previousSize.X;
+                base.Height = previousSize.Y;
+            }
+            else if (currentSize.X > 300 && currentSize.Y > 200)
+            {
+                if (ecartX > ecartY)
+                {
+                    double newHeight = (base.Width - 300) / ecartX * ecartY;
+                    base.Height = newHeight + 200;
+                }
+                else if (ecartY > ecartX)
+                {
+                    double newWidth = (base.Height - 200) / ecartY * ecartX;
+                    base.Width = newWidth + 300;
+                }
+                else // si ecartX == ecartY
+                { 
+                
+                }
+            }
+            else if (currentSize.X <= 300 && currentSize.Y > 200)
+            {
+                base.Width = previousSize.X;
+            }
+            else if (currentSize.X > 300 && currentSize.Y <= 200)
+            {
+                base.Height = previousSize.Y;
+            }
+            else
+            { 
+                // pas normal !!! 
+            }
+
+
+            
+
+
+            /*if (currentSize.X > 300)
+            {
+                base.MainGrid.Width = base.Width;
+                base.Height = (base.Width - 300) * ecartXparY + 200;
+            }
+            else if (currentSize.Y > 200)
+            {
+                base.MainGrid.Height = base.Height;
+            }
+
+            //
+            //  GESTION taille base.MainGrid
+            //
+            if (currentSize.X < base.MainGrid.Width)
+            {
                 base.MainGrid.Width = currentSize.X;
+            }
+            if (currentSize.Y < base.MainGrid.Height)
+            {
                 base.MainGrid.Height = currentSize.Y;
+            }
+            if (300 > base.MainGrid.Width)
+            {
+                base.MainGrid.Width = 300;
+            }
+            if (200 > base.MainGrid.Height)
+            {
+                base.MainGrid.Height = 200;
+            }
+
+            //
+            //  GESTION taille Node
+            //
+            if (currentSize.X < base.Width)
+            {
                 base.Width = currentSize.X;
+            }
+            if (currentSize.Y < base.Height)
+            {
                 base.Height = currentSize.Y;
-                //base.CanScale = false;
+            }*/
+
+            // si la dimensiondu Node est trop grande
+            if (base.Width > currentSize.X)
+            {
+                base.Width = currentSize.X;
             }
+            if (base.Height > currentSize.Y)
+            {
+                base.Height = currentSize.Y;
+            }
+
+            // si la dimension du Node est trop petite
+            if (base.Width <= 300)
+            {
+                base.Width = 300;
+            }
+            if (base.Height <= 200)
+            {
+                base.Height = 200;
+            }
+
+            // reglage de la Grid
+            if (currentSize.X <= 300)
+            {
+                base.MainGrid.Width = currentSize.X;
+            }
+            else
+            {
+                base.MainGrid.Width = base.Width;
+            }
+            if (currentSize.Y <= 200)
+            {
+                base.MainGrid.Height = currentSize.Y;
+            }
+            else
+            {
+                base.MainGrid.Height = base.Height;
+            }
+            
+
+            previousSize = new Point(base.Width, base.Height);
+
         }
 
-        private void OnSmallerSelection(object sender, RoutedEventArgs e)
-        {
-            base.MainGrid.Width = 300;
-            base.MainGrid.Height = 200;
-            base.Width = 300;
-            base.Height = 200;
 
-            if (base.ActualCenter.X < 100)
-            {
-                if (base.ActualCenter.Y < 100)
-                {
-                    base.Center = new Point(100, 100);
-                }
-                else if (base.ActualCenter.Y > Surface.Height - 100)
-                {
-                    base.Center = new Point(100, Surface.Height - 100);
-                }
-                else
-                {
-                    base.Center = new Point(100, base.ActualCenter.Y - 100);
-                }
-            }
-            else if (base.ActualCenter.X > Surface.Width - 100)
-            {
-                if (base.ActualCenter.Y < 100)
-                {
-                    base.Center = new Point(Surface.Width - 100, 100);
-                }
-                else if (base.ActualCenter.Y > Surface.Height - 100)
-                {
-                    base.Center = new Point(Surface.Width - 100, Surface.Height - 100);
-                }
-                else
-                {
-                    base.Center = new Point(Surface.Width - 100, base.ActualCenter.Y - 100);
-                }
-            }
-
-            if (base.ActualCenter.Y < 100)
-            {
-                base.Center = new Point(base.ActualCenter.X - 100, 100);
-            }
-            else if (base.ActualCenter.Y > Surface.Height - 100)
-            {
-                base.Center = new Point(base.ActualCenter.X - 100, Surface.Height - 100);
-            }
-        }
 
 
         //
-        //  GESTION IMAGE AR LISTE D'IMAGE
+        //  GESTION IMAGE PAR LISTE D'IMAGE
         //
         public void onCloseImagesList()
         {
             base.AddonGrid.Items.Remove(imageChoice);
             base.MainGrid.Background = currentImage;
             isEditing = false;
-            tempSize = new Point(-1, -1);
+            tempSize = new Point(300, 200);
         }
         public void onChoice(Brush newPath, Point dimension)
         {
@@ -177,7 +252,50 @@ namespace AppliProjetTut
         {
             currentImage = base.MainGrid.Background;
             currentSize = tempSize;
+            mise_a_echelle();
         }
+
+
+        //
+        //  FONCTION de mise a echelle du Node
+        //
+        void mise_a_echelle()
+        {
+            // taille du Node
+            base.Height = 200;
+            base.Width = 300;
+            
+            // taille minimum du Node
+            //base.MinHeight = 200;
+            //base.MinWidth = 300;
+
+            //// taille maximum du Node
+            // reglage sur les X
+            if (currentSize.X > 300)
+            {
+                //base.MaxWidth = currentSize.X;
+                base.MainGrid.Width = base.Width;
+            }
+            else
+            {
+                //base.MaxWidth = base.MinWidth;
+                base.MainGrid.Width = currentSize.X;
+            }
+            // reglage sur les Y
+            if (currentSize.Y > 200)
+            {
+                //base.MaxHeight = currentSize.Y;
+                base.MainGrid.Height = base.Height;
+            }
+            else
+            {
+                //base.MaxHeight = base.MinHeight;
+                base.MainGrid.Height = currentSize.Y;
+            }
+
+
+        }
+
 
 
         //

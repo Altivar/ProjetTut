@@ -95,7 +95,7 @@ namespace AppliProjetTut
 
                 btnNone.Background = new SolidColorBrush(Colors.Gray);
                 
-                Point dimNone = new Point(0, 0);
+                Point dimNone = new Point(300, 200);
                 KeyValuePair<SurfaceButton, Point> myPairNone = new KeyValuePair<SurfaceButton, Point>(btnNone, dimNone);
 
                 listButton.Add(myPairNone);
