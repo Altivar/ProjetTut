@@ -16,8 +16,7 @@
         <s:ElementMenu 
         Name="MainMenu"
         ActivationMode="AlwaysActive"
-        ActivationHost="{Binding ElementName=MenuGrid}"
-        HorizontalAlignment="Center" VerticalAlignment="Bottom">
+        ActivationHost="{Binding ElementName=MenuGrid}" VerticalAlignment="Bottom" Margin="100,0,100,-50">
             <s:ElementMenuItem Header="Add NodeText" Click="OnAddNodeTextSelection" />
             <s:ElementMenuItem Header="Add NodeImage" Click="OnAddNodeImageSelection" />
             <s:ElementMenuItem Header="Remove This" Click="OnRemoveSelection" />

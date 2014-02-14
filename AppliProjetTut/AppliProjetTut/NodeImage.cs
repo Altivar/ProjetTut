@@ -224,7 +224,9 @@ namespace AppliProjetTut
             {
                 base.MainGrid.Height = base.Height;
             }
-            
+
+            double borderHeight = (base.Height - base.MainGrid.Height) / 2;
+            base.MainMenu.Margin = new Thickness((base.Width - base.MainGrid.Width) / 2, base.MainGrid.Height + borderHeight, (base.Width - base.MainGrid.Width) / 2, -(borderHeight + 50));
 
             previousSize = new Point(base.Width, base.Height);
 
@@ -292,6 +294,12 @@ namespace AppliProjetTut
                 //base.MaxHeight = base.MinHeight;
                 base.MainGrid.Height = currentSize.Y;
             }
+
+            double borderHeight = (base.Height - base.MainGrid.Height) / 2;
+            base.MainMenu.Margin = new Thickness((base.Width - base.MainGrid.Width) / 2, base.MainGrid.Height + borderHeight, (base.Width - base.MainGrid.Width) / 2, -(borderHeight + 50));
+
+            previousSize = new Point(base.Width, base.Height);
+
 
 
         }
