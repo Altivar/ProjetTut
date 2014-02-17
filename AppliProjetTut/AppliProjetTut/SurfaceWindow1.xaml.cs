@@ -393,9 +393,13 @@ namespace AppliProjetTut
                         }
                     }
 
-                    if (length != -1 && length < 200) // si la node la plus proche est assez près
+                    if (length != -1) // si la node la plus proche est assez près
                     {
-                        listLigneRattache.ElementAt(i).Key.SetParent(nearestText);
+                        double dimension = (nearestText.Width > nearestText.Height) ? nearestText.Width : nearestText.Height;
+                        if (length < dimension / 3 * 2)
+                        {
+                            listLigneRattache.ElementAt(i).Key.SetParent(nearestText);
+                        }
                     }
 
                     // ensuite on supprime la ligne
@@ -494,24 +498,28 @@ namespace AppliProjetTut
                     }
                 }
 
-                if (length != -1 && length < 200) // si la node la plus proche est assez près
-                { 
-                    Ellipse ell = new Ellipse();
+                if (length != -1) // si la node la plus proche est assez près
+                {
+                    double dimension = (nearestText.Width > nearestText.Height) ? nearestText.Width : nearestText.Height;
+                    if (length < dimension / 3 * 2)
+                    {
+                        Ellipse ell = new Ellipse();
 
-                    ell.Width = 400;
-                    ell.Height = 400;
-                    ell.Fill = new SolidColorBrush(Colors.Transparent);
-                    ell.Stroke = new SolidColorBrush(Colors.DarkGreen);
-                    ell.StrokeThickness = 9;
+                        ell.Width = dimension * 3 / 2 - dimension / 6;
+                        ell.Height = dimension * 3 / 2 - dimension / 6;
+                        ell.Fill = new SolidColorBrush(Colors.Transparent);
+                        ell.Stroke = new SolidColorBrush(Colors.DarkGreen);
+                        ell.StrokeThickness = 9;
 
-                    DoubleCollection dColl = new DoubleCollection();
-                    dColl.Add(10);
-                    dColl.Add(5);
-                    ell.StrokeDashArray = dColl;
+                        DoubleCollection dColl = new DoubleCollection();
+                        dColl.Add(10);
+                        dColl.Add(5);
+                        ell.StrokeDashArray = dColl;
 
-                    this.NearParentEllipseCanvas.Children.Add(ell);
-                    Canvas.SetLeft(ell, nearestText.ActualCenter.X-200);
-                    Canvas.SetTop(ell, nearestText.ActualCenter.Y-200);
+                        this.NearParentEllipseCanvas.Children.Add(ell);
+                        Canvas.SetLeft(ell, nearestText.ActualCenter.X - dimension / 3 * 2/* - dimension / 12*/);
+                        Canvas.SetTop(ell, nearestText.ActualCenter.Y - dimension / 3 * 2/* - dimension / 12*/);
+                    }
                 }
 
             }
@@ -566,27 +574,27 @@ namespace AppliProjetTut
                     Point pt6 = pt1;
                     // placement du premier point de la pseudo-ellipse
                     pt1.X -= 60;
-                    pt1.Y -= 80;
+                    pt1.Y -= listNode.ElementAt(i).Height / 2 - 20;
                     pt1 = listNode.ElementAt(i).PointToScreen(pt1);
                     // placement du premier point de la pseudo-ellipse
                     pt2.X -= 50;
-                    pt2.Y -= 120;
+                    pt2.Y -= listNode.ElementAt(i).Height / 2 + 20;
                     pt2 = listNode.ElementAt(i).PointToScreen(pt2);
                     // placement du premier point de la pseudo-ellipse
                     pt3.X -= 20;
-                    pt3.Y -= 140;
+                    pt3.Y -= listNode.ElementAt(i).Height / 2 + 40;
                     pt3 = listNode.ElementAt(i).PointToScreen(pt3);
                     // placement du premier point de la pseudo-ellipse
                     pt4.X += 20;
-                    pt4.Y -= 140;
+                    pt4.Y -= listNode.ElementAt(i).Height / 2 + 40;
                     pt4 = listNode.ElementAt(i).PointToScreen(pt4);
                     // placement du premier point de la pseudo-ellipse
                     pt5.X += 50;
-                    pt5.Y -= 120;
+                    pt5.Y -= listNode.ElementAt(i).Height / 2 + 20;
                     pt5 = listNode.ElementAt(i).PointToScreen(pt5);
                     // placement du premier point de la pseudo-ellipse
                     pt6.X += 60;
-                    pt6.Y -= 80;
+                    pt6.Y -= listNode.ElementAt(i).Height / 2 - 20;
                     pt6 = listNode.ElementAt(i).PointToScreen(pt6);
 
                     // création de la PointCollection qui génerera la forme
