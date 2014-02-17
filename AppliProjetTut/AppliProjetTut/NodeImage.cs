@@ -96,6 +96,7 @@ namespace AppliProjetTut
                 base.AddonGrid.Margin = new Thickness(base.MainGrid.Width / 2, base.MainGrid.Height + borderHeight, base.MainGrid.Width / 2, -(borderHeight + 50));
                 base.AddonGrid.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
 
+                CanScale = false;
                 isEditing = true;
             }
         }
@@ -206,7 +207,8 @@ namespace AppliProjetTut
             base.MainGrid.Background = currentImage;
             base.MainGrid.Width = (currentSize.X > 300) ? 300 : currentSize.X;
             base.MainGrid.Height = (currentSize.Y > 200) ? 200 : currentSize.Y;
-            
+
+            CanScale = true;
             isEditing = false;
             
             tempSize = new Point(300, 200);
