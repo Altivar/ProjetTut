@@ -185,72 +185,14 @@ namespace AppliProjetTut
             //TODO: disable audio, animations here
         }
 
-        public void AddNode(ScatterCustom parent, Point pt, String typeNode)
-        {
-            switch (typeNode)
-            {
-                case "Text":
-                    NodeText text = new NodeText(this, parent);
-                    text.Center = pt;
-                    this.MainScatterView.Items.Add(text);
-                    listNode.Add(text);
-                    break;
-                case "Image":
-                    NodeImage image = new NodeImage(this, parent);
-                    image.Center = pt;
-                    this.MainScatterView.Items.Add(image);
-                    listNode.Add(image);
-                    break;
+        
 
-            }
-            
-        }
 
-        public void RemoveNode(ScatterCustom parent, bool confirmation)
-        {
-            bool conf = confirmation;
 
-            for (int i = 0; i < listNode.Count; i++)
-            {
-                if (listNode.ElementAt(i).GetParent() == parent)
-                {
-                    if (conf)
-                    {
-                        // demande de confirmation
-                        string title = "Warning";
-                        string message = "Remove this Text will remove automatically its children. Remove?";
-                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-                        DialogResult res;
 
-                        res = System.Windows.Forms.MessageBox.Show(message, title, buttons);
-
-                        if (res == System.Windows.Forms.DialogResult.No)
-                        {
-                            // On annule la suppression
-                            return;
-                        }
-
-                        // on separe de son parent avant d'effectuer la suppression des enfants
-                        // utile dans le cas d'une boucle
-                        parent.SetParent(null);
-
-                        conf = false;
-
-                        
-                    }
-                    RemoveNode(listNode.ElementAt(i), false);
-                    i--;
-                }
-            }
-            listNode.Remove(parent);
-            this.MainScatterView.Items.Remove(parent);
-            if (confirmation)
-            {
-                RefreshImage();
-            }
-
-        }
-
+        //
+        //  EVENEMENT
+        //
         private void OnPreviewTouchDown(object sender, TouchEventArgs e)
         {
             bool LoadEnable = true;
@@ -443,9 +385,94 @@ namespace AppliProjetTut
 
         }
 
-        
 
 
+        //
+        //  FONCTION DE GESTION DES NODES
+        //
+        /// <summary>
+        /// Ajoute un NODE du type passé en paramètre
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="pt"></param>
+        /// <param name="typeNode"></param>
+        public void AddNode(ScatterCustom parent, Point pt, String typeNode)
+        {
+            switch (typeNode)
+            {
+                case "Text":
+                    NodeText text = new NodeText(this, parent);
+                    text.Center = pt;
+                    this.MainScatterView.Items.Add(text);
+                    listNode.Add(text);
+                    break;
+                case "Image":
+                    NodeImage image = new NodeImage(this, parent);
+                    image.Center = pt;
+                    this.MainScatterView.Items.Add(image);
+                    listNode.Add(image);
+                    break;
+
+            }
+
+        }
+        /// <summary>
+        /// Supprime le NODE passé en paramètre
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="confirmation"></param>
+        public void RemoveNode(ScatterCustom parent, bool confirmation)
+        {
+            bool conf = confirmation;
+
+            for (int i = 0; i < listNode.Count; i++)
+            {
+                if (listNode.ElementAt(i).GetParent() == parent)
+                {
+                    if (conf)
+                    {
+                        // demande de confirmation
+                        string title = "Warning";
+                        string message = "Remove this Text will remove automatically its children. Remove?";
+                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                        DialogResult res;
+
+                        res = System.Windows.Forms.MessageBox.Show(message, title, buttons);
+
+                        if (res == System.Windows.Forms.DialogResult.No)
+                        {
+                            // On annule la suppression
+                            return;
+                        }
+
+                        // on separe de son parent avant d'effectuer la suppression des enfants
+                        // utile dans le cas d'une boucle
+                        parent.SetParent(null);
+
+                        conf = false;
+
+
+                    }
+                    RemoveNode(listNode.ElementAt(i), false);
+                    i--;
+                }
+            }
+            listNode.Remove(parent);
+            this.MainScatterView.Items.Remove(parent);
+            if (confirmation)
+            {
+                RefreshImage();
+            }
+
+        }
+
+
+        //
+        //  REFRESH
+        //
+        /// <summary>
+        /// Fonction de Refresh de la table appelée a chaque tick du timer
+        /// </summary>
         private void RefreshImage()
         {
             // on efface toutes les lignes des liens internode
@@ -628,7 +655,8 @@ namespace AppliProjetTut
 
 
         }
-
+        //
+        //  FIN REFRESH
 
 
 
@@ -685,7 +713,9 @@ namespace AppliProjetTut
 
 
 
-
+        //
+        // MENU SELECTION TYPE NODE
+        //
         public void MenuIsClicked(MenuCreation menu, String choice)
         {
             AddNode(null, menu.ActualCenter, choice);
@@ -696,6 +726,24 @@ namespace AppliProjetTut
             }
             catch { }
         }
+
+
+        //
+        //  SUPPRIME LA LIGNE VERTE DE RATTACHE SI LE MENU EST OUVERT
+        //
+        public void MenuIsOpened(ScatterCustom scatt)
+        {
+            for (int i = 0; i < listLigneRattache.Count; i++)
+            {
+                if (listLigneRattache.ElementAt(i).Key == scatt)
+                {
+                    listLigneRattache.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+
 
 
 
