@@ -425,6 +425,14 @@ namespace AppliProjetTut
         {
             bool conf = confirmation;
 
+            for (int i = 0; i < listLigneRattache.Count; i++)
+            {
+                if (listLigneRattache.ElementAt(i).Key == parent)
+                {
+                    listLigneRattache.RemoveAt(i);
+                    break;
+                }
+            }
             for (int i = 0; i < listNode.Count; i++)
             {
                 if (listNode.ElementAt(i).GetParent() == parent)
@@ -725,22 +733,6 @@ namespace AppliProjetTut
                 MainScatterView.Items.Remove(menu);
             }
             catch { }
-        }
-
-
-        //
-        //  SUPPRIME LA LIGNE VERTE DE RATTACHE SI LE MENU EST OUVERT
-        //
-        public void MenuIsOpened(ScatterCustom scatt)
-        {
-            for (int i = 0; i < listLigneRattache.Count; i++)
-            {
-                if (listLigneRattache.ElementAt(i).Key == scatt)
-                {
-                    listLigneRattache.RemoveAt(i);
-                    return;
-                }
-            }
         }
 
 

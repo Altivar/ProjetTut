@@ -34,8 +34,6 @@ namespace AppliProjetTut
             parent = parentNode;
             Surface = parentSurface;
 
-            this.MainMenu.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnActivationMenu);
-
             CanScale = false;
         }
 
@@ -90,13 +88,7 @@ namespace AppliProjetTut
 
 
 
-        //
-        //  OPEN MENU
-        //
-        void OnActivationMenu(object sender, TouchEventArgs e)
-        {
-            Surface.MenuIsOpened(this);
-        }
+        
 
         // SELECTION MENU
         public void OnAddNodeTextSelection(object sender, RoutedEventArgs e)
