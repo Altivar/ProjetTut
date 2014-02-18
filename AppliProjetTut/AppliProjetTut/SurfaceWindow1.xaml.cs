@@ -52,12 +52,7 @@ namespace AppliProjetTut
         Timer timeRefresh = new Timer();
         
         //Liste des Cercle Chargeur
-        List<LoadCircle> listLoadCircle = new List<LoadCircle>();
-
-
-
-
-
+        List<KeyValuePair<LoadCircle, Timer>> listLoadCircle = new List<KeyValuePair<LoadCircle, Timer>>();
 
 
 
@@ -91,6 +86,11 @@ namespace AppliProjetTut
 
         }
 
+
+
+
+
+
         void TimerRefresh(object sender, EventArgs e)
         {
             RefreshImage();
@@ -115,9 +115,29 @@ namespace AppliProjetTut
                 }
             }
         }
-        
 
-        
+        void circleTimeOut(object sender, EventArgs e)
+        {
+            Timer circleTimer = (Timer)sender;
+            for (int i = 0; i < listLoadCircle.Count; i++)
+            {
+                if (listLoadCircle.ElementAt(i).Value == circleTimer)
+                {
+                    this.MainScatterView.Items.Remove(listLoadCircle.ElementAt(i).Key);
+                    for (int j = 0; j < listTouch.Count; j++)
+                    {
+                        if (listLoadCircle.ElementAt(i).Key.Id == listTouch.ElementAt(j).Key)
+                        {
+                            listTouch.RemoveAt(j);
+                            break;
+                        }
+                    }
+                    listLoadCircle.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Occurs when the window is about to close. 
@@ -218,11 +238,20 @@ namespace AppliProjetTut
 
             if (LoadEnable && listTouch.Count < mLimiteNbrTouch)
             {
-                //Cercle de chargement
+                // Timer du cercle de chargement
+                Timer circleTimer = new Timer();
+                circleTimer.Interval = 5000;    // durée de vie maximum : 5s
+                circleTimer.Tick += new EventHandler(circleTimeOut);
+                circleTimer.Start();
+                // Cercle de chargement
                 LoadCircle mLCircle = new LoadCircle();
                 mLCircle.Id = e.TouchDevice.Id;
                 mLCircle.Center = e.TouchDevice.GetPosition(this);
-                listLoadCircle.Add(mLCircle);
+
+                // Pair du cercle et de son timer
+                KeyValuePair<LoadCircle, Timer> myPair = new KeyValuePair<LoadCircle, Timer>(mLCircle, circleTimer);
+
+                listLoadCircle.Add(myPair);
                 MainScatterView.Items.Add(mLCircle);
 
 
@@ -235,6 +264,8 @@ namespace AppliProjetTut
                 listTouch.Add(pairTouch);
             }
         }
+
+        
         
 
         /// <summary>
@@ -270,20 +301,31 @@ namespace AppliProjetTut
                         bool done = false;
                         for (int j = 0; j < listLoadCircle.Count && !done; j++)
                         {
-                            if (listLoadCircle.ElementAt(j).Id == e.TouchDevice.Id)
+                            if (listLoadCircle.ElementAt(j).Key.Id == e.TouchDevice.Id)
                             {
                                 // on supprime l'ancien cercle
-                                MainScatterView.Items.Remove(listLoadCircle.ElementAt(j));
+                                MainScatterView.Items.Remove(listLoadCircle.ElementAt(j).Key);
                                 listLoadCircle.RemoveAt(j);
 
                                 if (!isRattache)
                                 {
-                                    // on ajoute le nouveau
-                                    LoadCircle mLCircle = new LoadCircle();
+                                    // On ajoute le nouveau
+                                    //
 
+                                    // Timer du cercle de chargement
+                                    Timer circleTimer = new Timer();
+                                    circleTimer.Interval = 5000;    // durée de vie maximum : 5s
+                                    circleTimer.Tick += new EventHandler(circleTimeOut);
+                                    circleTimer.Start();
+                                    // Cercle de chargement
+                                    LoadCircle mLCircle = new LoadCircle();
                                     mLCircle.Id = e.TouchDevice.Id;
                                     mLCircle.Center = e.TouchDevice.GetPosition(this);
-                                    listLoadCircle.Add(mLCircle);
+
+                                    // Pair du cercle et de son timer
+                                    KeyValuePair<LoadCircle, Timer> myPair = new KeyValuePair<LoadCircle, Timer>(mLCircle, circleTimer);
+
+                                    listLoadCircle.Add(myPair);
                                     MainScatterView.Items.Add(mLCircle);
                                 }
 
@@ -353,9 +395,9 @@ namespace AppliProjetTut
 
             for (int i = 0; i < listLoadCircle.Count; i++)
             {
-                if (listLoadCircle.ElementAt(i).Id == e.TouchDevice.Id)
+                if (listLoadCircle.ElementAt(i).Key.Id == e.TouchDevice.Id)
                 {
-                    MainScatterView.Items.Remove(listLoadCircle.ElementAt(i));
+                    MainScatterView.Items.Remove(listLoadCircle.ElementAt(i).Key);
                     listLoadCircle.RemoveAt(i);
                 }
             }
@@ -552,8 +594,8 @@ namespace AppliProjetTut
                         ell.StrokeDashArray = dColl;
 
                         this.NearParentEllipseCanvas.Children.Add(ell);
-                        Canvas.SetLeft(ell, nearestText.ActualCenter.X - dimension / 3 * 2/* - dimension / 12*/);
-                        Canvas.SetTop(ell, nearestText.ActualCenter.Y - dimension / 3 * 2/* - dimension / 12*/);
+                        Canvas.SetLeft(ell, nearestText.ActualCenter.X - dimension / 3 * 2);
+                        Canvas.SetTop(ell, nearestText.ActualCenter.Y - dimension / 3 * 2);
                     }
                 }
 
