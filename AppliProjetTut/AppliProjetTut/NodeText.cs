@@ -62,7 +62,7 @@ namespace AppliProjetTut
 
             SScrollViewer = new SurfaceScrollViewer();
             SScrollViewer.Width = 300;
-            SScrollViewer.Height = 200;
+            SScrollViewer.Height = 170;
             SScrollViewer.Content = STextBox;
             SScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
             SScrollViewer.ScrollToEnd();
@@ -128,11 +128,11 @@ namespace AppliProjetTut
         //
         public void AjoutTexte(string str)
         {
-            if (STextBox.LineCount > 9 && CanMove == false)
+            if (STextBox.LineCount > 7 && CanMove == false)
             {
                 STextBox.Width = 250;
             }
-            else if (STextBox.LineCount < 6 || CanMove == true)
+            else if (STextBox.LineCount < 9 || CanMove == true)
             {
                 STextBox.Width = 300;
             }
