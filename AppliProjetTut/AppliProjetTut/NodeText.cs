@@ -33,6 +33,7 @@ namespace AppliProjetTut
 
         // TextBox du TextNode
         SurfaceTextBox STextBox;
+        SurfaceScrollViewer SScrollViewer;
 
 
         // clavier virtuel
@@ -57,8 +58,14 @@ namespace AppliProjetTut
             STextBox.Name = "TextBoxNode";
             STextBox.IsEnabled = false;
             STextBox.TextWrapping = TextWrapping.Wrap;
-            STextBox.MaxLines = 6;
             base.TypeScatter.Children.Add(STextBox);
+
+            SScrollViewer = new SurfaceScrollViewer();
+            SScrollViewer.Width = 300;
+            SScrollViewer.Height = 200;
+            SScrollViewer.Content = STextBox;
+            SScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            SScrollViewer.ScrollToEnd();
 
             ElementMenuItem MenuItem1 = new ElementMenuItem();
             MenuItem1.Header = "Color choice";
@@ -121,7 +128,14 @@ namespace AppliProjetTut
         //
         public void AjoutTexte(string str)
         {
-
+            if (STextBox.LineCount > 9 && CanMove == false)
+            {
+                STextBox.Width = 250;
+            }
+            else if (STextBox.LineCount < 6 || CanMove == true)
+            {
+                STextBox.Width = 300;
+            }
             if (str.Equals("Close"))
             {
                 this.AddonGrid.Items.Remove(clavier);
@@ -155,7 +169,6 @@ namespace AppliProjetTut
                 STextBox.AppendText(str);
                 STextBox.AppendText("|");
             }
-
         }
 
         //
@@ -187,6 +200,20 @@ namespace AppliProjetTut
         {
             CanMove = enable;
             CanRotate = enable;
+            if (enable == false)
+            {
+                //si le node est locké on peut utiliser la scrollbar sur le textbox
+                base.TypeScatter.Children.Remove(STextBox);
+                SScrollViewer.Content = STextBox;
+                base.TypeScatter.Children.Add(SScrollViewer);
+            }
+            else
+            {
+                //si le node n'est pas locké pas de scrollbar
+                SScrollViewer.Content = null;
+                base.TypeScatter.Children.Remove(SScrollViewer);
+                base.TypeScatter.Children.Add(STextBox);
+            }
         }
 
 
