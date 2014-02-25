@@ -1,0 +1,14 @@
+﻿<s:TagVisualization x:Class="AppliProjetTut.MenuPrincipal"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="http://schemas.microsoft.com/surface/2008"
+    Loaded="MenuPrincipal_Loaded"
+    Width="100" Height="100">
+    <Grid Width="100" Height="100" Background="Orange">
+        <Grid Name="FormGrid" Margin="-100,100,-100,-250"/>
+        <Grid Margin="0,100,0,-100">
+            <s:SurfaceButton Name="SaveButton" Content="Save" />
+        </Grid>
+    </Grid>
+    
+</s:TagVisualization>
