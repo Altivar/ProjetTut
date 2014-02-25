@@ -169,7 +169,7 @@ namespace AppliProjetTut
             else
             {
 
-                if (STextBox.Text.Length - 1 >= MaxLength)
+                if (STextBox.Text.Length - 1 >= MaxLength && MaxLength != -1)
                     return;
 
                 string test = STextBox.Text;
@@ -211,7 +211,7 @@ namespace AppliProjetTut
         {
             CanMove = enable;
             CanRotate = enable;
-            if (enable == false)
+            if (!enable)
             {
                 //si le node est locké on peut utiliser la scrollbar sur le textbox
                 base.TypeScatter.Children.Remove(STextBox);
@@ -220,10 +220,14 @@ namespace AppliProjetTut
             }
             else
             {
-                //si le node n'est pas locké pas de scrollbar
-                SScrollViewer.Content = null;
-                base.TypeScatter.Children.Remove(SScrollViewer);
-                base.TypeScatter.Children.Add(STextBox);
+                try
+                {
+                    //si le node n'est pas locké pas de scrollbar
+                    SScrollViewer.Content = null;
+                    base.TypeScatter.Children.Remove(SScrollViewer);
+                    base.TypeScatter.Children.Add(STextBox);
+                }
+                catch { }
             }
         }
 
