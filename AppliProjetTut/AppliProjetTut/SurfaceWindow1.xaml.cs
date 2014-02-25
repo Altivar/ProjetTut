@@ -17,6 +17,7 @@ using Microsoft.Surface.Presentation;
 using Microsoft.Surface.Presentation.Controls;
 using Microsoft.Surface.Presentation.Input;
 
+using System.IO;
 
 namespace AppliProjetTut
 {
@@ -55,7 +56,8 @@ namespace AppliProjetTut
         List<KeyValuePair<LoadCircle, Timer>> listLoadCircle = new List<KeyValuePair<LoadCircle, Timer>>();
 
 
-
+        // tag du menu principal
+        MenuPrincipal menuPrincipal;
 
 
 
@@ -83,6 +85,8 @@ namespace AppliProjetTut
             timeRefresh.Interval = 30;
             timeRefresh.Tick += new EventHandler(TimerRefresh);
             timeRefresh.Start();
+
+            
 
         }
 
@@ -215,53 +219,65 @@ namespace AppliProjetTut
         //
         private void OnPreviewTouchDown(object sender, TouchEventArgs e)
         {
-            bool LoadEnable = true;
 
-            //Pour chaque node, verification de la position du touch
-            for (int i = 0; i < listNode.Count; i++)
+            if (e.TouchDevice.GetIsFingerRecognized())
             {
-                if (listNode.ElementAt(i).AreAnyTouchesOver)//Si il est dessus, le chargement est impossible
+                
+                // Verification pour le menu principal si le touch est dessus
+                if (menuPrincipal != null)
                 {
-                    LoadEnable = false;
+                    if (menuPrincipal.AreAnyTouchesOver)
+                    {
+                        return;
+                    }
                 }
-            }
 
-            //Pour chaque node, verification de la position du touch
-            for (int i = 0; i < listRattache.Count; i++)
-            {
-                if (listRattache.ElementAt(i).Key.AreAnyTouchesOver)//Si il est dessus, le chargement est impossible
+                //Pour chaque node, verification de la position du touch
+                for (int i = 0; i < listNode.Count; i++)
                 {
-                    LoadEnable = false;
+                    if (listNode.ElementAt(i).AreAnyTouchesOver)//Si il est dessus, le chargement est impossible
+                    {
+                        return;
+                    }
                 }
-            }
+
+                //Pour chaque node, verification de la position du touch
+                for (int i = 0; i < listRattache.Count; i++)
+                {
+                    if (listRattache.ElementAt(i).Key.AreAnyTouchesOver)//Si il est dessus, le chargement est impossible
+                    {
+                        return;
+                    }
+                }
 
 
-            if (LoadEnable && listTouch.Count < mLimiteNbrTouch)
-            {
-                // Timer du cercle de chargement
-                Timer circleTimer = new Timer();
-                circleTimer.Interval = 5000;    // durée de vie maximum : 5s
-                circleTimer.Tick += new EventHandler(circleTimeOut);
-                circleTimer.Start();
-                // Cercle de chargement
-                LoadCircle mLCircle = new LoadCircle();
-                mLCircle.Id = e.TouchDevice.Id;
-                mLCircle.Center = e.TouchDevice.GetPosition(this);
+                if (listTouch.Count < mLimiteNbrTouch)
+                {
+                    // Timer du cercle de chargement
+                    Timer circleTimer = new Timer();
+                    circleTimer.Interval = 5000;    // durée de vie maximum : 5s
+                    circleTimer.Tick += new EventHandler(circleTimeOut);
+                    circleTimer.Start();
+                    // Cercle de chargement
+                    LoadCircle mLCircle = new LoadCircle();
+                    mLCircle.Id = e.TouchDevice.Id;
+                    mLCircle.Center = e.TouchDevice.GetPosition(this);
 
-                // Pair du cercle et de son timer
-                KeyValuePair<LoadCircle, Timer> myPair = new KeyValuePair<LoadCircle, Timer>(mLCircle, circleTimer);
+                    // Pair du cercle et de son timer
+                    KeyValuePair<LoadCircle, Timer> myPair = new KeyValuePair<LoadCircle, Timer>(mLCircle, circleTimer);
 
-                listLoadCircle.Add(myPair);
-                MainScatterView.Items.Add(mLCircle);
+                    listLoadCircle.Add(myPair);
+                    MainScatterView.Items.Add(mLCircle);
 
 
-                // on ajoute cette instance de point avec : 
-                // son ID
-                // sa position
-                // son heure d'apparition
-                KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
-                KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);
-                listTouch.Add(pairTouch);
+                    // on ajoute cette instance de point avec : 
+                    // son ID
+                    // sa position
+                    // son heure d'apparition
+                    KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
+                    KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);
+                    listTouch.Add(pairTouch);
+                }
             }
         }
 
@@ -275,157 +291,318 @@ namespace AppliProjetTut
         /// <param name="e"></param>
         void OnPreviewTouchMove(object sender, TouchEventArgs e)
         {
-
-            // met a jour la ligne de rattache si l'id du touch correspond
-            bool isRattache = false;
-            for (int i = 0; i < listLigneRattache.Count && !isRattache; i++)
+            if (e.TouchDevice.GetIsFingerRecognized())
             {
-                if (e.TouchDevice.Id == listLigneRattache.ElementAt(i).Value.Key)
+                // met a jour la ligne de rattache si l'id du touch correspond
+                bool isRattache = false;
+                for (int i = 0; i < listLigneRattache.Count && !isRattache; i++)
                 {
-                    listLigneRattache.ElementAt(i).Value.Value.X2 = e.TouchDevice.GetPosition(this).X;
-                    listLigneRattache.ElementAt(i).Value.Value.Y2 = e.TouchDevice.GetPosition(this).Y;
-                    isRattache = true;
-                }
-            }
-            
-            
-            
-            for (int i = 0; i < listTouch.Count; i++)
-            {
-                if (listTouch.ElementAt(i).Key == e.TouchDevice.Id)
-                {
-                    double diffX = listTouch.ElementAt(i).Value.Value.X - e.TouchDevice.GetPosition(this).X;
-                    double diffY = listTouch.ElementAt(i).Value.Value.Y - e.TouchDevice.GetPosition(this).Y;
-                    if (diffX * diffX + diffY * diffY > 900)    // si le déplacement depuis le point de départ est plus grand que 30pxl, on reinit le timer
+                    if (e.TouchDevice.Id == listLigneRattache.ElementAt(i).Value.Key)
                     {
-                        bool done = false;
-                        for (int j = 0; j < listLoadCircle.Count && !done; j++)
+                        listLigneRattache.ElementAt(i).Value.Value.X2 = e.TouchDevice.GetPosition(this).X;
+                        listLigneRattache.ElementAt(i).Value.Value.Y2 = e.TouchDevice.GetPosition(this).Y;
+                        isRattache = true;
+                    }
+                }
+
+
+
+                for (int i = 0; i < listTouch.Count; i++)
+                {
+                    if (listTouch.ElementAt(i).Key == e.TouchDevice.Id)
+                    {
+                        double diffX = listTouch.ElementAt(i).Value.Value.X - e.TouchDevice.GetPosition(this).X;
+                        double diffY = listTouch.ElementAt(i).Value.Value.Y - e.TouchDevice.GetPosition(this).Y;
+                        if (diffX * diffX + diffY * diffY > 900)    // si le déplacement depuis le point de départ est plus grand que 30pxl, on reinit le timer
                         {
-                            if (listLoadCircle.ElementAt(j).Key.Id == e.TouchDevice.Id)
+                            bool done = false;
+                            for (int j = 0; j < listLoadCircle.Count && !done; j++)
                             {
-                                // on supprime l'ancien cercle
-                                MainScatterView.Items.Remove(listLoadCircle.ElementAt(j).Key);
-                                listLoadCircle.RemoveAt(j);
-
-                                if (!isRattache)
+                                if (listLoadCircle.ElementAt(j).Key.Id == e.TouchDevice.Id)
                                 {
-                                    // On ajoute le nouveau
-                                    //
+                                    // on supprime l'ancien cercle
+                                    MainScatterView.Items.Remove(listLoadCircle.ElementAt(j).Key);
+                                    listLoadCircle.RemoveAt(j);
 
-                                    // Timer du cercle de chargement
-                                    Timer circleTimer = new Timer();
-                                    circleTimer.Interval = 5000;    // durée de vie maximum : 5s
-                                    circleTimer.Tick += new EventHandler(circleTimeOut);
-                                    circleTimer.Start();
-                                    // Cercle de chargement
-                                    LoadCircle mLCircle = new LoadCircle();
-                                    mLCircle.Id = e.TouchDevice.Id;
-                                    mLCircle.Center = e.TouchDevice.GetPosition(this);
+                                    if (!isRattache)
+                                    {
+                                        // On ajoute le nouveau
+                                        //
 
-                                    // Pair du cercle et de son timer
-                                    KeyValuePair<LoadCircle, Timer> myPair = new KeyValuePair<LoadCircle, Timer>(mLCircle, circleTimer);
+                                        // Timer du cercle de chargement
+                                        Timer circleTimer = new Timer();
+                                        circleTimer.Interval = 5000;    // durée de vie maximum : 5s
+                                        circleTimer.Tick += new EventHandler(circleTimeOut);
+                                        circleTimer.Start();
+                                        // Cercle de chargement
+                                        LoadCircle mLCircle = new LoadCircle();
+                                        mLCircle.Id = e.TouchDevice.Id;
+                                        mLCircle.Center = e.TouchDevice.GetPosition(this);
 
-                                    listLoadCircle.Add(myPair);
-                                    MainScatterView.Items.Add(mLCircle);
+                                        // Pair du cercle et de son timer
+                                        KeyValuePair<LoadCircle, Timer> myPair = new KeyValuePair<LoadCircle, Timer>(mLCircle, circleTimer);
+
+                                        listLoadCircle.Add(myPair);
+                                        MainScatterView.Items.Add(mLCircle);
+                                    }
+
+                                    done = true;
                                 }
-
-                                done = true;
                             }
+                            listTouch.RemoveAt(i);
+                            if (!isRattache)
+                            {
+                                KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
+                                KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);
+                                listTouch.Add(pairTouch);
+                            }
+                            return;
                         }
-                        listTouch.RemoveAt(i);
-                        if (!isRattache)
-                        {
-                            KeyValuePair<int, Point> statTouch = new KeyValuePair<int, Point>(e.Timestamp, e.TouchDevice.GetPosition(this));
-                            KeyValuePair<int, KeyValuePair<int, Point>> pairTouch = new KeyValuePair<int, KeyValuePair<int, Point>>(e.TouchDevice.Id, statTouch);
-                            listTouch.Add(pairTouch);
-                        }
-                        return;
                     }
                 }
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnPreviewTouchUp(object sender, TouchEventArgs e)
         {
-
-            for (int i = 0; i < listLigneRattache.Count; i++)
+            if (e.TouchDevice.GetIsFingerRecognized())
             {
-                if (e.TouchDevice.Id == listLigneRattache.ElementAt(i).Value.Key)
+                for (int i = 0; i < listLigneRattache.Count; i++)
                 {
-                    
-
-                    double length = -1;
-                    ScatterCustom nearestText = null;
-                    for (int j = 0; j < listNode.Count; j++) // on teste la distance de chaque node
+                    if (e.TouchDevice.Id == listLigneRattache.ElementAt(i).Value.Key)
                     {
-                        if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j)) // on ne test pas la node a laquelle la ligne est rattachée
+
+
+                        double length = -1;
+                        ScatterCustom nearestText = null;
+                        for (int j = 0; j < listNode.Count; j++) // on teste la distance de chaque node
                         {
-                            if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j).GetParent()) // on test si la node n'a pas pour parent celle a laquelle la ligne est rattachée
+                            if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j)) // on ne test pas la node a laquelle la ligne est rattachée
                             {
-                                double diffXCarre = (listNode.ElementAt(j).ActualCenter.X - listLigneRattache.ElementAt(i).Value.Value.X2);
-                                diffXCarre *= diffXCarre;
-                                double diffYCarre = (listNode.ElementAt(j).ActualCenter.Y - listLigneRattache.ElementAt(i).Value.Value.Y2);
-                                diffYCarre *= diffYCarre;
-                                double testLenght = Math.Sqrt(diffXCarre + diffYCarre);
-                                if (length == -1 || length > testLenght) // si la node est plus proche que la précédente on la retient
+                                if (listLigneRattache.ElementAt(i).Key != listNode.ElementAt(j).GetParent()) // on test si la node n'a pas pour parent celle a laquelle la ligne est rattachée
                                 {
-                                    length = testLenght;
-                                    nearestText = listNode.ElementAt(j);
+                                    double diffXCarre = (listNode.ElementAt(j).ActualCenter.X - listLigneRattache.ElementAt(i).Value.Value.X2);
+                                    diffXCarre *= diffXCarre;
+                                    double diffYCarre = (listNode.ElementAt(j).ActualCenter.Y - listLigneRattache.ElementAt(i).Value.Value.Y2);
+                                    diffYCarre *= diffYCarre;
+                                    double testLenght = Math.Sqrt(diffXCarre + diffYCarre);
+                                    if (length == -1 || length > testLenght) // si la node est plus proche que la précédente on la retient
+                                    {
+                                        length = testLenght;
+                                        nearestText = listNode.ElementAt(j);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (length != -1) // si la node la plus proche est assez près
-                    {
-                        double dimension = (nearestText.Width > nearestText.Height) ? nearestText.Width : nearestText.Height;
-                        if (length < dimension / 3 * 2)
+                        if (length != -1) // si la node la plus proche est assez près
                         {
-                            listLigneRattache.ElementAt(i).Key.SetParent(nearestText);
+                            double dimension = (nearestText.Width > nearestText.Height) ? nearestText.Width : nearestText.Height;
+                            if (length < dimension / 3 * 2)
+                            {
+                                listLigneRattache.ElementAt(i).Key.SetParent(nearestText);
+                            }
+                        }
+
+                        // ensuite on supprime la ligne
+                        listLigneRattache.RemoveAt(i);
+
+                    }
+                }
+
+
+                for (int i = 0; i < listLoadCircle.Count; i++)
+                {
+                    if (listLoadCircle.ElementAt(i).Key.Id == e.TouchDevice.Id)
+                    {
+                        MainScatterView.Items.Remove(listLoadCircle.ElementAt(i).Key);
+                        listLoadCircle.RemoveAt(i);
+                    }
+                }
+
+                for (int i = 0; i < listTouch.Count; i++)
+                {
+                    if (listTouch.ElementAt(i).Key == e.TouchDevice.Id)
+                    {
+                        if (e.Timestamp - listTouch.ElementAt(i).Value.Key > 2000)  // si l'appui a duré +2s
+                        {
+                            MenuCreation ChoiceNode = new MenuCreation(this);
+                            ChoiceNode.Center = e.TouchDevice.GetCenterPosition(this);
+                            ChoiceNode.Orientation = e.TouchDevice.GetOrientation(this) + 90.0;
+                            MainScatterView.Items.Add(ChoiceNode);
+
+                            Timer menuLifeTime = new Timer();
+                            menuLifeTime.Interval = 3000;
+                            menuLifeTime.Tick += new EventHandler(ChoiceMenuTimeExpired);
+                            menuLifeTime.Start();
+
+                            KeyValuePair<MenuCreation, Timer> myPair = new KeyValuePair<MenuCreation, Timer>(ChoiceNode, menuLifeTime);
+                            listMenu.Add(myPair);
+                        }
+                        listTouch.RemoveAt(i);
+                    }
+                }
+            }
+        }
+
+
+
+        //
+        //  GESTION du MENU PRINCIPAL
+        //
+        /// <summary>
+        /// Appelé lorsqu'on ajoute un tag
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnVisualizationAdded(object sender, TagVisualizerEventArgs e)
+        {
+            // gestion du tag
+            MenuPrincipal mainMenu = (MenuPrincipal)e.TagVisualization;
+            
+            if (mainMenu != null)
+            {
+                menuPrincipal = mainMenu;
+                menuPrincipal.SaveButton.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnSaveButtonPreviewTouchUp);
+            }
+        }
+
+        /// <summary>
+        /// Appelé lorsqu'on enleve un tag
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TagVisualizer_VisualizationRemoved(object sender, TagVisualizerEventArgs e)
+        {
+            if (menuPrincipal == (MenuPrincipal)e.TagVisualization)
+            {
+                menuPrincipal = null;
+            }
+        }
+
+        /// <summary>
+        /// Appelé lorsque le bouton de sauvegarde du menu principal est appuyé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void OnSaveButtonPreviewTouchUp(object sender, TouchEventArgs e)
+        {
+            if (menuPrincipal == null)
+                return;
+
+            NodeText SaveFileNameEntrance = new NodeText(this, null);
+            SaveFileNameEntrance.TransformToFileSaver();
+            SaveFileNameEntrance.SetParent(SaveFileNameEntrance);
+            SaveFileNameEntrance.GetClavier().Enter.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnValidateFileName);
+            SaveFileNameEntrance.GetClavier().Entrer.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnValidateFileName);
+            SaveFileNameEntrance.GetClavier().close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnClosePreviewTouchDown);
+
+            menuPrincipal.FormGrid.Children.Add(SaveFileNameEntrance);
+        }
+
+        
+
+        void OnValidateFileName(object sender, TouchEventArgs e)
+        {
+            NodeText saveFileNameText;
+            string NomSauvegarde = "<>";
+            for (int i = 0; i < menuPrincipal.FormGrid.Children.Count; i++)
+            {
+                saveFileNameText = (NodeText)menuPrincipal.FormGrid.Children[i];
+                if (saveFileNameText != null)
+                {
+                    NomSauvegarde = saveFileNameText.GetText();
+                }
+            }
+
+            if (NomSauvegarde == "<>")
+            {
+                return;
+            }
+            else
+            {
+                char[] separator = { '\r' };
+                NomSauvegarde = NomSauvegarde.Split(separator).First();
+            }
+
+            DirectoryInfo dirInfo = new DirectoryInfo(".\\Saves");
+            try
+            {
+                DirectoryInfo[] DirFiles = dirInfo.GetDirectories();
+                foreach (DirectoryInfo dir in DirFiles)
+                {
+                    if (dir.Name == NomSauvegarde)
+                    {
+                        // demande de confirmation
+                        string title = "Attention";
+                        string message = "Ecraser le dossier de sauvegarde existant?";
+                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                        DialogResult res;
+
+                        res = System.Windows.Forms.MessageBox.Show(message, title, buttons);
+
+                        if (res == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            // on supprime le dossier existant
+                            dir.Delete(true);
+                        }
+                        else
+                        {
+                            // On annule la suppression
+                            return;
                         }
                     }
-
-                    // ensuite on supprime la ligne
-                    listLigneRattache.RemoveAt(i);
-
                 }
+
+                CreateDirectory(NomSauvegarde);
+
             }
+            catch { }
+        }
 
+        /// <summary>
+        /// Appelé lorsque le bouton "Close" du clavier de sauvegarde est appuyé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void OnClosePreviewTouchDown(object sender, TouchEventArgs e)
+        {
+            menuPrincipal.FormGrid.Children.Clear();
+        }
 
-            for (int i = 0; i < listLoadCircle.Count; i++)
-            {
-                if (listLoadCircle.ElementAt(i).Key.Id == e.TouchDevice.Id)
-                {
-                    MainScatterView.Items.Remove(listLoadCircle.ElementAt(i).Key);
-                    listLoadCircle.RemoveAt(i);
-                }
-            }
-            
-            for (int i = 0; i < listTouch.Count; i++)
-            {
-                if (listTouch.ElementAt(i).Key == e.TouchDevice.Id)
-                {
-                    if (e.Timestamp - listTouch.ElementAt(i).Value.Key > 2000)  // si l'appui a duré +2s
-                    {
-                        MenuCreation ChoiceNode = new MenuCreation(this);
-                        ChoiceNode.Center = e.TouchDevice.GetCenterPosition(this);
-                        ChoiceNode.Orientation = e.TouchDevice.GetOrientation(this)+90.0;
-                        MainScatterView.Items.Add(ChoiceNode);
+        /// <summary>
+        /// Crée le dossier de la sauvegarde
+        /// </summary>
+        /// <param name="path"></param>
+        void CreateDirectory(string path)
+        {
 
-                        Timer menuLifeTime = new Timer();
-                        menuLifeTime.Interval = 3000;
-                        menuLifeTime.Tick += new EventHandler(ChoiceMenuTimeExpired);
-                        menuLifeTime.Start();
+            DirectoryInfo newDir = new DirectoryInfo(".\\Saves\\" + path);
+            newDir.Create();
 
-                        KeyValuePair<MenuCreation, Timer> myPair = new KeyValuePair<MenuCreation, Timer>(ChoiceNode, menuLifeTime);
-                        listMenu.Add(myPair);
-                    }
-                    listTouch.RemoveAt(i);
-                }
-            }
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("ligne 1");
+            sb.AppendLine("ligne 2");
+            sb.AppendLine();
+            sb.AppendLine("ligne 4");
+            sb.Append("fin");
+            FileStream myFile = new FileStream(".\\Saves\\" + path + "\\masauvegarde.txt", FileMode.OpenOrCreate);
+            StreamWriter sw = new StreamWriter(myFile);
+            sw.Write(sb.ToString());
+            sw.Close();
+
+            menuPrincipal.FormGrid.Children.Clear();
 
         }
+
+
+
+
 
 
 
@@ -777,6 +954,7 @@ namespace AppliProjetTut
             catch { }
         }
 
+        
 
 
 

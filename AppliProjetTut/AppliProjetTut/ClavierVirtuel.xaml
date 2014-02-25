@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Width="646" Height="151"
              >
-    <Grid>
+    <Grid Name="KeyGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="30"/>

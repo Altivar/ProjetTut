@@ -33,7 +33,8 @@ namespace AppliProjetTut
 
         // TextBox du TextNode
         SurfaceTextBox STextBox;
-
+        // Nombre maximal de caractères
+        int MaxLength = -1;
 
         // clavier virtuel
         private ClavierVirtuel clavier;
@@ -143,17 +144,26 @@ namespace AppliProjetTut
                     test = test.Remove(test.Length - 2);
                     STextBox.Clear();
                     STextBox.AppendText(test);
+                    if (STextBox.Text.Length < 1)
+                    {
+                        clavier.EnableEnterKeys(false);
+                    }
                     STextBox.AppendText("|");
                 }
             }
             else
             {
+
+                if (STextBox.Text.Length - 1 >= MaxLength)
+                    return;
+
                 string test = STextBox.Text;
                 test = test.Remove(test.Length - 1);
                 STextBox.Clear();
                 STextBox.AppendText(test);
                 STextBox.AppendText(str);
                 STextBox.AppendText("|");
+                clavier.EnableEnterKeys(true);
             }
 
         }
@@ -188,6 +198,54 @@ namespace AppliProjetTut
             CanMove = enable;
             CanRotate = enable;
         }
+
+        public ClavierVirtuel GetClavier()
+        {
+            return clavier;
+        }
+
+        public string GetText()
+        {
+            return STextBox.Text.ToString();
+        }
+
+        //
+        //  prevu pour la sauvegarde de fichier
+        //
+        public void TransformToFileSaver()
+        {
+            // on adapte la taille
+            base.Height = 0;
+            base.MainGrid.Height = 50;
+            // on limite le nombre de ligne
+            STextBox.MaxLines = 1;
+            // nombre de caractères limité à 20
+            MaxLength = 20;
+            // on modifie la couleur de base
+            base.Background = new SolidColorBrush(Colors.Black);
+            STextBox.Background = new SolidColorBrush(Colors.Black);
+            STextBox.BorderBrush = new SolidColorBrush(Colors.Black);
+
+            // on desactive les caracteres speciaux du clavier
+            clavier.DisableSpecialCarac();
+
+            base.AddonGrid.Margin = new Thickness(150, 100, 150, -100);
+
+            // on cache le menu
+            base.MainMenu.Visibility = System.Windows.Visibility.Hidden;
+
+            // on active le clavier
+            base.AddonGrid.Items.Add(clavier);
+            // on fait apparaitre le "curseur"
+            STextBox.AppendText("|");
+            clavier.CanMove = false;
+            clavier.CanScale = false;
+            clavier.CanRotate = false;
+            isEditing = true;
+
+        }
+
+
 
 
     }

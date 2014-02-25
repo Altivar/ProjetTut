@@ -10,6 +10,18 @@
         
     </s:SurfaceWindow.Background>
     <Grid Name="MainGrid">
+        <s:TagVisualizer VisualizationAdded="OnVisualizationAdded" VisualizationRemoved="TagVisualizer_VisualizationRemoved">
+            <s:TagVisualizer.Definitions>
+                <s:TagVisualizationDefinition
+                    Value="0x00"
+                    LostTagTimeout="2000"
+                    Source="./MenuPrincipal.xaml"
+                    MaxCount="1"
+                    
+                    >
+                </s:TagVisualizationDefinition>
+            </s:TagVisualizer.Definitions>
+        </s:TagVisualizer>
         <Canvas Name="NearParentEllipseCanvas" />
         <Grid Name="LinkParentLineGrid" />
         <Grid Name="LinkParentGrid" />

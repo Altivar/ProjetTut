@@ -158,7 +158,6 @@ namespace AppliProjetTut
             return this.PointToScreen(pt);
         }
 
-        
 
     }
 }

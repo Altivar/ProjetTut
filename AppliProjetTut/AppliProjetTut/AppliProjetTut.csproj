@@ -74,6 +74,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MenuPrincipal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PaletteCouleurs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -101,6 +105,9 @@
     </Compile>
     <Compile Include="MenuCreation.xaml.cs">
       <DependentUpon>MenuCreation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MenuPrincipal.xaml.cs">
+      <DependentUpon>MenuPrincipal.xaml</DependentUpon>
     </Compile>
     <Compile Include="NodeImage.cs" />
     <Compile Include="NodeText.cs" />
