@@ -482,9 +482,12 @@ namespace AppliProjetTut
             if (mainMenu != null)
             {
                 menuPrincipal = mainMenu;
-                menuPrincipal.SaveAsButton.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnSaveButtonPreviewTouchUp);
+                menuPrincipal.SaveAsButton.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnSaveAsButtonPreviewTouchUp);
+                menuPrincipal.SaveButton.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnSaveButtonPreviewTouchUp);
             }
         }
+
+        
 
         /// <summary>
         /// Appelé lorsqu'on enleve un tag
@@ -504,7 +507,7 @@ namespace AppliProjetTut
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void OnSaveButtonPreviewTouchUp(object sender, TouchEventArgs e)
+        void OnSaveAsButtonPreviewTouchUp(object sender, TouchEventArgs e)
         {
             if (menuPrincipal == null)
                 return;
@@ -519,8 +522,34 @@ namespace AppliProjetTut
             menuPrincipal.FormGrid.Children.Add(SaveFileNameEntrance);
         }
 
-        
+        /// <summary>
+        /// Appelé lorsque le bouton de sauvegarde du menu principal est appuyé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void OnSaveButtonPreviewTouchUp(object sender, TouchEventArgs e)
+        {
+            if (menuPrincipal == null)
+                return;
 
+            if (nomFichier == "<>")
+            {
+                NodeText SaveFileNameEntrance = new NodeText(this, null);
+                SaveFileNameEntrance.TransformToFileSaver();
+                SaveFileNameEntrance.SetParent(SaveFileNameEntrance);
+                SaveFileNameEntrance.GetClavier().Enter.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnValidateFileName);
+                SaveFileNameEntrance.GetClavier().Entrer.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnValidateFileName);
+                SaveFileNameEntrance.GetClavier().close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnClosePreviewTouchDown);
+
+                menuPrincipal.FormGrid.Children.Add(SaveFileNameEntrance);
+            }
+            else
+            {
+                CreateDirectory(nomFichier);
+            }
+        }
+
+        //
         void OnValidateFileName(object sender, TouchEventArgs e)
         {
             NodeText saveFileNameText;
@@ -613,6 +642,7 @@ namespace AppliProjetTut
             menuPrincipal.FormGrid.Children.Clear();
 
             Modification(false);
+            nomFichier = path;
 
         }
 
