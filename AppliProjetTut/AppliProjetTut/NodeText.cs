@@ -184,6 +184,7 @@ namespace AppliProjetTut
             if (STextBox.LineCount > 8 && isLocked)
             {
                 STextBox.Width = 250;
+                SScrollViewer.ScrollToBottom();
             }
             else
             {
@@ -229,6 +230,7 @@ namespace AppliProjetTut
             if (STextBox.LineCount > 8 && isLocked)
             {
                 STextBox.Width = 250;
+                SScrollViewer.ScrollToBottom();
             }
             else
             {
