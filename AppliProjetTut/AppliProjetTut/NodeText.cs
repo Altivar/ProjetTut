@@ -138,7 +138,14 @@ namespace AppliProjetTut
 
                 // on enlève le "curseur"
                 string test = STextBox.Text;
-                test = test.Remove(test.Length - 2);
+                if (MaxLength == -1)
+                {
+                    test = test.Remove(test.Length - 2);
+                }
+                else
+                {
+                    test = test.Remove(test.Length - 1);
+                }
                 STextBox.Clear();
                 STextBox.AppendText(test);
 
@@ -147,20 +154,38 @@ namespace AppliProjetTut
             }
             else if (str.ToLower().Equals("backspace"))
             {
-                if (STextBox.Text.Length > 2)
+                if (MaxLength == -1)
                 {
-                    string test = STextBox.Text;
-                    test = test.Remove(test.Length - 3);
-                    STextBox.Clear();
-                    STextBox.AppendText(test);
-                    if (STextBox.Text.Length < 1)
+                    if (STextBox.Text.Length > 2)
                     {
-                        clavier.EnableEnterKeys(false);
-                    }
-                    STextBox.AppendText("|\r");
+                        string test = STextBox.Text;
+                        test = test.Remove(test.Length - 3);
+                        STextBox.Clear();
+                        STextBox.AppendText(test);
+                        if (STextBox.Text.Length < 1 && MaxLength != -1)
+                        {
+                            clavier.EnableEnterKeys(false);
+                        }
+                        STextBox.AppendText("|\r");
 
-                    // le fichier a été modifié
-                    Surface.Modification(true);
+                        // le fichier a été modifié
+                        Surface.Modification(true);
+                    }
+                }
+                else
+                {
+                    if (STextBox.Text.Length > 1)
+                    {
+                        string test = STextBox.Text;
+                        test = test.Remove(test.Length - 2);
+                        STextBox.Clear();
+                        STextBox.AppendText(test);
+                        if (STextBox.Text.Length < 1 && MaxLength != -1)
+                        {
+                            clavier.EnableEnterKeys(false);
+                        }
+                        STextBox.AppendText("|");
+                    }
                 }
             }
             else
@@ -169,16 +194,29 @@ namespace AppliProjetTut
                 if (STextBox.Text.Length - 2 >= MaxLength && MaxLength != -1)
                     return;
 
-                string test = STextBox.Text;
-                test = test.Remove(test.Length - 2);
-                STextBox.Clear();
-                STextBox.AppendText(test);
-                STextBox.AppendText(str);
-                STextBox.AppendText("|\r");
-                clavier.EnableEnterKeys(true);
+                if (MaxLength == -1)
+                {
+                    string test = STextBox.Text;
+                    test = test.Remove(test.Length - 2);
+                    STextBox.Clear();
+                    STextBox.AppendText(test);
+                    STextBox.AppendText(str);
+                    STextBox.AppendText("|\r");
+                    clavier.EnableEnterKeys(true);
+                    // le fichier a été modifié
+                    Surface.Modification(true);
+                }
+                else
+                {
+                    string test = STextBox.Text;
+                    test = test.Remove(test.Length - 1);
+                    STextBox.Clear();
+                    STextBox.AppendText(test);
+                    STextBox.AppendText(str);
+                    STextBox.AppendText("|");
+                    clavier.EnableEnterKeys(true);
+                }
 
-                // le fichier a été modifié
-                Surface.Modification(true);
             }
 
             if (STextBox.LineCount > 8 && isLocked)
