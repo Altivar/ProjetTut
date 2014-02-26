@@ -35,6 +35,8 @@ namespace AppliProjetTut
         SurfaceTextBox STextBox;
         // Nombre maximal de caractères
         int MaxLength = -1;
+        // Si le cadenas est activé
+        bool isLocked = false;
 
         SurfaceScrollViewer SScrollViewer;
 
@@ -64,7 +66,7 @@ namespace AppliProjetTut
 
             SScrollViewer = new SurfaceScrollViewer();
             SScrollViewer.Width = 300;
-            SScrollViewer.Height = 170;
+            SScrollViewer.Height = 200;
             SScrollViewer.Content = STextBox;
             SScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
             SScrollViewer.ScrollToEnd();
@@ -85,7 +87,7 @@ namespace AppliProjetTut
             }
             catch
             {
-                currentColor = new SolidColorBrush(Colors.LightBlue);
+                currentColor = new SolidColorBrush(Colors.Black);
             }
             STextBox.Background = currentColor;
 
@@ -102,7 +104,7 @@ namespace AppliProjetTut
                 base.AddonGrid.Items.Add(clavier);
 
                 // on fait apparaitre le "curseur"
-                STextBox.AppendText("|");
+                STextBox.AppendText("|\r");
                 clavier.CanMove = false;
                 clavier.CanScale = false;
                 clavier.CanRotate = false;
@@ -130,21 +132,13 @@ namespace AppliProjetTut
         //
         public void AjoutTexte(string str)
         {
-            if (STextBox.LineCount > 7 && CanMove == false)
-            {
-                STextBox.Width = 250;
-            }
-            else if (STextBox.LineCount < 9 || CanMove == true)
-            {
-                STextBox.Width = 300;
-            }
             if (str.Equals("Close"))
             {
                 this.AddonGrid.Items.Remove(clavier);
 
                 // on enlève le "curseur"
                 string test = STextBox.Text;
-                test = test.Remove(test.Length - 1);
+                test = test.Remove(test.Length - 2);
                 STextBox.Clear();
                 STextBox.AppendText(test);
 
@@ -153,34 +147,52 @@ namespace AppliProjetTut
             }
             else if (str.ToLower().Equals("backspace"))
             {
-                if (STextBox.Text.Length > 1)
+                if (STextBox.Text.Length > 2)
                 {
                     string test = STextBox.Text;
-                    test = test.Remove(test.Length - 2);
+                    test = test.Remove(test.Length - 3);
                     STextBox.Clear();
                     STextBox.AppendText(test);
                     if (STextBox.Text.Length < 1)
                     {
                         clavier.EnableEnterKeys(false);
                     }
-                    STextBox.AppendText("|");
+                    STextBox.AppendText("|\r");
+
+                    // le fichier a été modifié
+                    Surface.Modification(true);
                 }
             }
             else
             {
 
-                if (STextBox.Text.Length - 1 >= MaxLength && MaxLength != -1)
+                if (STextBox.Text.Length - 2 >= MaxLength && MaxLength != -1)
                     return;
 
                 string test = STextBox.Text;
-                test = test.Remove(test.Length - 1);
+                test = test.Remove(test.Length - 2);
                 STextBox.Clear();
                 STextBox.AppendText(test);
                 STextBox.AppendText(str);
-                STextBox.AppendText("|");
+                STextBox.AppendText("|\r");
                 clavier.EnableEnterKeys(true);
+
+                // le fichier a été modifié
+                Surface.Modification(true);
             }
+
+            if (STextBox.LineCount > 8 && isLocked)
+            {
+                STextBox.Width = 250;
+            }
+            else
+            {
+                STextBox.Width = 300;
+            }
+
         }
+        
+
 
         //
         //   INTERACTION AVEC LA PALETTE
@@ -190,6 +202,7 @@ namespace AppliProjetTut
             currentColor = color;
             STextBox.Background = currentColor;
             STextBox.BorderBrush = currentColor;
+            Surface.Modification(true);
         }
         public void ClosePalette()
         {
@@ -211,6 +224,18 @@ namespace AppliProjetTut
         {
             CanMove = enable;
             CanRotate = enable;
+            isLocked = !enable;
+
+            if (STextBox.LineCount > 8 && isLocked)
+            {
+                STextBox.Width = 250;
+            }
+            else
+            {
+                STextBox.Width = 300;
+            }
+
+
             if (!enable)
             {
                 //si le node est locké on peut utiliser la scrollbar sur le textbox

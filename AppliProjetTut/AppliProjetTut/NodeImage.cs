@@ -238,6 +238,9 @@ namespace AppliProjetTut
             currentImage = base.MainGrid.Background;
             currentSize = tempSize;
             mise_a_echelle();
+
+            // le fichier a été modifié
+            Surface.Modification(true);
         }
 
 

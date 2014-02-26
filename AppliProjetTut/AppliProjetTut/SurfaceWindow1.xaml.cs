@@ -27,6 +27,18 @@ namespace AppliProjetTut
     public partial class SurfaceWindow1 : SurfaceWindow
     {
 
+        //
+        //  GESTION DU FICHIER
+        //
+
+        // nom du fichier ouvert
+        string nomFichier = "<>";
+        bool isModified = false;
+        
+
+        //
+        ////
+
         // liste de node
         List<ScatterCustom> listNode = new List<ScatterCustom>();
 
@@ -46,7 +58,7 @@ namespace AppliProjetTut
         List<KeyValuePair<int, KeyValuePair<int, Point>>> listTouch = new List<KeyValuePair<int, KeyValuePair<int, Point>>>();
         int mLimiteNbrTouch = 4;
 
-        //Position du Node initial
+        // Position du Node initial
         Point initP = new Point(800, 400);
 
         // timer
@@ -77,6 +89,7 @@ namespace AppliProjetTut
             // ajout de Nodes
             AddNode(null, initP, "Text");
             AddNode(null, initP, "Image");
+            Modification(false);
 
             PreviewTouchMove += new EventHandler<TouchEventArgs>(OnPreviewTouchMove);
             PreviewTouchDown += new EventHandler<TouchEventArgs>(OnPreviewTouchDown);
@@ -406,6 +419,7 @@ namespace AppliProjetTut
                             if (length < dimension / 3 * 2)
                             {
                                 listLigneRattache.ElementAt(i).Key.SetParent(nearestText);
+                                Modification(true);
                             }
                         }
 
@@ -468,7 +482,7 @@ namespace AppliProjetTut
             if (mainMenu != null)
             {
                 menuPrincipal = mainMenu;
-                menuPrincipal.SaveButton.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnSaveButtonPreviewTouchUp);
+                menuPrincipal.SaveAsButton.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnSaveButtonPreviewTouchUp);
             }
         }
 
@@ -598,6 +612,8 @@ namespace AppliProjetTut
 
             menuPrincipal.FormGrid.Children.Clear();
 
+            Modification(false);
+
         }
 
 
@@ -631,8 +647,11 @@ namespace AppliProjetTut
                     this.MainScatterView.Items.Add(image);
                     listNode.Add(image);
                     break;
+                default:
+                    return;
 
             }
+            Modification(true);
 
         }
         /// <summary>
@@ -688,6 +707,7 @@ namespace AppliProjetTut
             this.MainScatterView.Items.Remove(parent);
             if (confirmation)
             {
+                Modification(true);
                 RefreshImage();
             }
 
@@ -958,6 +978,15 @@ namespace AppliProjetTut
 
 
 
+
+
+        //
+        //  MODIFICATION du FICHIER
+        //
+        public void Modification(bool modif)
+        {
+            isModified = modif;
+        }
 
         ///////////////////
             //FIN DES FONCTIONS !!!

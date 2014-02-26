@@ -126,6 +126,9 @@ namespace AppliProjetTut
         public void OnSeparateSelection(object sender, RoutedEventArgs e)
         {
             parent = null;
+
+            // le fichier a été modifié
+            Surface.Modification(true);
         }
 
 
@@ -144,10 +147,14 @@ namespace AppliProjetTut
             if (this.parent == null)
             {
                 this.parent = newParent;
+                // le fichier a été modifié
+                Surface.Modification(true);
             }
             else if (newParent == null)
             {
                 this.parent = null;
+                // le fichier a été modifié
+                Surface.Modification(true);
             }
         }
 

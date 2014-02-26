@@ -3,12 +3,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="http://schemas.microsoft.com/surface/2008"
     Loaded="MenuPrincipal_Loaded"
-    Width="100" Height="100">
+    Width="100" Height="100" OffsetOrigin="0.5, 0.5">
     <Grid Width="100" Height="100" Background="Orange">
-        <Grid Name="FormGrid" Margin="-100,100,-100,-250"/>
-        <Grid Margin="0,100,0,-100">
-            <s:SurfaceButton Name="SaveButton" Content="Save" />
+        <Grid Margin="0,100,0,-150">
+            <s:SurfaceButton Name="SaveAsButton" Content="Save As" Width="100" Height="50" Margin="0,0,0,100"/>
+            <s:SurfaceButton Name="SaveButton" Content="Save" Width="100" Height="50" Margin="0,50,0,50"/>
+            <s:SurfaceButton Name="OpenButton" Content="Open" Width="100" Height="50" Margin="0,100,0,0"/>
         </Grid>
+        <Grid Name="FormGrid" Margin="-100,100,-100,-250"/>
     </Grid>
     
 </s:TagVisualization>
