@@ -86,6 +86,11 @@ namespace AppliProjetTut
             // Add handlers for window availability events
             AddWindowAvailabilityHandlers();
 
+            // si le dossier de sauvegarde n'existe pas : on le crée
+            DirectoryInfo SavesDir = new DirectoryInfo(".\\Saves\\");
+            if (!SavesDir.Exists)
+                SavesDir.Create();
+
             // ajout de Nodes
             AddNode(null, initP, "Text");
             AddNode(null, initP, "Image");
@@ -465,10 +470,11 @@ namespace AppliProjetTut
         }
 
 
-
-        //
-        //  GESTION du MENU PRINCIPAL
-        //
+        ////                         ////
+        //                             //
+        //  GESTION du MENU PRINCIPAL  //
+        //                             //
+        ////                         ////
         /// <summary>
         /// Appelé lorsqu'on ajoute un tag
         /// </summary>
@@ -549,9 +555,14 @@ namespace AppliProjetTut
             }
         }
 
-        //
+        /// <summary>
+        /// Appelé lorsque le nom du fichier de suavegarde est validé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnValidateFileName(object sender, TouchEventArgs e)
         {
+
             NodeText saveFileNameText;
             string NomSauvegarde = "<>";
             for (int i = 0; i < menuPrincipal.FormGrid.Children.Count; i++)
@@ -625,15 +636,45 @@ namespace AppliProjetTut
         void CreateDirectory(string path)
         {
 
+
             DirectoryInfo newDir = new DirectoryInfo(".\\Saves\\" + path);
             newDir.Create();
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("ligne 1");
-            sb.AppendLine("ligne 2");
-            sb.AppendLine();
-            sb.AppendLine("ligne 4");
-            sb.Append("fin");
+
+            for (int i = 0; i < listNode.Count; i++)
+            {
+
+                string type = listNode.ElementAt(i).GetTypeOfNode();
+                switch (type)
+                {
+                    case "Text":
+                        {
+                            NodeText myText = (NodeText)listNode.ElementAt(i);
+                            if (myText == null)
+                                break;
+                            sb.AppendLine("TEXT");
+                            int numParent = GetNumOfParent(listNode.ElementAt(i));
+                            sb.AppendLine("PARENT -+- " + numParent);
+                            sb.AppendLine("VALUE -+- " + myText.GetText());
+                            break;
+                        }
+                    case "Image":
+                        {
+                            NodeImage myImage = (NodeImage)listNode.ElementAt(i);
+                            if (myImage == null)
+                                break;
+                            sb.AppendLine("IMAGE");
+                            int numParent = GetNumOfParent(listNode.ElementAt(i));
+                            sb.AppendLine("PARENT -+- " + numParent);
+                            sb.AppendLine("VALUE -+- " + myImage.GetImagePath());
+                            SaveImageToFile(myImage.GetImagePath(), path);
+                            break;
+                        }
+                }
+
+            }
+            
             FileStream myFile = new FileStream(".\\Saves\\" + path + "\\masauvegarde.txt", FileMode.OpenOrCreate);
             StreamWriter sw = new StreamWriter(myFile);
             sw.Write(sb.ToString());
@@ -646,9 +687,69 @@ namespace AppliProjetTut
 
         }
 
+        /// <summary>
+        /// Récupère la position du parent dans la liste
+        /// </summary>
+        /// <param name="scatt"></param>
+        /// <returns></returns>
+        private int GetNumOfParent(ScatterCustom scatt)
+        {
+            for (int i = 0; i < listNode.Count; i++)
+            {
+                if (scatt.GetParent() == listNode.ElementAt(i))
+                {
+                    return i;
+                }
+            }
 
+            return -1;
+        }
 
+        private void SaveImageToFile(string imgPath, string savePath)
+        {
+            if (imgPath == "NONE")
+                return;
 
+            DirectoryInfo dirInfo = new DirectoryInfo(".\\Saves\\"+savePath+"\\Images");
+            if (!dirInfo.Exists)
+                dirInfo.Create();
+
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.UriSource = new Uri(".\\Resources\\Images\\" + imgPath, UriKind.Relative);
+            bi.EndInit();
+
+            string separator = ".";
+            string imgFormat = imgPath.Split(separator.ToCharArray()).Last();
+            
+            string imgLocation = ".\\Saves\\" + savePath + "\\Images\\" + imgPath;
+            FileStream fileStr = new FileStream(imgLocation, FileMode.Create);
+
+            switch (imgFormat)
+            { 
+                case "jpg":
+                    JpegBitmapEncoder encoderJPG = new JpegBitmapEncoder();
+                    encoderJPG.Frames.Add(BitmapFrame.Create((BitmapImage)bi));
+                    encoderJPG.Save(fileStr);
+                    break;
+                case "png":
+                    PngBitmapEncoder encoderPNG = new PngBitmapEncoder();
+                    encoderPNG.Frames.Add(BitmapFrame.Create((BitmapImage)bi));
+                    encoderPNG.Save(fileStr);
+                    break;
+                case "gif":
+                    GifBitmapEncoder encoderGIF = new GifBitmapEncoder();
+                    encoderGIF.Frames.Add(BitmapFrame.Create((BitmapImage)bi));
+                    encoderGIF.Save(fileStr);
+                    break;
+                case "bmp":
+                    BmpBitmapEncoder encoderBMP = new BmpBitmapEncoder();
+                    encoderBMP.Frames.Add(BitmapFrame.Create((BitmapImage)bi));
+                    encoderBMP.Save(fileStr);
+                    break;
+            }
+
+        }
 
 
 

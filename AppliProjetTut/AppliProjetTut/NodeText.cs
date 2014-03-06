@@ -58,6 +58,8 @@ namespace AppliProjetTut
             clavier = new ClavierVirtuel(this);
             palette = new PaletteCouleurs(this);
 
+            base.SetTypeOfNode("Text");
+
             STextBox = new SurfaceTextBox();
             STextBox.Name = "TextBoxNode";
             STextBox.IsEnabled = false;

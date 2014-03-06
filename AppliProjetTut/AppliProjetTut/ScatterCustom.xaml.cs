@@ -26,6 +26,8 @@ namespace AppliProjetTut
         // surfacewindow
         SurfaceWindow1 Surface;
 
+        // type du node
+        string thisType;
 
         public ScatterCustom(SurfaceWindow1 parentSurface, ScatterCustom parentNode)
         {
@@ -165,6 +167,15 @@ namespace AppliProjetTut
             return this.PointToScreen(pt);
         }
 
+
+        public void SetTypeOfNode(string str)
+        {
+            thisType = str;
+        }
+        public string GetTypeOfNode()
+        {
+            return thisType;
+        }
 
     }
 }

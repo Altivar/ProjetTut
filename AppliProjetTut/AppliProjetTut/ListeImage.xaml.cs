@@ -33,7 +33,7 @@ namespace AppliProjetTut
         NodeImage nodeParent;
 
         // liste de bouton
-        List<KeyValuePair<SurfaceButton, Point>> listButton = new List<KeyValuePair<SurfaceButton, Point>>();
+        List<KeyValuePair<KeyValuePair<SurfaceButton, Point>, string>> listButton = new List<KeyValuePair<KeyValuePair<SurfaceButton, Point>, string>>();
         
 
         public ListeImages(NodeImage parent)
@@ -85,8 +85,9 @@ namespace AppliProjetTut
 
                         Point dim = new Point(bi.Width, bi.Height);
                         KeyValuePair<SurfaceButton, Point> myPair = new KeyValuePair<SurfaceButton, Point>(btnImg, dim);
+                        KeyValuePair<KeyValuePair<SurfaceButton, Point>,string> triple = new KeyValuePair<KeyValuePair<SurfaceButton,Point>,string>(myPair, nomPartition.Last());
 
-                        listButton.Add(myPair);
+                        listButton.Add(triple);
                     }
                 }
                 SurfaceButton btnNone = new SurfaceButton();
@@ -97,8 +98,9 @@ namespace AppliProjetTut
                 
                 Point dimNone = new Point(300, 200);
                 KeyValuePair<SurfaceButton, Point> myPairNone = new KeyValuePair<SurfaceButton, Point>(btnNone, dimNone);
+                KeyValuePair<KeyValuePair<SurfaceButton, Point>,string> tripleNone = new KeyValuePair<KeyValuePair<SurfaceButton,Point>,string>(myPairNone, "NONE");
 
-                listButton.Add(myPairNone);
+                listButton.Add(tripleNone);
 
             }
             catch { };
@@ -106,7 +108,7 @@ namespace AppliProjetTut
             ButtonListGrid.Width = listButton.Count * imgSize;
             for (int i = 0 ; i < listButton.Count; i++)
             { 
-                SurfaceButton btn = listButton.ElementAt(i).Key;
+                SurfaceButton btn = listButton.ElementAt(i).Key.Key;
                 if (i == listButton.Count - 1)
                 {
                     btn.Margin = new Thickness(imgSize * i + imgBorder, imgBorder, imgSize * (listButton.Count - 1 - i) + imgBorder, 100 - imgSize + imgBorder);
@@ -130,10 +132,10 @@ namespace AppliProjetTut
             {
                 for (int i = 0; i < listButton.Count; i++)
                 {
-                    if (listButton.ElementAt(i).Key == button)
+                    if (listButton.ElementAt(i).Key.Key == button)
                     { 
                         Brush imgBrush = (Brush)button.Background;
-                        nodeParent.onChoice(imgBrush, listButton.ElementAt(i).Value);
+                        nodeParent.onChoice(imgBrush, listButton.ElementAt(i).Key.Value, listButton.ElementAt(i).Value);
                     }
                 }
                 

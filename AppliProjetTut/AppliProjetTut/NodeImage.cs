@@ -39,6 +39,8 @@ namespace AppliProjetTut
         Point currentSize;
         Point tempSize = new Point(300, 200);
         Point previousSize = new Point(300, 200);
+        string tempPath = "NONE";
+        string currentPath = "NONE";
 
         public NodeImage(SurfaceWindow1 parentSurface, ScatterCustom parentNode)
             : base(parentSurface, parentNode)
@@ -48,6 +50,8 @@ namespace AppliProjetTut
 
             parent = parentNode;
             Surface = parentSurface;
+
+            base.SetTypeOfNode("Image");
 
             imageChoice = new ListeImages(this);
 
@@ -218,7 +222,7 @@ namespace AppliProjetTut
             base.MainMenu.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
         }
 
-        public void onChoice(Brush newPath, Point dimension)
+        public void onChoice(Brush newPath, Point dimension, string path)
         {
             base.MainGrid.Background = newPath;
             tempSize = dimension;
@@ -232,12 +236,17 @@ namespace AppliProjetTut
             base.AddonGrid.Margin = new Thickness(base.MainGrid.Width / 2, base.MainGrid.Height + borderHeight, base.MainGrid.Width / 2, -(borderHeight + 50));
             base.AddonGrid.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
 
+            tempPath = path;
+
         }
         public void onValidateChoice()
         {
             currentImage = base.MainGrid.Background;
             currentSize = tempSize;
             mise_a_echelle();
+
+            currentPath = tempPath;
+
 
             // le fichier a été modifié
             Surface.Modification(true);
@@ -288,6 +297,10 @@ namespace AppliProjetTut
         //
         //
         //
+        public string GetImagePath()
+        {
+            return currentPath;
+        }
         public Brush GetImage()
         {
             return currentImage;
