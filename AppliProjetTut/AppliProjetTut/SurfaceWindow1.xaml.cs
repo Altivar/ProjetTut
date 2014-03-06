@@ -490,8 +490,11 @@ namespace AppliProjetTut
                 menuPrincipal = mainMenu;
                 menuPrincipal.SaveAsButton.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnSaveAsButtonPreviewTouchUp);
                 menuPrincipal.SaveButton.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnSaveButtonPreviewTouchUp);
+                menuPrincipal.OpenButton.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnOpenButtonPreviewTouchUp);
             }
         }
+
+        
 
         
 
@@ -525,6 +528,7 @@ namespace AppliProjetTut
             SaveFileNameEntrance.GetClavier().Entrer.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnValidateFileName);
             SaveFileNameEntrance.GetClavier().close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnClosePreviewTouchDown);
 
+            menuPrincipal.FormGrid.Children.Clear();
             menuPrincipal.FormGrid.Children.Add(SaveFileNameEntrance);
         }
 
@@ -547,6 +551,7 @@ namespace AppliProjetTut
                 SaveFileNameEntrance.GetClavier().Entrer.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnValidateFileName);
                 SaveFileNameEntrance.GetClavier().close.PreviewTouchDown += new EventHandler<TouchEventArgs>(OnClosePreviewTouchDown);
 
+                menuPrincipal.FormGrid.Children.Clear();
                 menuPrincipal.FormGrid.Children.Add(SaveFileNameEntrance);
             }
             else
@@ -554,6 +559,26 @@ namespace AppliProjetTut
                 CreateDirectory(nomFichier);
             }
         }
+
+
+        /// <summary>
+        /// Appelé lorsque le bouton d'ouverture de fichier est appuyé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void OnOpenButtonPreviewTouchUp(object sender, TouchEventArgs e)
+        {
+
+            if (menuPrincipal == null)
+                return;
+
+            ListeSauvegarde listSave = new ListeSauvegarde(this);
+            
+            menuPrincipal.FormGrid.Children.Clear();
+            menuPrincipal.FormGrid.Children.Add(listSave);
+
+        }
+
 
         /// <summary>
         /// Appelé lorsque le nom du fichier de suavegarde est validé
@@ -675,7 +700,7 @@ namespace AppliProjetTut
 
             }
             
-            FileStream myFile = new FileStream(".\\Saves\\" + path + "\\masauvegarde.txt", FileMode.OpenOrCreate);
+            FileStream myFile = new FileStream(".\\Saves\\" + path + "\\saveFile.mms", FileMode.OpenOrCreate);
             StreamWriter sw = new StreamWriter(myFile);
             sw.Write(sb.ToString());
             sw.Close();
@@ -750,6 +775,108 @@ namespace AppliProjetTut
             }
 
         }
+
+        /// <summary>
+        /// Appelé lors de la selection d'un fichier a ouvrir
+        /// </summary>
+        /// <param name="filename"></param>
+        public void OpenFile(string filename)
+        {
+
+            if (filename == "<Annuler>")
+            {
+                menuPrincipal.FormGrid.Children.Clear();
+                return;
+            }
+
+            while(listNode.Count != 0)
+            {
+                RemoveNode(listNode.ElementAt(0), false);
+            }
+
+            string line = "";
+            string filePath = ".\\Saves\\" + filename + "\\saveFile.mms";
+            StreamReader sr = new StreamReader(filePath);
+
+            List<int> listPrent = new List<int>();
+            string currentType = "";
+            int currentParent = -1;
+            int compteur = 0;
+            while ((line = sr.ReadLine()) != null)
+            {
+
+                if (compteur % 3 == 0)
+                {
+                    switch (line)
+                    { 
+                        case "TEXT":
+                            currentType = "TEXT";
+                            break;
+                        case "IMAGE":
+                            currentType = "IMAGE";
+                            break;
+                        default:
+                            currentType = "NO-TYPE";
+                            break;
+                    }
+                }
+                else if (compteur % 3 == 1)
+                {
+                    string strparent = line.Split(" -+- ".ToCharArray()).Last();
+                    try
+                    {
+                        currentParent = Convert.ToInt32(strparent);
+                    }
+                    catch { currentParent = -1; };
+                }
+                else if (compteur % 3 == 2)
+                {
+                    switch (currentType)
+                    {
+                        case "TEXT":
+                            NodeText newNodeText = new NodeText(this, null);
+                            string text = line.Split(" -+- ".ToCharArray()).Last();
+                            newNodeText.Center = initP;
+                            newNodeText.LoadText(text);
+                            this.MainScatterView.Items.Add(newNodeText);
+                            listNode.Add(newNodeText);
+                            break;
+
+                        case "IMAGE":
+                            NodeImage newNodeImage = new NodeImage(this, null);
+                            string img = line.Split(" -+- ".ToCharArray()).Last();
+                            
+                            BitmapImage bi = new BitmapImage();
+                            bi.BeginInit();
+                            bi.UriSource = new Uri(".\\Saves\\" + filename + "\\Images\\" + img, UriKind.Relative);
+                            bi.EndInit();
+                            Point dim = new Point(bi.Width, bi.Height);
+                            Brush bru = new ImageBrush(bi);
+                            newNodeImage.Center = initP;
+                            newNodeImage.LoadImage(bru, dim, img);
+                            this.MainScatterView.Items.Add(newNodeImage);
+                            listNode.Add(newNodeImage);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+
+                compteur++;
+            }
+
+            menuPrincipal.FormGrid.Children.Clear();
+        
+        
+        
+        }
+
+
+
+
+
 
 
 

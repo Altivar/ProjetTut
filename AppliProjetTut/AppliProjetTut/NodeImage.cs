@@ -295,6 +295,30 @@ namespace AppliProjetTut
 
 
         //
+        //  GESTION chargement image
+        //
+        public void LoadImage(Brush newPath, Point dimension, string path)
+        {
+            base.MainGrid.Background = newPath;
+            currentSize = dimension;
+            base.MainGrid.Width = (tempSize.X > 300) ? 300 : tempSize.X;
+            base.MainGrid.Height = (tempSize.Y > 200) ? 200 : tempSize.Y;
+
+            double borderHeight = (base.Height - base.MainGrid.Height) / 2;
+            base.MainMenu.Margin = new Thickness(base.MainGrid.Width / 2, base.MainGrid.Height + borderHeight, base.MainGrid.Width / 2, -(borderHeight + 50));
+            base.MainMenu.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+
+            base.AddonGrid.Margin = new Thickness(base.MainGrid.Width / 2, base.MainGrid.Height + borderHeight, base.MainGrid.Width / 2, -(borderHeight + 50));
+            base.AddonGrid.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+
+            currentPath = path;
+
+            currentImage = base.MainGrid.Background;
+            mise_a_echelle();
+        }
+
+
+        //
         //
         //
         public string GetImagePath()

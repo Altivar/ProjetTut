@@ -345,7 +345,14 @@ namespace AppliProjetTut
         }
 
 
-
+        //
+        //  CHARGEMENT du NodeText
+        //
+        public void LoadText(string str)
+        {
+            STextBox.Clear();
+            STextBox.AppendText(str);
+        }
 
     }
 }
