@@ -680,7 +680,10 @@ namespace AppliProjetTut
                                 break;
                             sb.AppendLine("TEXT");
                             int numParent = GetNumOfParent(listNode.ElementAt(i));
-                            sb.AppendLine("PARENT -+- " + numParent);
+                            if (numParent == -1)
+                                sb.AppendLine("PARENT -+- N");
+                            else
+                                sb.AppendLine("PARENT -+- " + numParent);
                             sb.AppendLine("VALUE -+- " + myText.GetText());
                             break;
                         }
@@ -691,9 +694,16 @@ namespace AppliProjetTut
                                 break;
                             sb.AppendLine("IMAGE");
                             int numParent = GetNumOfParent(listNode.ElementAt(i));
-                            sb.AppendLine("PARENT -+- " + numParent);
+                            if(numParent == -1)
+                                sb.AppendLine("PARENT -+- N");
+                            else
+                                sb.AppendLine("PARENT -+- " + numParent);
                             sb.AppendLine("VALUE -+- " + myImage.GetImagePath());
-                            SaveImageToFile(myImage.GetImagePath(), path);
+                            try
+                            {
+                                SaveImageToFile(myImage.GetImagePath(), path);
+                            }
+                            catch { };
                             break;
                         }
                 }
@@ -789,16 +799,14 @@ namespace AppliProjetTut
                 return;
             }
 
-            while(listNode.Count != 0)
-            {
-                RemoveNode(listNode.ElementAt(0), false);
-            }
+            listNode.Clear();
+            MainScatterView.Items.Clear();
 
             string line = "";
             string filePath = ".\\Saves\\" + filename + "\\saveFile.mms";
             StreamReader sr = new StreamReader(filePath);
 
-            List<int> listPrent = new List<int>();
+            List<int> listParent = new List<int>();
             string currentType = "";
             int currentParent = -1;
             int compteur = 0;
@@ -828,44 +836,68 @@ namespace AppliProjetTut
                         currentParent = Convert.ToInt32(strparent);
                     }
                     catch { currentParent = -1; };
+                    listParent.Add(currentParent);
                 }
                 else if (compteur % 3 == 2)
                 {
-                    switch (currentType)
+                    try
                     {
-                        case "TEXT":
-                            NodeText newNodeText = new NodeText(this, null);
-                            string text = line.Split(" -+- ".ToCharArray()).Last();
-                            newNodeText.Center = initP;
-                            newNodeText.LoadText(text);
-                            this.MainScatterView.Items.Add(newNodeText);
-                            listNode.Add(newNodeText);
-                            break;
+                        switch (currentType)
+                        {
+                            case "TEXT":
+                                NodeText newNodeText = new NodeText(this, null);
+                                string text = line.Split(" -+- ".ToCharArray()).Last();
+                                newNodeText.Center = initP;
+                                newNodeText.LoadText(text);
+                                this.MainScatterView.Items.Add(newNodeText);
+                                listNode.Add(newNodeText);
+                                break;
 
-                        case "IMAGE":
-                            NodeImage newNodeImage = new NodeImage(this, null);
-                            string img = line.Split(" -+- ".ToCharArray()).Last();
-                            
-                            BitmapImage bi = new BitmapImage();
-                            bi.BeginInit();
-                            bi.UriSource = new Uri(".\\Saves\\" + filename + "\\Images\\" + img, UriKind.Relative);
-                            bi.EndInit();
-                            Point dim = new Point(bi.Width, bi.Height);
-                            Brush bru = new ImageBrush(bi);
-                            newNodeImage.Center = initP;
-                            newNodeImage.LoadImage(bru, dim, img);
-                            this.MainScatterView.Items.Add(newNodeImage);
-                            listNode.Add(newNodeImage);
-                            break;
+                            case "IMAGE":
+                                NodeImage newNodeImage = new NodeImage(this, null);
+                                string img = line.Split(" -+- ".ToCharArray()).Last();
+                                if (img != "NONE")
+                                {
+                                    BitmapImage bi = new BitmapImage();
+                                    bi.BeginInit();
+                                    bi.UriSource = new Uri(".\\Saves\\" + filename + "\\Images\\" + img, UriKind.Relative);
+                                    bi.EndInit();
+                                    Point dim = new Point(bi.Width, bi.Height);
+                                    Brush bru = new ImageBrush(bi);
+                                    newNodeImage.LoadImage(bru, dim, img);
+                                }
+                                newNodeImage.Center = initP;
+                                this.MainScatterView.Items.Add(newNodeImage);
+                                listNode.Add(newNodeImage);
+                                break;
 
-                        default:
-                            break;
+                            default:
+                                break;
+                        }
                     }
+                    catch { listParent.RemoveAt(listParent.Count - 1); };
                 }
 
 
                 compteur++;
             }
+
+
+            for (int i = 0; i < listNode.Count; i++)
+            {
+
+                if (listParent.Count > i)
+                {
+                    if (listParent.ElementAt(i) < listNode.Count && listParent.ElementAt(i) != -1)
+                    {
+                        listNode.ElementAt(i).SetParent(listNode.ElementAt(listParent.ElementAt(i)));
+                    }
+                }
+
+            }
+
+            nomFichier = filename;
+            isModified = false;
 
             menuPrincipal.FormGrid.Children.Clear();
         
