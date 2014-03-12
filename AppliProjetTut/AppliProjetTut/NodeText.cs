@@ -69,7 +69,7 @@ namespace AppliProjetTut
             SScrollViewer = new SurfaceScrollViewer();
             SScrollViewer.Width = 300;
             SScrollViewer.Height = 200;
-            SScrollViewer.Content = STextBox;
+            //SScrollViewer.Content = STextBox;
             SScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
             SScrollViewer.ScrollToEnd();
 
