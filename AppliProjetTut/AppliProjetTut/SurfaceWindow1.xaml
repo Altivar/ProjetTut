@@ -24,8 +24,8 @@
         </s:TagVisualizer>
         <Canvas Name="NearParentEllipseCanvas" />
         <Grid Name="LinkParentLineGrid" />
-        <Grid Name="LinkParentGrid" />
+        <Canvas Name="LinkParentGrid"/>
         <Grid Name="LineGrid" />
-        <s:ScatterView Name="MainScatterView" Grid.Row="1" Grid.Column="0" />
+        <s:ScatterView Name="MainScatterView"/>
     </Grid>
 </s:SurfaceWindow>
