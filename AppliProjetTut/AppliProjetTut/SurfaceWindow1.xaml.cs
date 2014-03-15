@@ -112,12 +112,21 @@ namespace AppliProjetTut
 
 
 
-
+        /// <summary>
+        /// Timer de l'actualisation d'affichage
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void TimerRefresh(object sender, EventArgs e)
         {
             RefreshImage();
         }
 
+        /// <summary>
+        /// Timer d'expiration du menu de choix de type de Node
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void ChoiceMenuTimeExpired(object sender, EventArgs e)
         {
             //
@@ -138,6 +147,11 @@ namespace AppliProjetTut
             }
         }
 
+        /// <summary>
+        /// Timer des cercle de chargement (évite des bugs)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void circleTimeOut(object sender, EventArgs e)
         {
             Timer circleTimer = (Timer)sender;
@@ -235,6 +249,11 @@ namespace AppliProjetTut
         //
         //  EVENEMENT
         //
+        /// <summary>
+        /// Preview Touch Down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnPreviewTouchDown(object sender, TouchEventArgs e)
         {
 
@@ -303,7 +322,7 @@ namespace AppliProjetTut
         
 
         /// <summary>
-        /// Evenement de mouvement de Touch sur la table
+        /// Preview Touch Move
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -382,7 +401,7 @@ namespace AppliProjetTut
         }
 
         /// <summary>
-        /// 
+        /// Preview Touch Up
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -746,6 +765,11 @@ namespace AppliProjetTut
             return -1;
         }
 
+        /// <summary>
+        /// Sauvegarde l'image passée en paramètre
+        /// </summary>
+        /// <param name="imgPath"></param>
+        /// <param name="savePath"></param>
         private void SaveImageToFile(string imgPath, string savePath)
         {
             if (imgPath == "NONE")
@@ -1356,6 +1380,11 @@ namespace AppliProjetTut
         //
         // MENU SELECTION TYPE NODE
         //
+        /// <summary>
+        /// Appelé lorsqu'un "Touch" sur un cercle vert est détecté
+        /// </summary>
+        /// <param name="menu"></param>
+        /// <param name="choice"></param>
         public void MenuIsClicked(MenuCreation menu, String choice)
         {
             AddNode(null, menu.ActualCenter, choice);

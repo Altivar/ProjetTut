@@ -30,6 +30,10 @@ namespace AppliProjetTut
         // liste de bouton
         List<SurfaceButton> listButton = new List<SurfaceButton>();
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="parent"></param>
         public ListeSauvegarde(SurfaceWindow1 parent)
         {
             InitializeComponent();
@@ -41,6 +45,9 @@ namespace AppliProjetTut
             this.BoutonAnnuler.PreviewTouchUp += new EventHandler<TouchEventArgs>(OnFileButtonPreviewTouchUp);
         }
 
+        /// <summary>
+        /// Initialise les liste de Sauvegarde
+        /// </summary>
         private void InitSaveList()
         {
 
@@ -86,6 +93,11 @@ namespace AppliProjetTut
             }
         }
 
+        /// <summary>
+        /// Lors de la sélection d'un bouton : ouvre le fichier correspondant
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnFileButtonPreviewTouchUp(object sender, TouchEventArgs e)
         {
             SurfaceButton senderBtn = (SurfaceButton)sender;

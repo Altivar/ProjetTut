@@ -35,7 +35,10 @@ namespace AppliProjetTut
         // liste de bouton
         List<KeyValuePair<KeyValuePair<SurfaceButton, Point>, string>> listButton = new List<KeyValuePair<KeyValuePair<SurfaceButton, Point>, string>>();
         
-
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="parent"></param>
         public ListeImages(NodeImage parent)
         {
             InitializeComponent();
@@ -57,6 +60,9 @@ namespace AppliProjetTut
         //
         //   FONCTION D'INITIALISATION DE LA LISTE D'IMAGE
         //
+        /// <summary>
+        /// Initialise la liste d'image
+        /// </summary>
         public void InitListView()
         {
             listButton.Clear();
@@ -124,7 +130,11 @@ namespace AppliProjetTut
             
         }
 
-
+        /// <summary>
+        /// Lors de l'appui sur un bouton image
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnButtonPreviewTouchUp(object sender, TouchEventArgs e)
         {
             SurfaceButton button = (SurfaceButton)sender;
@@ -146,6 +156,13 @@ namespace AppliProjetTut
         //   VERIFIE SI LE FICHIER EST UNE IMAGE
         //   true : extension d'image reconnue
         //   false : extension autre que d'une image reconnue
+        /// <summary>
+        /// Vérifie si le fichier passé en paramètre est une image
+        /// true : extension d'image reconnue
+        /// false : extension non reconnue
+        /// </summary>
+        /// <param name="nom"></param>
+        /// <returns></returns>
         private bool isImage(string nom)
         {
 
@@ -174,12 +191,21 @@ namespace AppliProjetTut
         //
         //   INTERACTION AVEC LA LISTE D'IMAGES
         //
+        /// <summary>
+        /// Valide le choix de l'image
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Valider_Click(object sender, RoutedEventArgs e)
         {
             nodeParent.onValidateChoice();
             nodeParent.onCloseImagesList();
         }
-
+        /// <summary>
+        /// Annule le choix de l'image
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Annuler_Click(object sender, RoutedEventArgs e)
         {
             nodeParent.onCloseImagesList();

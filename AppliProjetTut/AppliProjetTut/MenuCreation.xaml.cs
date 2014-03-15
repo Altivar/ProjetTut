@@ -25,6 +25,10 @@ namespace AppliProjetTut
         // surface window parent
         SurfaceWindow1 parentWindow;
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="parent"></param>
         public MenuCreation(SurfaceWindow1 parent)
         {
             InitializeComponent();
@@ -32,16 +36,31 @@ namespace AppliProjetTut
             parentWindow = parent;
         }
 
+        /// <summary>
+        /// Ferme le menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CloseMenuClick(object sender, RoutedEventArgs e)
         {
             parentWindow.MenuIsClicked(this, "Close");
         }
 
+        /// <summary>
+        /// Crée un NodeText
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TextButtonClick(object sender, RoutedEventArgs e)
         {
             parentWindow.MenuIsClicked(this, "Text");
         }
 
+        /// <summary>
+        /// Crée un NodeImage
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ImageButtonClick(object sender, RoutedEventArgs e)
         {
             parentWindow.MenuIsClicked(this, "Image");

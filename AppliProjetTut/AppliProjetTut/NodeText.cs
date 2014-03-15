@@ -48,6 +48,11 @@ namespace AppliProjetTut
         // couleur actuelle
         private Brush currentColor;
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="parentSurface"></param>
+        /// <param name="parentNode"></param>
         public NodeText(SurfaceWindow1 parentSurface, ScatterCustom parentNode)
             : base(parentSurface, parentNode)
         {
@@ -99,6 +104,11 @@ namespace AppliProjetTut
         //
         //   EVENT de selection du menu
         //
+        /// <summary>
+        /// Lorsque que le Menu du clavier est sélectionné
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnEditSelection(object sender, RoutedEventArgs e)
         {
             if (!isEditing)
@@ -113,7 +123,11 @@ namespace AppliProjetTut
                 isEditing = true;
             }
         }
-
+        /// <summary>
+        /// Lorsque que le Menu de la palette de couleurs est sélectionné
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnColorSelection(object sender, RoutedEventArgs e)
         {
             if (!isEditing)
@@ -132,6 +146,10 @@ namespace AppliProjetTut
         //
         //   INTERACTION AVEC LE CLAVIER
         //
+        /// <summary>
+        /// Ajoute le texte passé en paramètre
+        /// </summary>
+        /// <param name="str"></param>
         public void AjoutTexte(string str)
         {
             if (str.Equals("Close"))
@@ -238,12 +256,19 @@ namespace AppliProjetTut
         //
         //   INTERACTION AVEC LA PALETTE
         //
+        /// <summary>
+        /// Change la couleur du Node
+        /// </summary>
+        /// <param name="color"></param>
         public void SetBackGroundColor(Brush color)
         {
             currentColor = color;
             STextBox.Background = currentColor;
             STextBox.BorderBrush = currentColor;
         }
+        /// <summary>
+        /// Ferme la palette de couleur
+        /// </summary>
         public void ClosePalette()
         {
             this.AddonGrid.Items.Remove(palette);
@@ -255,16 +280,28 @@ namespace AppliProjetTut
         //
         // autres fonctions utiles
         //
+        /// <summary>
+        /// Retourne la couleur
+        /// </summary>
+        /// <returns></returns>
         public Brush GetColor()
         {
             return currentColor;
         }
+        /// <summary>
+        /// Récupère la couleur passée en paramètre
+        /// </summary>
+        /// <param name="col"></param>
         public void SetColor(string col)
         {
             Brush color = new BrushConverter().ConvertFromString(col) as SolidColorBrush;
             SetBackGroundColor(color);
         }
 
+        /// <summary>
+        /// Autorise le mouvement(true) ou le désactive(false)
+        /// </summary>
+        /// <param name="enable"></param>
         public void isMoveEnable(bool enable)
         {
             CanMove = enable;
@@ -302,11 +339,18 @@ namespace AppliProjetTut
             }
         }
 
+        /// <summary>
+        /// Retourne le clavier
+        /// </summary>
+        /// <returns></returns>
         public ClavierVirtuel GetClavier()
         {
             return clavier;
         }
-
+        /// <summary>
+        /// Retourne le texte du NodeText
+        /// </summary>
+        /// <returns></returns>
         public string GetText()
         {
             return STextBox.Text.ToString();
@@ -315,6 +359,9 @@ namespace AppliProjetTut
         //
         //  prevu pour la sauvegarde de fichier
         //
+        /// <summary>
+        /// Transforme le NodeText en boîte de dialogue pour entrer un nom de sauvegarde
+        /// </summary>
         public void TransformToFileSaver()
         {
             // on adapte la taille
@@ -352,6 +399,11 @@ namespace AppliProjetTut
         //
         //  CHARGEMENT du NodeText
         //
+        /// <summary>
+        /// Charge du texte lors de l'ouverture d'un fichier de sauvegarde
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="clear"></param>
         public void LoadText(string str, bool clear)
         {
             if(clear)

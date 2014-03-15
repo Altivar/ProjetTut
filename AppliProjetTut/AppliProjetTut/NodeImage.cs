@@ -42,6 +42,11 @@ namespace AppliProjetTut
         string tempPath = "NONE";
         string currentPath = "NONE";
 
+        /// <summary>
+        /// Defalut Constructor
+        /// </summary>
+        /// <param name="parentSurface"></param>
+        /// <param name="parentNode"></param>
         public NodeImage(SurfaceWindow1 parentSurface, ScatterCustom parentNode)
             : base(parentSurface, parentNode)
         {
@@ -84,6 +89,11 @@ namespace AppliProjetTut
         //
         //   EVENT de selection du menu
         //
+        /// <summary>
+        /// Appelé lors de la selection du Menu de choix d'image
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnImageChoiceSelection(object sender, RoutedEventArgs e)
         {
             if (!isEditing)
@@ -109,6 +119,11 @@ namespace AppliProjetTut
         //
         //  EVENT de changement de taille
         //
+        /// <summary>
+        /// Evenement de changement de taille réadapté aux images
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnNodeImageSizeChanged(object sender, SizeChangedEventArgs e)
         {
 
@@ -205,6 +220,9 @@ namespace AppliProjetTut
         //
         //  GESTION IMAGE PAR LISTE D'IMAGE
         //
+        /// <summary>
+        /// Appelé lors de la fermeture de la liste d'image
+        /// </summary>
         public void onCloseImagesList()
         {
             base.AddonGrid.Items.Remove(imageChoice);
@@ -222,6 +240,12 @@ namespace AppliProjetTut
             base.MainMenu.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
         }
 
+        /// <summary>
+        /// Appelé lors de l'appui sur une image de la liste
+        /// </summary>
+        /// <param name="newPath"></param>
+        /// <param name="dimension"></param>
+        /// <param name="path"></param>
         public void onChoice(Brush newPath, Point dimension, string path)
         {
             base.MainGrid.Background = newPath;
@@ -239,6 +263,9 @@ namespace AppliProjetTut
             tempPath = path;
 
         }
+        /// <summary>
+        /// Appéle lors de la validation du choix de l'image
+        /// </summary>
         public void onValidateChoice()
         {
             currentImage = base.MainGrid.Background;
@@ -256,6 +283,9 @@ namespace AppliProjetTut
         //
         //  FONCTION de mise a echelle du Node
         //
+        /// <summary>
+        /// Met le NodeImage à l'echelle de l'image qu'il contient
+        /// </summary>
         void mise_a_echelle()
         {
             // taille du Node
@@ -297,6 +327,12 @@ namespace AppliProjetTut
         //
         //  GESTION chargement image
         //
+        /// <summary>
+        /// Charge l'image passé en paramètre avec les caractéristique de l'image
+        /// </summary>
+        /// <param name="newPath"></param>
+        /// <param name="dimension"></param>
+        /// <param name="path"></param>
         public void LoadImage(Brush newPath, Point dimension, string path)
         {
             base.MainGrid.Background = newPath;
@@ -321,14 +357,26 @@ namespace AppliProjetTut
         //
         //
         //
+        /// <summary>
+        /// Retourne le chemin vers l'image
+        /// </summary>
+        /// <returns></returns>
         public string GetImagePath()
         {
             return currentPath;
         }
+        /// <summary>
+        /// Retourne l'image
+        /// </summary>
+        /// <returns></returns>
         public Brush GetImage()
         {
             return currentImage;
         }
+        /// <summary>
+        /// Retourne la taille maximale de l'image du NodeImage
+        /// </summary>
+        /// <returns></returns>
         public Point GetSize()
         {
             return currentSize;

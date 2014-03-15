@@ -27,6 +27,10 @@ namespace AppliProjetTut
         // couleur d'origine
         private Brush firstColor = new SolidColorBrush(Colors.LightBlue);
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="parent"></param>
         public PaletteCouleurs(NodeText parent)
         {
             InitializeComponent();
@@ -56,23 +60,39 @@ namespace AppliProjetTut
             this.Valider.PreviewTouchDown += new EventHandler<TouchEventArgs>(Valider_PreviewTouchDown);
         }
 
+        /// <summary>
+        /// Appelé lorsque le choix est validé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Valider_PreviewTouchDown(object sender, TouchEventArgs e)
         {
             firstColor = ((SurfaceButton)sender).Background;
             parentNode.ClosePalette();
         }
-
+        /// <summary>
+        /// Appelé lorsque le choix est annulé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnAnnulerPreviewTouchDown(object sender, TouchEventArgs e)
         {
             parentNode.SetBackGroundColor(firstColor);
             parentNode.ClosePalette();
         }
-
+        /// <summary>
+        /// Appelé lors de l'appui d'une touche couleur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnColorPreviewTouchDown(object sender, TouchEventArgs e)
         {
             parentNode.SetBackGroundColor( ((SurfaceButton)sender).Background );
         }
-
+        /// <summary>
+        /// Récupère la couleur avant que la palette de couleurs ne s'ouvre
+        /// </summary>
+        /// <param name="col"></param>
         public void SetFirstColor(Brush col)
         {
             firstColor = col;

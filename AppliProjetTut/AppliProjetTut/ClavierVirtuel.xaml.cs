@@ -39,7 +39,10 @@ namespace AppliProjetTut
         bool isBackSpaceDown = false;
         int compteurBackSpace = 0;
 
-
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="parent"></param>
         public ClavierVirtuel(NodeText parent)
         {
             InitializeComponent();
@@ -147,6 +150,11 @@ namespace AppliProjetTut
         //
         //  TIMER POUR LE BACKSPACE
         //
+        /// <summary>
+        /// Temps entre chaque suppression de caractère lors de l'appui long sur le backspace
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void backSpaceTimer_Tick(object sender, EventArgs e)
         {
             if (isBackSpaceDown)
@@ -161,6 +169,11 @@ namespace AppliProjetTut
                 }
             }
         }
+        /// <summary>
+        ///  reinitialise l'appui long sur le backspace
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Backspace_PreviewTouchUp(object sender, TouchEventArgs e)
         {
             compteurBackSpace = 0;
@@ -172,6 +185,11 @@ namespace AppliProjetTut
         //
         //  GESTION FERMETURE
         //
+        /// <summary>
+        /// Ferme le clavier virtuel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnClosePreviewTouchDown(object sender, TouchEventArgs e)
         {
             //ne ferme la fenêtre que si on utilise le doigt
@@ -184,7 +202,11 @@ namespace AppliProjetTut
                 NodeParent.AjoutTexte("Close");
             }
         }
-
+        /// <summary>
+        /// Bloque tout mouvement du clavier virtuel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Cadenas_PreviewTouchDown(object sender, TouchEventArgs e)
         {
             //ne bloque la fenêtre que si on utilise le doigt
@@ -206,7 +228,11 @@ namespace AppliProjetTut
         }
 
         
-
+        /// <summary>
+        /// Appelé lors de l'appui d'une lettre ou d'un autre caractère sur le clavier virtuel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnLetterPreviewTouchDown(object sender, TouchEventArgs e)
         {
             //ne tape une lettre que si on utilise le doigt
@@ -235,6 +261,11 @@ namespace AppliProjetTut
             }
         }
 
+        /// <summary>
+        /// Appui sur la touche "Entrée
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Enter_PreviewTouchDown(object sender, TouchEventArgs e)
         {
             //ne passe à la ligne que si on utilise le doigt
@@ -243,7 +274,11 @@ namespace AppliProjetTut
                 NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
             }
         }
-
+        /// <summary>
+        /// Appuis sur la Barre espace
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Space_PreviewTouchDown(object sender, TouchEventArgs e)
         {
             //ne fais un espace que si on utilise le doigt
@@ -252,7 +287,11 @@ namespace AppliProjetTut
                 NodeParent.AjoutTexte(((SurfaceButton)sender).Content.ToString());
             }
         }
-
+        /// <summary>
+        /// Selection de caractère en majuscule
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Caps_PreviewTouchDown(object sender, TouchEventArgs e)
         {
             //n'utilise le caps qu'avec le doigt
@@ -282,7 +321,11 @@ namespace AppliProjetTut
                 }
             }
         }
-
+        /// <summary>
+        /// Appui sur la touche tabulation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void Tab_PreviewTouchDown(object sender, TouchEventArgs e)
         {
             //ne fait de tabulation que si on utilise le doigt

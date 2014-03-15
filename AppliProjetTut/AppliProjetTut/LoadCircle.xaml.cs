@@ -26,6 +26,9 @@ namespace AppliProjetTut
         //Id du cercle
         public int Id;
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
         public LoadCircle()
         {
             InitializeComponent();
@@ -36,6 +39,12 @@ namespace AppliProjetTut
             CanScale = false;
             CanMove = false;
         }
+
+        /// <summary>
+        /// Lorsque le chargement est terminé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ScatterViewItem_Loaded(object sender, RoutedEventArgs e)
         {
             Microsoft.Surface.Presentation.Generic.SurfaceShadowChrome ssc;

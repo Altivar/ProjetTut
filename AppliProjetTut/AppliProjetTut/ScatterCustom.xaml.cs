@@ -29,6 +29,11 @@ namespace AppliProjetTut
         // type du node
         string thisType;
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="parentSurface"></param>
+        /// <param name="parentNode"></param>
         public ScatterCustom(SurfaceWindow1 parentSurface, ScatterCustom parentNode)
         {
             InitializeComponent();
@@ -51,7 +56,10 @@ namespace AppliProjetTut
 
 
 
-
+        /// <summary>
+        /// Retourne la ligne de liason entre le Node et son parent
+        /// </summary>
+        /// <returns></returns>
         public Line getLineToParent()
         {
             Line line = new Line();
@@ -93,6 +101,11 @@ namespace AppliProjetTut
         
 
         // SELECTION MENU
+        /// <summary>
+        /// Lorsque le Menu de selection de NodeText est activé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnAddNodeTextSelection(object sender, RoutedEventArgs e)
         {
             Point pt = ActualCenter;
@@ -106,6 +119,11 @@ namespace AppliProjetTut
             }    
             Surface.AddNode(this, pt, "Text");
         }
+        /// <summary>
+        /// Lorsque le Menu de selection de NodeImage est activé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnAddNodeImageSelection(object sender, RoutedEventArgs e)
         {
             Point pt = ActualCenter;
@@ -119,12 +137,20 @@ namespace AppliProjetTut
             }
             Surface.AddNode(this, pt, "Image");
         }
-
+        /// <summary>
+        /// Lorsque le Menu de suppression de Node est activé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnRemoveSelection(object sender, RoutedEventArgs e)
         {
             Surface.RemoveNode(this, true);
         }
-
+        /// <summary>
+        /// Lorsque le Menu de séparation du parent est activé
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnSeparateSelection(object sender, RoutedEventArgs e)
         {
             parent = null;
@@ -139,11 +165,18 @@ namespace AppliProjetTut
 
 
         // SET - GET
-
+        /// <summary>
+        /// Retourne le parent
+        /// </summary>
+        /// <returns></returns>
         public ScatterCustom GetParent()
         {
             return parent;
         }
+        /// <summary>
+        /// Rattache au Node passé en paramètre comme enfant
+        /// </summary>
+        /// <param name="newParent"></param>
         public void SetParent(ScatterCustom newParent)
         {
             if (newParent == null)
@@ -159,7 +192,10 @@ namespace AppliProjetTut
                 Surface.Modification(true);
             }
         }
-
+        /// <summary>
+        /// Retourne le centre du Node
+        /// </summary>
+        /// <returns></returns>
         public Point GetOrigin()
         {
             Point pt = this.PointFromScreen(this.ActualCenter);
@@ -167,11 +203,18 @@ namespace AppliProjetTut
             return this.PointToScreen(pt);
         }
 
-
+        /// <summary>
+        /// Indique le type du Node
+        /// </summary>
+        /// <param name="str"></param>
         public void SetTypeOfNode(string str)
         {
             thisType = str;
         }
+        /// <summary>
+        /// Retourne le type du Node
+        /// </summary>
+        /// <returns></returns>
         public string GetTypeOfNode()
         {
             return thisType;

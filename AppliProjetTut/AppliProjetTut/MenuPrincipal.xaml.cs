@@ -23,6 +23,9 @@ namespace AppliProjetTut
     /// </summary>
     public partial class MenuPrincipal : TagVisualization
     {
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
         public MenuPrincipal()
         {
             InitializeComponent();
