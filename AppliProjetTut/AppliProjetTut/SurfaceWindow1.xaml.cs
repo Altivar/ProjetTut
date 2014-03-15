@@ -678,13 +678,17 @@ namespace AppliProjetTut
                             NodeText myText = (NodeText)listNode.ElementAt(i);
                             if (myText == null)
                                 break;
-                            sb.AppendLine("TEXT");
+                            sb.AppendLine("<node type='txt' id='" + i + "' color='" + myText.GetColor().ToString() + "'>");
                             int numParent = GetNumOfParent(listNode.ElementAt(i));
-                            if (numParent == -1)
-                                sb.AppendLine("PARENT -+- N");
-                            else
-                                sb.AppendLine("PARENT -+- " + numParent);
-                            sb.AppendLine("VALUE -+- " + myText.GetText());
+                            if (numParent != -1)
+                                sb.AppendLine("<parent id='" + numParent + "'/>");
+                            if(myText.GetText() != "")
+                            {
+                                sb.AppendLine("<text>");
+                                sb.AppendLine(myText.GetText());
+                                sb.AppendLine("</text>");
+                            }
+                            sb.AppendLine("</node>");
                             break;
                         }
                     case "Image":
@@ -692,13 +696,13 @@ namespace AppliProjetTut
                             NodeImage myImage = (NodeImage)listNode.ElementAt(i);
                             if (myImage == null)
                                 break;
-                            sb.AppendLine("IMAGE");
+                            sb.AppendLine("<node type='img' id='" + i + "'>");
                             int numParent = GetNumOfParent(listNode.ElementAt(i));
-                            if(numParent == -1)
-                                sb.AppendLine("PARENT -+- N");
-                            else
-                                sb.AppendLine("PARENT -+- " + numParent);
-                            sb.AppendLine("VALUE -+- " + myImage.GetImagePath());
+                            if (numParent != -1)
+                                sb.AppendLine("<parent id='" + numParent + "'/>");
+                            if (myImage.GetImagePath() != "NONE")
+                                sb.AppendLine("<image path='" + myImage.GetImagePath() + "'>");
+                            sb.AppendLine("</node>");
                             try
                             {
                                 SaveImageToFile(myImage.GetImagePath(), path);
@@ -707,6 +711,8 @@ namespace AppliProjetTut
                             break;
                         }
                 }
+
+                sb.AppendLine();
 
             }
             
@@ -806,94 +812,226 @@ namespace AppliProjetTut
             string filePath = ".\\Saves\\" + filename + "\\saveFile.mms";
             StreamReader sr = new StreamReader(filePath);
 
-            List<int> listParent = new List<int>();
+            List<KeyValuePair<KeyValuePair<int, int>, ScatterCustom>> listParent = new List<KeyValuePair<KeyValuePair<int, int>, ScatterCustom>>();
             string currentType = "";
-            int currentParent = -1;
             int compteur = 0;
+            bool isFirstLine = true;
+            bool isInText = false;
+            KeyValuePair<int, int> myPair = new KeyValuePair<int, int>();
+            ScatterCustom currentNode = new ScatterCustom(this, null);
+
+
+            //
+            // Chargement des nodes
+            //
             while ((line = sr.ReadLine()) != null)
             {
-
-                if (compteur % 3 == 0)
+                
+                if(line.Contains("<node"))
                 {
-                    switch (line)
-                    { 
-                        case "TEXT":
-                            currentType = "TEXT";
-                            break;
-                        case "IMAGE":
-                            currentType = "IMAGE";
-                            break;
-                        default:
-                            currentType = "NO-TYPE";
-                            break;
-                    }
-                }
-                else if (compteur % 3 == 1)
-                {
-                    string strparent = line.Split(" -+- ".ToCharArray()).Last();
-                    try
+                    compteur++;
+                    myPair = new KeyValuePair<int, int>(-1, -1);
+                    string[] typeLine = line.Split("'".ToCharArray());
+                    string type = "NULL";
+                    for (int i = 0; i < typeLine.Count()-1; i++)
                     {
-                        currentParent = Convert.ToInt32(strparent);
-                    }
-                    catch { currentParent = -1; };
-                    listParent.Add(currentParent);
-                }
-                else if (compteur % 3 == 2)
-                {
-                    try
-                    {
-                        switch (currentType)
+                        if (typeLine[i].Contains("type"))
                         {
-                            case "TEXT":
-                                NodeText newNodeText = new NodeText(this, null);
-                                string text = line.Split(" -+- ".ToCharArray()).Last();
-                                newNodeText.Center = initP;
-                                newNodeText.LoadText(text);
-                                this.MainScatterView.Items.Add(newNodeText);
-                                listNode.Add(newNodeText);
-                                break;
-
-                            case "IMAGE":
-                                NodeImage newNodeImage = new NodeImage(this, null);
-                                string img = line.Split(" -+- ".ToCharArray()).Last();
-                                if (img != "NONE")
-                                {
-                                    BitmapImage bi = new BitmapImage();
-                                    bi.BeginInit();
-                                    bi.UriSource = new Uri(".\\Saves\\" + filename + "\\Images\\" + img, UriKind.Relative);
-                                    bi.EndInit();
-                                    Point dim = new Point(bi.Width, bi.Height);
-                                    Brush bru = new ImageBrush(bi);
-                                    newNodeImage.LoadImage(bru, dim, img);
-                                }
-                                newNodeImage.Center = initP;
-                                this.MainScatterView.Items.Add(newNodeImage);
-                                listNode.Add(newNodeImage);
-                                break;
-
-                            default:
-                                break;
+                            type = typeLine[i + 1];
+                            break;
                         }
                     }
-                    catch { listParent.RemoveAt(listParent.Count - 1); };
+                    int id = -1;
+                    for (int i = 0; i < typeLine.Count() - 1; i++)
+                    {
+                        if (typeLine[i].Contains("id"))
+                        {
+                            string strId = typeLine[i + 1];
+                            id = Convert.ToInt32(strId);
+                            break;
+                        }
+                    }
+                    myPair = new KeyValuePair<int, int>(id, -1);
+
+                    switch (type)
+                    { 
+                        case "txt":
+                            currentType = "txt";
+                            NodeText myText = new NodeText(this, null);
+                            string color = "NULL";
+                            for (int i = 0; i < typeLine.Count()-1; i++)
+                            {
+                                if (typeLine[i].Contains("color"))
+                                {
+                                    color = typeLine[i + 1];
+                                    break;
+                                }
+                            }
+                            if (color != "NULL")
+                                myText.SetColor(color);
+
+                            myText.Center = initP;
+                            this.MainScatterView.Items.Add(myText);
+                            listNode.Add(myText);
+                            currentNode = myText;
+                            break;
+                        case "img":
+                            currentType = "img";
+                            NodeImage myImage = new NodeImage(this, null);
+                            myImage.Center = initP;
+                            this.MainScatterView.Items.Add(myImage);
+                            listNode.Add(myImage);
+                            currentNode = myImage;
+                            break;
+                    }
+                    continue;
                 }
 
 
-                compteur++;
+                if (line.Contains("<parent") && line.Contains("/>"))
+                {
+                    compteur++;
+                    string[] typeLine = line.Split("'".ToCharArray());
+                    int id = -1;
+                    for (int i = 0; i < typeLine.Count() - 1; i++)
+                    {
+                        if (typeLine[i].Contains("id"))
+                        {
+                            string strId = typeLine[i + 1];
+                            id = Convert.ToInt32(strId);
+                            break;
+                        }
+                    }
+                    myPair = new KeyValuePair<int, int>(myPair.Key, id);
+                }
+
+
+                if (line.Contains("<image"))
+                {
+                    NodeImage myImage = (NodeImage)currentNode;
+                    if (myImage == null)
+                        continue;
+                    string[] imageLine = line.Split("'".ToCharArray());
+                    string path = "NONE";
+                    for (int i = 0; i < imageLine.Count() - 1; i++)
+                    {
+                        if (imageLine[i].Contains("path"))
+                        {
+                            path = imageLine[i + 1];
+                            break;
+                        }
+                    }
+                    if (path != "NONE")
+                    {
+                        BitmapImage bi = new BitmapImage();
+                        bi.BeginInit();
+                        bi.UriSource = new Uri(".\\Saves\\" + filename + "\\Images\\" + path, UriKind.Relative);
+                        bi.EndInit();
+                        Point dim = new Point(bi.Width, bi.Height);
+                        Brush bru = new ImageBrush(bi);
+                        myImage.LoadImage(bru, dim, path);
+                    }
+                    continue;
+                }
+
+                
+
+                if(line.Contains("</text>"))
+                {
+                    NodeText myText = (NodeText)currentNode;
+                    if (myText == null)
+                        continue;
+                    string[] textLine = line.Split("</texte>".ToCharArray());
+                    string text = "";
+                    try
+                    {
+                        text = textLine.First();
+                    }
+                    catch { }
+                    if (text != "")
+                    {
+                        myText.LoadText("\r", false);
+                        if (!isFirstLine)
+                            myText.LoadText(text, false);
+                        else
+                        {
+                            myText.LoadText(text, true);
+                            isFirstLine = false;
+                        }
+                    }
+                    isInText = false;
+                }
+
+                if (isInText)
+                {
+                    NodeText myText = (NodeText)currentNode;
+                    if (myText == null)
+                        continue;
+                    myText.LoadText("\r", false);
+                    if (!isFirstLine)
+                        myText.LoadText(line, false);
+                    else
+                    {
+                        myText.LoadText(line, true);
+                        isFirstLine = false;
+                    }
+                }
+
+                if (line.Contains("<text>"))
+                {
+                    NodeText myText = (NodeText)currentNode;
+                    if (myText == null)
+                        continue;
+                    string[] textLine = line.Split("<texte>".ToCharArray());
+                    string text = "";
+                    try
+                    {
+                        text = textLine.Last();
+                    }
+                    catch { }
+                    if (text != "")
+                    {
+                        myText.LoadText(text, true);
+                        isFirstLine = false;
+                    }
+                    isInText = true;
+
+                }
+
+
+                if (line.Contains("</node>"))
+                {
+                    if (currentType != "" && myPair.Key != -1)
+                    {
+                        KeyValuePair<KeyValuePair<int, int>, ScatterCustom> triple = new KeyValuePair<KeyValuePair<int, int>, ScatterCustom>(myPair, currentNode);
+                        listParent.Add(triple);
+                    }
+                    currentType = "";
+                    isFirstLine = true;
+                    isInText = false;
+                    currentNode = new ScatterCustom(this, null);
+                }
+
             }
 
 
-            for (int i = 0; i < listNode.Count; i++)
+            //
+            // Chargement des liens de parenté
+            //
+            for (int i = 0; i < listParent.Count; i++)
             {
-
-                if (listParent.Count > i)
+                if (listParent.ElementAt(i).Key.Value != -1)
                 {
-                    if (listParent.ElementAt(i) < listNode.Count && listParent.ElementAt(i) != -1)
+                    for (int j = 0; j < listParent.Count; j++)
                     {
-                        listNode.ElementAt(i).SetParent(listNode.ElementAt(listParent.ElementAt(i)));
+                        if (listParent.ElementAt(i).Key.Value == listParent.ElementAt(j).Key.Key)
+                        {
+                            listParent.ElementAt(i).Value.SetParent(listParent.ElementAt(j).Value);
+                        }
                     }
                 }
-
+                else
+                    listParent.ElementAt(i).Value.SetParent(null);
             }
 
             nomFichier = filename;

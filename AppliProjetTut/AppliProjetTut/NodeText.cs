@@ -243,7 +243,6 @@ namespace AppliProjetTut
             currentColor = color;
             STextBox.Background = currentColor;
             STextBox.BorderBrush = currentColor;
-            Surface.Modification(true);
         }
         public void ClosePalette()
         {
@@ -259,6 +258,11 @@ namespace AppliProjetTut
         public Brush GetColor()
         {
             return currentColor;
+        }
+        public void SetColor(string col)
+        {
+            Brush color = new BrushConverter().ConvertFromString(col) as SolidColorBrush;
+            SetBackGroundColor(color);
         }
 
         public void isMoveEnable(bool enable)
@@ -348,9 +352,10 @@ namespace AppliProjetTut
         //
         //  CHARGEMENT du NodeText
         //
-        public void LoadText(string str)
+        public void LoadText(string str, bool clear)
         {
-            STextBox.Clear();
+            if(clear)
+                STextBox.Clear();
             STextBox.AppendText(str);
         }
 

@@ -146,15 +146,15 @@ namespace AppliProjetTut
         }
         public void SetParent(ScatterCustom newParent)
         {
-            if (this.parent == null)
+            if (newParent == null)
             {
-                this.parent = newParent;
+                this.parent = null;
                 // le fichier a été modifié
                 Surface.Modification(true);
             }
-            else if (newParent == null)
+            else if (this.parent == null)
             {
-                this.parent = null;
+                this.parent = newParent;
                 // le fichier a été modifié
                 Surface.Modification(true);
             }
