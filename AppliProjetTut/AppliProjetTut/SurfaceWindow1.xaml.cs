@@ -720,7 +720,7 @@ namespace AppliProjetTut
                             if (numParent != -1)
                                 sb.AppendLine("<parent id='" + numParent + "'/>");
                             if (myImage.GetImagePath() != "NONE")
-                                sb.AppendLine("<image path='" + myImage.GetImagePath() + "'>");
+                                sb.AppendLine("<image path='" + myImage.GetImagePath() + "'/>");
                             sb.AppendLine("</node>");
                             try
                             {
@@ -822,6 +822,10 @@ namespace AppliProjetTut
         /// <param name="filename"></param>
         public void OpenFile(string filename)
         {
+
+            menuPrincipal.SaveAsButton.IsEnabled = false;
+            menuPrincipal.SaveButton.IsEnabled = false;
+            menuPrincipal.OpenButton.IsEnabled = false;
 
             if (filename == "<Annuler>")
             {
@@ -930,7 +934,7 @@ namespace AppliProjetTut
                 }
 
 
-                if (line.Contains("<image"))
+                if (line.Contains("<image") && line.Contains("/>"))
                 {
                     NodeImage myImage = (NodeImage)currentNode;
                     if (myImage == null)
@@ -1062,6 +1066,9 @@ namespace AppliProjetTut
             isModified = false;
 
             menuPrincipal.FormGrid.Children.Clear();
+            menuPrincipal.SaveAsButton.IsEnabled = true;
+            menuPrincipal.SaveButton.IsEnabled = true;
+            menuPrincipal.OpenButton.IsEnabled = true;
         
         
         
