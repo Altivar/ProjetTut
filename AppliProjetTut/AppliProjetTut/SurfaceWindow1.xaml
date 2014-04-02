@@ -6,7 +6,7 @@
     >
     <s:SurfaceWindow.Background>
         
-       <ImageBrush ImageSource="./Resources/icon.png" />
+       <ImageBrush ImageSource="Resources/bckg.jpg" />
         
     </s:SurfaceWindow.Background>
     <Grid Name="MainGrid">
